@@ -4,87 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>机器学习 | Yunlong Zhou</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
-      background-color: #f9f9f9;
-      color: #1d1d1f;
-    }
+  <link rel="stylesheet" href = "style.css"/>
 
-    header {
-      background-color: #000;
-      padding: 20px 0;
-      text-align: center;
-    }
-
-    header h1 {
-      color: white;
-      font-size: 2rem;
-      margin: 0;
-      letter-spacing: 0.5px;
-    }
-
-    nav {
-      margin-top: 10px;
-    }
-
-    nav a {
-      color: #bbb;
-      text-decoration: none;
-      margin: 0 15px;
-      font-weight: 500;
-    }
-
-    nav a:hover {
-      color: #0a84ff;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 60px auto;
-      padding: 40px;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      text-align: center;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      margin-top: 40px;
-      margin-bottom: 10px;
-      color: #333;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 6px;
-    }
-
-    p {
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: #555;
-      text-align: left;
-    }
-
-    footer {
-      margin-top: 60px;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #999;
-    }
-  </style>
 </head>
 <body>
 
   <header>
-    <h1>Yunlong Zhou</h1>
-    <nav>
-      <a href="index.html">首页</a>
-      <a href="ml-blog.html">机器学习</a>
-      <a href="dl-blog.html">神经网络</a>
-
-    </nav>
+    <h1>离谱纪</h1>
+    <div id="nav-container"></div>
   </header>
 
   <div class="container">
@@ -93,10 +20,11 @@
     <p>伯克利的机器学习课程依旧关注于传统的机器学习方法，同时也涉猎较新颖的内容。最开始学习的课程是支持向量机，一个古老的机器学习算法。之后是高斯判别分析，线性回归，Logistic回归，岭回归，决策树（包括随机森林，AdaBoost),神经网络,无监督学习（主成分分析、聚类）的内容。</p>
     <p>我上了另外一门专门针对神经网络的课，神经网络是值得单独拎出来说的。</p>
     <p>学习机器学习的人都了解Cross Validation(中文应该翻译为交叉验证），包括Weight Decay(比如大家可能听闻过的Lasso或者Ridge惩罚过大权重的措施）。经济学不做Cross Validation的原因主要在于经济学关注无偏性，也并不关注预测方面的结果（这可能是经济表现往往不如经济学家所预期那样的原因，因为他们在分析过去的事情中下了大量功夫用了大量方法，而对于未来预测往往是一拍脑袋出的答案）。</p>
-    <footer>
-      <p>© Yunlong Zhou</p>
-    </footer>
-  </div>
 
+  </div>
+  <footer>
+    <div id = "foot-container"></div>
+  </footer>
+  <script src="navbar.js"></script>
 </body>
 </html>

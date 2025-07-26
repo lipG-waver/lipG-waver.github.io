@@ -3,99 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>机器学习 | Yunlong Zhou</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
-      background-color: #f9f9f9;
-      color: #1d1d1f;
-    }
+  <title>深度学习 | Yunlong Zhou</title>
+  <link rel="stylesheet" href = "style.css"/>
 
-    header {
-      background-color: #000;
-      padding: 20px 0;
-      text-align: center;
-    }
-
-    header h1 {
-      color: white;
-      font-size: 2rem;
-      margin: 0;
-      letter-spacing: 0.5px;
-    }
-
-    nav {
-      margin-top: 10px;
-    }
-
-    nav a {
-      color: #bbb;
-      text-decoration: none;
-      margin: 0 15px;
-      font-weight: 500;
-    }
-
-    nav a:hover {
-      color: #0a84ff;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 60px auto;
-      padding: 40px;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      text-align: center;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      margin-top: 40px;
-      margin-bottom: 10px;
-      color: #333;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 6px;
-    }
-
-    p {
-      font-size: 1.05rem;
-      line-height: 1.75;
-      color: #555;
-      text-align: left;
-    }
-
-    footer {
-      margin-top: 60px;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #999;
-    }
-  </style>
 </head>
 <body>
 
   <header>
-    <h1>Yunlong Zhou</h1>
-    <nav>
-      <a href="index.html">首页</a>
-      <a href="ml-blog.html">机器学习</a>
-      <a href="dl-blog.html">神经网络</a>
-
-    </nav>
+    <h1>离谱纪</h1>
+    <div id="nav-container"></div>
   </header>
 
   <div class="container">
     <h2>神经网络</h2>
     <p>我的神经网络老师Anant Sahai不允许我们上课使用电子产品，我很晚才知道这一点，当时选课的时候根本不知道能选上这一门。</p>
-    <p>这是我个人的观点：神经网络是一个伪装成参数方法的非参数模型。现代深度神经网络通常具有数百万甚至数十亿个参数，远远超过训练数据量（过参数化）。这种过参数化使得神经网络能够表现出类似非参数模型的灵活性，可以拟合几乎任意复杂的数据分布。这种行为类似于非参数模型，因为模型的表达能力似乎“动态”适应了数据。尽管神经网络在形式上是参数化的，但它们在过参数化设置下的良好泛化能力（如在测试数据上的表现）让人联想到非参数模型的特性。</p>
+    <p>这是我个人的观点：神经网络是一个伪装成参数方法的非参数模型。现代深度神经网络通常具有数百万甚至数十亿个参数，远远超过训练数据量（过参数化）。这种过参数化使得神经网络能够表现出类似非参数模型的灵活性，可以拟合几乎任意复杂的数据分布。这种行为类似于非参数模型，因为模型的表达能力似乎"动态"适应了数据。尽管神经网络在形式上是参数化的，但它们在过参数化设置下的良好泛化能力（如在测试数据上的表现）让人联想到非参数模型的特性。</p>
     <p>如果读者不知道什么是神经网络，只需要记住一点，只要你的参数量足够大，层数足够多，数据量足够大，那神经网络能拟合任何函数。远超出我们一般所学的线性回归的能力。</p>
-    <footer>
-      <p>© Yunlong Zhou</p>
-    </footer>
   </div>
+  <footer>
+    <div id = "foot-container"></div>
+  </footer>
 
+  <script src="navbar.js"></script>
 </body>
 </html>
