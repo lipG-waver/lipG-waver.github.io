@@ -30,4 +30,4 @@ function loadFooter(){
 
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', loadNavbar); 
-document.addEventListener('DOMContentLoaded',loadFooter());
+document.addEventListener('DOMContentLoaded', loadFooter);
