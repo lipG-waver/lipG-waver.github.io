@@ -3,6 +3,7 @@ layout: post
 title: "网站移动端菜单问题修复技术总结"
 date: 2025-08-07 00:00:00 +0800
 categories: 技术总结
+permalink: /tech-summary/2025/08/07/mobile-menu-fix-summary.html
 ---
 
 # 网站移动端菜单问题修复技术总结
