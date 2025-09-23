@@ -8,6 +8,7 @@ import DlBlogPage from '../components/DlBlogPage.vue'
 import NewBlogPost from '../components/NewBlogPost.vue'
 import MarkdownBlog from '../components/MarkdownBlog.vue'
 import MarkdownPost from '../components/MarkdownPost.vue'
+import TeachingAssistantPage from '../components/TeachingAssistantPage.vue'
 
 const routes = [
   {
@@ -55,6 +56,11 @@ const routes = [
     name: 'MarkdownPost',
     component: MarkdownPost,
     props: true
+  },
+  {
+    path: '/teaching-assistant',
+    name: 'TeachingAssistantPage',
+    component: TeachingAssistantPage
   }
 ]
 

@@ -1,6 +1,6 @@
 <template>
   <div class="intro-page">
-    <h1>建立网站的过程</h1>
+    <h1 class="page-title">建立网站的过程</h1>
     <div class="content">
       <p>起初，我通过自己的 GitHub 账户创建了静态网页仓库，并用最基本的 <code>index.html</code> 页面作为网站主页。这是我第一次从零开始搭建个人站点，起初所有内容都是手动嵌入的，导航栏和脚注每页都需要单独复制粘贴，维护起来非常繁琐。</p>
 
@@ -36,20 +36,53 @@ export default {
 .content {
   background-color: #fff;
   padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
-h1 {
-  color: #333;
+.page-title {
+  color: #2c3e50;
   text-align: center;
   margin-bottom: 30px;
+  font-size: 2rem;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.page-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #3498db, #2c3e50);
+  margin: 10px auto 0;
+  border-radius: 3px;
+}
+
+h2 {
+  color: #2c3e50;
+  margin-top: 25px;
+  font-size: 1.5rem;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+h2::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #3498db, #2c3e50);
+  margin: 8px 0 0 0;
+  border-radius: 2px;
 }
 
 p {
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #34495e;
   margin-bottom: 15px;
+  text-align: justify;
 }
 
 ul {
@@ -59,6 +92,38 @@ ul {
 
 li {
   margin-bottom: 10px;
-  line-height: 1.5;
+  line-height: 1.6;
+  color: #34495e;
+}
+
+code {
+  background-color: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #e74c3c;
+}
+
+@media (max-width: 768px) {
+  .intro-page {
+    padding: 10px;
+  }
+  
+  .content {
+    padding: 20px;
+  }
+  
+  .page-title {
+    font-size: 1.7rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
 }
 </style>

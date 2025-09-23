@@ -1,9 +1,9 @@
 <template>
   <div class="daily-insights-page">
-    <h1>每日收获分享</h1>
+    <h1 class="page-title">每日收获分享</h1>
     <div class="content">
       <div class="insight-item">
-        <h2>移动端菜单栏问题修复</h2>
+        <h2 class="section-title">移动端菜单栏问题修复</h2>
         <p class="date">2025年8月7日</p>
         <p>今天解决了网站在移动端设备上菜单栏无法正常显示和交互的问题。在排查过程中发现了几个关键问题：</p>
         <ul>
@@ -36,25 +36,52 @@ export default {
 .content {
   background-color: #fff;
   padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
-h1 {
-  color: #333;
+.page-title {
+  color: #2c3e50;
   text-align: center;
   margin-bottom: 30px;
+  font-size: 2rem;
+  position: relative;
+  padding-bottom: 10px;
 }
 
-h2 {
-  color: #444;
-  margin-top: 25px;
+.page-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #3498db, #2c3e50);
+  margin: 10px auto 0;
+  border-radius: 3px;
+}
+
+.section-title {
+  color: #2c3e50;
+  margin: 25px 0 15px 0;
+  font-size: 1.5rem;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #3498db, #2c3e50);
+  margin: 8px 0 0 0;
+  border-radius: 2px;
 }
 
 .date {
-  color: #666;
+  color: #2980b9;
   font-style: italic;
   margin-bottom: 15px;
+  font-weight: 500;
 }
 
 .insight-item {
@@ -69,8 +96,44 @@ h2 {
 }
 
 p {
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #34495e;
   margin-bottom: 15px;
+  text-align: justify;
+}
+
+ul {
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+  line-height: 1.6;
+  color: #34495e;
+}
+
+@media (max-width: 768px) {
+  .daily-insights-page {
+    padding: 10px;
+  }
+  
+  .content {
+    padding: 20px;
+  }
+  
+  .page-title {
+    font-size: 1.7rem;
+  }
+  
+  .section-title {
+    font-size: 1.3rem;
+  }
+  
+  p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
 }
 </style>
