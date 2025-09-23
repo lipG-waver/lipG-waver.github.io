@@ -1,0 +1,89 @@
+# ---- 站点基础信息 -----------------------------------------------------------
+title: 离谱纪
+tagline: 记录一些离谱又有趣的事
+description: >-
+  这里是我的个人博客「离谱纪」。关于编程、学习、产品和生活的随笔与笔记。
+email: your-email@example.com
+author:
+  name: Yunlong Zhou
+  email: your-email@example.com
+
+# ---- 部署路径（最重要的两行） -----------------------------------------------
+# 生产环境的站点根（不要带斜杠结尾）
+url: "https://lipG-waver.github.io"
+# 站点在仓库里的子路径（以 / 开头，不要以 / 结尾）
+baseurl: "/my-blog"
+
+# 语言 & 时区（需要可改为 Asia/Tokyo）
+lang: zh-CN
+timezone: Asia/Shanghai
+
+# ---- 外观主题 ---------------------------------------------------------------
+theme: minima
+minima:
+  skin: classic   # 可选: auto, dark, solarized 等
+
+# ---- Markdown/链接/文章配置 --------------------------------------------------
+markdown: kramdown
+kramdown:
+  input: GFM
+permalink: /:categories/:title/   # 生成更友好的文章链接
+paginate: 10                       # 每页文章数
+paginate_path: "/page:num/"        # 分页路径（需要 index.html 使用 paginator）
+show_excerpts: true
+
+# ---- 资源路径建议 ------------------------------------------------------------
+# 你的静态资源建议放在 personal-page/assets 下，
+# 在模板里用 {{ "/assets/..." | relative_url }} 来引用
+# Jekyll 会自动拼接 baseurl，避免子目录 404。
+
+# ---- 插件（仅使用 GitHub Pages 支持的白名单插件） --------------------------
+plugins:
+  - jekyll-feed      # RSS
+  - jekyll-sitemap   # sitemap.xml
+  - jekyll-seo-tag   # SEO 元信息
+  - jekyll-paginate  # 经典分页（与 paginate 一起使用）
+
+# ---- Minima 的顶部导航（若你仍想用 Minima 的导航，而不是 JS 注入）---------
+# 如果你继续使用“JS 动态注入导航”，这段可以先留着或删除。
+# header_pages:
+#   - about.md
+#   - index.md
+
+# ---- 构建排除/包含 -----------------------------------------------------------
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - node_modules/
+  - vendor/
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - package.json
+  - package-lock.json
+
+# 如果你需要让根目录以外的文件被处理，可按需加入 include:
+# include:
+#   - _pages
+
+# ---- 默认布局（给常见内容自动套用 default 布局） ----------------------------
+defaults:
+  - scope:
+      path: ""        # 站点内全部
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+
+# ---- SEO/分析（按需启用） ---------------------------------------------------
+# google_analytics: G-XXXXXXXXXX
+# social:
+#   name: Yunlong Zhou
+#   links:
+#     - https://github.com/lipG-waver
+
+# ---- 分类归档（如果后面想做分类/标签页，可用 pages 生成，暂不使用插件） ----
