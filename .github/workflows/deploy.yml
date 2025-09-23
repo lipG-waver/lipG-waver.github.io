@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: 16
           cache: 'npm'
 
       - name: Install dependencies
@@ -24,23 +24,6 @@ jobs:
 
       - name: Build Vue.js app
         run: npm run build
-
-      # 构建 Jekyll 博客
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.0
-          bundler-cache: true
-
-      - name: Install Jekyll dependencies
-        run: |
-          cd blog
-          bundle install
-
-      - name: Build Jekyll site
-        run: |
-          cd blog
-          bundle exec jekyll build
 
       # 部署到 GitHub Pages
       - name: Deploy to GitHub Pages
