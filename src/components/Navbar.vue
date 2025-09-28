@@ -8,8 +8,12 @@
         <li class="nav-item">
           <router-link to="/" class="nav-link">自我介绍</router-link>
         </li>
-        <li class="nav-item">
-          <router-link to="/teaching-assistant" class="nav-link">作为助教</router-link>
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link">作为助教 <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown-menu">
+            <li><router-link to="/teaching-assistant" class="dropdown-link">助教寄语</router-link></li>
+            <li><a href="/ProblemSession1.pdf" target="_blank" class="dropdown-link">第一次习题课</a></li>
+          </ul>
         </li>
 
         <!-- <li class="nav-item">

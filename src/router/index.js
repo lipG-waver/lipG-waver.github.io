@@ -9,6 +9,7 @@ import NewBlogPost from '../components/NewBlogPost.vue'
 import MarkdownBlog from '../components/MarkdownBlog.vue'
 import MarkdownPost from '../components/MarkdownPost.vue'
 import TeachingAssistantPage from '../components/TeachingAssistantPage.vue'
+// import FirstExerciseSession from '../components/FirstExerciseSession.vue'
 
 const routes = [
   {
@@ -61,7 +62,12 @@ const routes = [
     path: '/teaching-assistant',
     name: 'TeachingAssistantPage',
     component: TeachingAssistantPage
-  }
+  },
+  // {
+  //   path: '/first-exercise-session',
+  //   name: 'FirstExerciseSession',
+  //   component: FirstExerciseSession
+  // }
 ]
 
 const router = createRouter({
