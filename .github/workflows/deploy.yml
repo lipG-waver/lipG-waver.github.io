@@ -49,7 +49,7 @@ jobs:
         with:
           path: ./dist
 
-      # 部署到 GitHub Pages
+      # 部署到 GitHub Pages（使用新的官方方式）
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
