@@ -25,11 +25,11 @@
         <li class="nav-item dropdown">
           <a href="#" class="nav-link">技术博客 <i class="fas fa-chevron-down"></i></a>
           <ul class="dropdown-menu">
-            <!-- <li><router-link to="/leetcode-blog" class="dropdown-link">LeetCode题解</router-link></li> -->
+<!-- <li><router-link to="/leetcode-blog" class="dropdown-link">LeetCode题解</router-link></li> -->
             <li><router-link to="/ml-blog" class="dropdown-link">机器学习</router-link></li>
             <li><router-link to="/dl-blog" class="dropdown-link">深度学习</router-link></li>
-            <!-- <li><router-link to="/new-blog-post" class="dropdown-link">新文章</router-link></li>
-            <li><router-link to="/markdown-blog" class="dropdown-link">Markdown博客</router-link></li> -->
+            <li><router-link to="/ascend-cuda" class="dropdown-link">昇腾与CUDA</router-link></li>
+            <!-- <li><router-link to="/markdown-blog" class="dropdown-link">Markdown博客</router-link></li> --> -->
           </ul>
         </li>
       </ul>

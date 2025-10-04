@@ -10,6 +10,7 @@ import MarkdownBlog from '../components/MarkdownBlog.vue'
 import MarkdownPost from '../components/MarkdownPost.vue'
 import TeachingAssistantPage from '../components/TeachingAssistantPage.vue'
 // import FirstExerciseSession from '../components/FirstExerciseSession.vue'
+import AscendCudaPage from '../components/AscendCudaPage.vue'
 
 const routes = [
   {
@@ -62,6 +63,11 @@ const routes = [
     path: '/teaching-assistant',
     name: 'TeachingAssistantPage',
     component: TeachingAssistantPage
+  },
+  {
+    path: '/ascend-cuda',
+    name: 'AscendCudaPage',
+    component: AscendCudaPage
   },
   // {
   //   path: '/first-exercise-session',
