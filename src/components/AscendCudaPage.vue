@@ -159,7 +159,29 @@
         <!-- Buffer Management -->
         <section>
           <h2>缓冲区管理机制</h2>
+          <div class="code-example">
+            <p class="code-title">InitBuffer</p>
+            <pre><code>pipe.InitBuffer(inQueueX, BUFFER_NUM, TILE_LENGTH * sizeof(half));</code></pre>
+            <p>生成BUFFER_NUM个队列（2个），每次长度为TILE_LENGTH，供数据反复填入移出</p>
+          </div>
 
+          <div class="info-block">
+            <h4>队列容量限制</h4>
+            <p><code>inQueueX</code> 这个队列的容量是由 <code>BUFFER_NUM</code> 决定的。在这里 <code>BUFFER_NUM = 2</code>，意味着这个队列<strong>最多只能同时容纳2个数据块</strong>。</p>
+            
+            <p><strong>双缓冲工作机制：</strong></p>
+            <ul>
+              <li>Buffer 0：正在被AI Core计算</li>
+              <li>Buffer 1：正在被搬入数据</li>
+            </ul>
+
+            <p><strong>流程控制：</strong></p>
+            <ul>
+              <li>当队列已满（2个buffer都被占用）时，<code>EnQue</code> 操作会<strong>阻塞等待</strong></li>
+              <li>只有当 <code>DeQue</code> 取出一个数据后，才能继续 <code>EnQue</code> 新数据</li>
+              <li>这样确保了生产者（CopyIn）和消费者（Compute）的同步</li>
+            </ul>
+            </div>
           <div class="code-example">
             <p class="code-title">InitBuffer</p>
             <pre><code>pipe.InitBuffer(inQueueX, BUFFER_NUM, TILE_LENGTH * sizeof(half));</code></pre>
