@@ -51,14 +51,25 @@
                 深度学习
               </router-link>
             </li>
+
+          </ul>
+        </li>
+        <li class="nav-item dropdown" :class="{ active: isDropdownOpen.tech }">
+          <a 
+            href="#" 
+            class="nav-link" 
+            @click.prevent="toggleDropdown('tech')"
+          >
+            昇腾博客 <i class="fas fa-chevron-down"></i>
+          </a>
+          <ul class="dropdown-menu">
             <li>
               <router-link to="/ascend-cuda" class="dropdown-link" @click="closeMenu">
-                昇腾与CUDA
+                昇腾与CUDA的加法差异
               </router-link>
             </li>
           </ul>
         </li>
-        
         <!-- 新增：VitePress 博客链接 -->
         <li class="nav-item">
           <a 
