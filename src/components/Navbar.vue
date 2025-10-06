@@ -2,38 +2,77 @@
   <nav class="navbar">
     <div class="nav-container">
       <div class="nav-logo">
-  <router-link to="/">LipG</router-link>
-</div>
-      <ul class="nav-menu">
+        <router-link to="/">LipG</router-link>
+      </div>
+      
+      <ul class="nav-menu" :class="{ active: isMenuOpen }">
         <li class="nav-item">
-          <router-link to="/" class="nav-link">自我介绍</router-link>
+          <router-link to="/" class="nav-link" @click="closeMenu">自我介绍</router-link>
         </li>
-        <li class="nav-item dropdown">
-          <a href="#" class="nav-link">作为助教 <i class="fas fa-chevron-down"></i></a>
+        
+        <li class="nav-item dropdown" :class="{ active: isDropdownOpen.teaching }">
+          <a 
+            href="#" 
+            class="nav-link" 
+            @click.prevent="toggleDropdown('teaching')"
+          >
+            作为助教 <i class="fas fa-chevron-down"></i>
+          </a>
           <ul class="dropdown-menu">
-            <li><router-link to="/teaching-assistant" class="dropdown-link">助教寄语</router-link></li>
-            <li><a href="/ProblemSession1.pdf" target="_blank" class="dropdown-link">第一次习题课</a></li>
+            <li>
+              <router-link to="/teaching-assistant" class="dropdown-link" @click="closeMenu">
+                助教寄语
+              </router-link>
+            </li>
+            <li>
+              <a href="/ProblemSession1.pdf" target="_blank" class="dropdown-link" @click="closeMenu">
+                第一次习题课
+              </a>
+            </li>
           </ul>
         </li>
-
-        <!-- <li class="nav-item">
-          <router-link to="/intro" class="nav-link">建立网站</router-link>
-        </li> -->
-        <!-- <li class="nav-item">
-          <router-link to="/daily-insight" class="nav-link">日常思考</router-link>
-        </li> -->
-        <li class="nav-item dropdown">
-          <a href="#" class="nav-link">技术博客 <i class="fas fa-chevron-down"></i></a>
+        
+        <li class="nav-item dropdown" :class="{ active: isDropdownOpen.tech }">
+          <a 
+            href="#" 
+            class="nav-link" 
+            @click.prevent="toggleDropdown('tech')"
+          >
+            技术博客 <i class="fas fa-chevron-down"></i>
+          </a>
           <ul class="dropdown-menu">
-<!-- <li><router-link to="/leetcode-blog" class="dropdown-link">LeetCode题解</router-link></li> -->
-            <li><router-link to="/ml-blog" class="dropdown-link">机器学习</router-link></li>
-            <li><router-link to="/dl-blog" class="dropdown-link">深度学习</router-link></li>
-            <li><router-link to="/ascend-cuda" class="dropdown-link">昇腾与CUDA</router-link></li>
-            <!-- <li><router-link to="/markdown-blog" class="dropdown-link">Markdown博客</router-link></li> --> -->
+            <li>
+              <router-link to="/ml-blog" class="dropdown-link" @click="closeMenu">
+                机器学习
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/dl-blog" class="dropdown-link" @click="closeMenu">
+                深度学习
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/ascend-cuda" class="dropdown-link" @click="closeMenu">
+                昇腾与CUDA
+              </router-link>
+            </li>
           </ul>
+        </li>
+        
+        <!-- 新增：VitePress 博客链接 -->
+        <li class="nav-item">
+          <a 
+            href="https://lipg-waver.github.io/blogs" 
+            target="_blank" 
+            class="nav-link"
+            @click="closeMenu"
+          >
+            个人博客 <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: 4px;"></i>
+          </a>
         </li>
       </ul>
-      <div class="nav-toggle" @click="toggleMenu">
+      
+      <div class="nav-toggle" @click="toggleMenu" :class="{ active: isMenuOpen }">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
@@ -44,9 +83,53 @@
 
 <script>
 export default {
-  name: 'AppNavbar'
+  name: 'AppNavbar',
+  data() {
+    return {
+      isMenuOpen: false,
+      isDropdownOpen: {
+        teaching: false,
+        tech: false
+      }
+    }
+  },
+  methods: {
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen
+      // 切换菜单时关闭所有下拉菜单
+      if (!this.isMenuOpen) {
+        this.closeAllDropdowns()
+      }
+    },
+    closeMenu() {
+      this.isMenuOpen = false
+      this.closeAllDropdowns()
+    },
+    toggleDropdown(name) {
+      // 在移动端，切换下拉菜单
+      // 在桌面端，这个方法不会被调用（使用 CSS hover）
+      if (window.innerWidth <= 768) {
+        this.isDropdownOpen[name] = !this.isDropdownOpen[name]
+      }
+    },
+    closeAllDropdowns() {
+      Object.keys(this.isDropdownOpen).forEach(key => {
+        this.isDropdownOpen[key] = false
+      })
+    }
+  },
+  mounted() {
+    // 点击页面其他地方关闭菜单
+    document.addEventListener('click', (e) => {
+      const navbar = this.$el
+      if (!navbar.contains(e.target)) {
+        this.closeMenu()
+      }
+    })
+  }
 }
 </script>
+
 
 <style scoped>
 .navbar {

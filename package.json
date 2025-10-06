@@ -4,8 +4,14 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build": "vue-cli-service build && cp dist/index.html dist/404.html",
+    "lint": "vue-cli-service lint",
+  
+    "docs:dev": "vitepress dev docs --port 5173",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    
+    "build:all": "npm run build && npm run docs:build"
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -23,7 +29,8 @@
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
+    "eslint-plugin-vue": "^8.0.3",
+    "vitepress": "^1.6.4"
   },
   "eslintConfig": {
     "root": true,
