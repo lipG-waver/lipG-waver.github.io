@@ -73,7 +73,7 @@
         <!-- 新增：VitePress 博客链接 -->
         <li class="nav-item">
           <a 
-            href="https://lipg-waver.github.io/blogs" 
+            href="/blog/" 
             target="_blank" 
             class="nav-link"
             @click="closeMenu"

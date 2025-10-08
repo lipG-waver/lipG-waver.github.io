@@ -5,13 +5,13 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && cp dist/index.html dist/404.html",
+    "build:blog": "vitepress build docs",
+    "copy:blog": "cp -r docs/.vitepress/dist dist/blog",
+    "create:nojekyll": "touch dist/.nojekyll",
+    "build:all": "npm run build && npm run build:blog && npm run copy:blog && npm run create:nojekyll",
     "lint": "vue-cli-service lint",
-  
     "docs:dev": "vitepress dev docs --port 5173",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
-    
-    "build:all": "npm run build && npm run docs:build"
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "core-js": "^3.8.3",

@@ -1,0 +1,1 @@
+import{_ as e,c as r,o as l,ae as t}from"./chunks/framework.BKNbpbHR.js";const b=JSON.parse('{"title":"关于我","description":"","frontmatter":{"title":"关于我"},"headers":[],"relativePath":"about.md","filePath":"about.md"}'),i={name:"about.md"};function o(n,a,h,s,u,d){return l(),r("div",null,[...a[0]||(a[0]=[t("",28)])])}const p=e(i,[["render",o]]);export{b as __pageData,p as default};

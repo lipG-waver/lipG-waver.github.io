@@ -1,21 +1,11 @@
 ---
+layout: home
+---
 
-<style>
-.VPHome {
-  padding-bottom: 48px;
-}
-</style>
+# 欢迎来到我的博客
 
-## 📚 最新文章
+这是博客首页。
 
-<div style="margin-top: 2rem;">
+## 最新文章
 
-还没有文章？[创建你的第一篇博客](/posts/my-first-post)！
-
-</div>
-
-## 🔗 快速链接
-
-- [所有文章](/posts/)
-- [标签分类](/tags)
-- [关于我](/about)
+- [测试文章](./test)

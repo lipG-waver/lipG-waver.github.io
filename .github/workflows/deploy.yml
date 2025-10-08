@@ -32,13 +32,34 @@ jobs:
           node-version: 22
           cache: 'npm'
       
-      # 安装依赖
+      # 安装主项目依赖
       - name: Install dependencies
         run: npm ci
       
-      # 构建 Vue.js 应用
+      # 安装 VitePress 依赖
+      - name: Install VitePress dependencies
+        run: |
+          cd docs
+          npm install
+          cd ..
+      
+      # 构建 Vue.js 主站
       - name: Build Vue.js app
         run: npm run build
+      
+      # 构建 VitePress 博客
+      - name: Build VitePress blog
+        run: npm run build:blog
+      
+      # 复制博客到 dist 目录
+      - name: Copy blog to dist
+        run: |
+          mkdir -p dist/blog
+          cp -r docs/.vitepress/dist/* dist/blog/
+      
+      # 创建 .nojekyll 文件
+      - name: Create .nojekyll
+        run: touch dist/.nojekyll
       
       # 设置 Pages
       - name: Setup Pages
