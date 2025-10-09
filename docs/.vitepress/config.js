@@ -37,7 +37,6 @@ export default {
           collapsed: false,
           items: [
             { text: '专题介绍', link: '/posts/parallel-computing/' },
-            { text: 'OpenMP 基础', link: '/posts/parallel-computing/openmp-basics' }
           ]
         }
       ]

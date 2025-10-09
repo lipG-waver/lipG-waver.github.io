@@ -1,7 +1,7 @@
 ---
 title: OpenMP 基础入门
 date: 2025-10-08
-author: LipG
+author: 离谱纪-Waver
 ---
 
 # OpenMP 基础入门
