@@ -1,24 +1,24 @@
 :root {
-  /* 主题颜色 - 根据你的主站设计调整 */
-  --primary-color: #3498db;
-  --primary-dark: #2980b9;
-  --primary-light: #5dade2;
-  --secondary-color: #2c3e50;
-  --accent-color: #e74c3c;
-  --success-color: #27ae60;
-  --warning-color: #f39c12;
+  /* 主题颜色 - 白色银色科技风格 */
+  --primary-color: #007bff; /* 科技蓝 */
+  --primary-dark: #0056b3; /* 深蓝 */
+  --primary-light: #4da6ff; /* 浅蓝 */
+  --secondary-color: #6c757d; /* 银灰色 */
+  --accent-color: #28a745; /* 科技绿 */
+  --success-color: #28a745;
+  --warning-color: #ffc107; /* 警告黄 */
   
   /* 文本颜色 */
-  --text-primary: #2c3e50;
-  --text-secondary: #7f8c8d;
-  --text-light: #95a5a6;
+  --text-primary: #212529; /* 深灰 */
+  --text-secondary: #495057; /* 中灰 */
+  --text-light: #6c757d; /* 银灰 */
   --text-white: #ffffff;
   
   /* 背景颜色 */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-tertiary: #ecf0f1;
-  --bg-dark: #2c3e50;
+  --bg-primary: #ffffff; /* 纯白 */
+  --bg-secondary: #f8f9fa; /* 银白 */
+  --bg-tertiary: #e9ecef; /* 浅银灰 */
+  --bg-dark: #343a40; /* 深灰 */
   --bg-code: #f6f8fa;
   
   /* 布局 */
@@ -57,10 +57,10 @@
   --border-radius-full: 9999px;
   
   /* 阴影 */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 12px 30px rgba(0, 0, 0, 0.15);
   
   /* 过渡 */
   --transition-fast: 150ms ease;
@@ -68,14 +68,14 @@
   --transition-slow: 350ms ease;
 }
 
-/* 深色模式变量 */
+/* 深色模式变量 - 白色银色科技风格 */
 .dark {
-  --text-primary: #ecf0f1;
-  --text-secondary: #bdc3c7;
-  --text-light: #95a5a6;
+  --text-primary: #f8f9fa;
+  --text-secondary: #e9ecef;
+  --text-light: #ced4da;
   
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #2c2c2c;
-  --bg-tertiary: #3a3a3a;
-  --bg-code: #2d2d2d;
+  --bg-primary: #212529; /* 深灰 */
+  --bg-secondary: #343a40; /* 中灰 */
+  --bg-tertiary: #495057; /* 银灰 */
+  --bg-code: #343a40;
 }

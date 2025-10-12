@@ -15,17 +15,17 @@ footer {
   margin-top: 60px;
   text-align: center;
   font-size: 1rem;
-  color: #7f8c8d;
+  color: #495057;
   padding: 25px 0;
-  background: linear-gradient(135deg, #2c3e50, #1a2a3a);
-  border-top: 1px solid #eee;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  border-top: 1px solid #e9ecef;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
 }
 
 footer p {
   margin: 0;
-  color: #ecf0f1;
-  font-weight: 300;
+  color: #212529;
+  font-weight: 400;
   letter-spacing: 0.5px;
 }
 

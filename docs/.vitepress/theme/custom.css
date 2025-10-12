@@ -1,93 +1,102 @@
 /**
- * 自定义主题样式 - 延续主站风格
- * 主色调: #2c3e50, #1a2a3a
- * 强调色: #3498db
+ * 自定义主题样式 - 清新浅色科技风格
+ * 主色调: 纯白、浅灰、科技蓝
+ * 强调色: #007bff (科技蓝)
  */
 
 /* ===== 全局变量覆盖 ===== */
 :root {
-  /* 品牌色 */
-  --vp-c-brand-1: #3498db;
-  --vp-c-brand-2: #2980b9;
-  --vp-c-brand-3: #2573a7;
+  /* 品牌色 - 科技蓝 */
+  --vp-c-brand-1: #007bff;
+  --vp-c-brand-2: #0069d9;
+  --vp-c-brand-3: #0056b3;
   
-  /* 背景色 */
-  --vp-c-bg: #1a1a1a;
-  --vp-c-bg-alt: #232323;
-  --vp-c-bg-elv: #2c3e50;
+  /* 背景色 - 清新浅色 */
+  --vp-c-bg: #ffffff;              /* 主背景: 纯白 */
+  --vp-c-bg-alt: #fafafa;          /* 次要背景: 浅灰 */
+  --vp-c-bg-elv: #ffffff;          /* 浮层背景: 纯白 */
   
-  /* 文字色 */
-  --vp-c-text-1: #ecf0f1;
-  --vp-c-text-2: #bdc3c7;
-  --vp-c-text-3: #95a5a6;
+  /* 文字色 - 清晰易读 */
+  --vp-c-text-1: #212529;          /* 主要文字: 深灰 */
+  --vp-c-text-2: #495057;          /* 次要文字: 中灰 */
+  --vp-c-text-3: #6c757d;          /* 辅助文字: 浅灰 */
   
   /* 导航栏 */
-  --vp-nav-bg-color: linear-gradient(135deg, #2c3e50, #1a2a3a);
+  --vp-nav-bg-color: #ffffff;
   --vp-nav-height: 64px;
+  
+  /* 边框色 */
+  --vp-c-divider: #e9ecef;
+  
+  /* 阴影 */
+  --vp-shadow-1: 0 1px 4px rgba(0, 0, 0, 0.05);
+  --vp-shadow-2: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --vp-shadow-3: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-/* ===== 深色模式优化 ===== */
+/* ===== 深色模式变量（保留但不使用） ===== */
 .dark {
-  --vp-c-bg: #0f1419;
-  --vp-c-bg-alt: #1a2332;
-  --vp-c-bg-elv: #2c3e50;
+  --vp-c-bg: #1a1a1a;
+  --vp-c-bg-alt: #222222;
+  --vp-c-bg-elv: #2a2a2a;
+  --vp-c-text-1: #ffffff;
+  --vp-c-text-2: #e0e0e0;
+  --vp-c-text-3: #a0a0a0;
 }
 
 /* ===== 导航栏样式 ===== */
 .VPNav {
-  background: linear-gradient(135deg, #2c3e50, #1a2a3a) !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+  background: #ffffff !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .VPNavBar {
   background: transparent !important;
+  border-bottom: none !important;
 }
 
 /* Logo/标题样式 */
 .VPNavBarTitle .title {
   font-weight: 700;
-  letter-spacing: 1px;
-  background: linear-gradient(90deg, #3498db, #ecf0f1);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+  color: #212529 !important;
   transition: all 0.3s ease;
 }
 
 .VPNavBarTitle .title:hover {
-  background: linear-gradient(90deg, #3498db, #5dade2);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #007bff !important;
 }
 
 /* 导航链接 */
 .VPNavBarMenuLink,
 .VPLink {
-  color: #ecf0f1 !important;
+  color: #495057 !important;
   font-weight: 500;
   transition: all 0.3s ease;
   border-radius: 6px;
   padding: 8px 12px !important;
+  margin: 0 2px;
 }
 
 .VPNavBarMenuLink:hover,
 .VPLink:hover {
-  color: #3498db !important;
-  background-color: rgba(52, 152, 219, 0.1);
-  transform: translateY(-2px);
+  color: #007bff !important;
+  background-color: rgba(0, 123, 255, 0.08);
+  transform: translateY(-1px);
 }
 
 .VPNavBarMenuLink.active {
-  color: #3498db !important;
-  background-color: rgba(52, 152, 219, 0.15);
+  color: #007bff !important;
+  background-color: rgba(0, 123, 255, 0.12);
+  font-weight: 600;
 }
 
 /* ===== 侧边栏样式 ===== */
 .VPSidebar {
-  background: linear-gradient(180deg, #2c3e50, #1a2a3a) !important;
-  border-right: 1px solid rgba(52, 152, 219, 0.2);
+  background: #ffffff !important;
+  border-right: 1px solid #f0f0f0;
+  padding: 24px 0;
 }
 
 .VPSidebarItem {
@@ -95,240 +104,329 @@
 }
 
 .VPSidebarItem:hover {
-  background-color: rgba(52, 152, 219, 0.1);
+  background-color: rgba(0, 123, 255, 0.05);
 }
 
 .VPSidebarItem.is-active > .item > .link {
-  color: #3498db !important;
-  background-color: rgba(52, 152, 219, 0.15);
-  border-left: 3px solid #3498db;
+  color: #007bff !important;
+  background-color: rgba(0, 123, 255, 0.1);
+  border-left: 3px solid #007bff;
+  font-weight: 600;
 }
 
 .group .VPSidebarItem .text {
-  color: #ecf0f1;
+  color: #212529;
   font-weight: 500;
 }
 
 /* 侧边栏分组标题 */
 .VPSidebarItem.level-0 .text {
   font-weight: 700;
-  color: #3498db;
-  font-size: 1.1em;
+  color: #007bff;
+  font-size: 1em;
+  padding: 6px 16px;
 }
 
 /* ===== 内容区域 ===== */
 .VPDoc {
-  background: linear-gradient(180deg, #1a1a1a 0%, #0f1419 100%);
+  background: #ffffff;
 }
 
 .vp-doc {
-  color: #ecf0f1;
+  color: #212529;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 .vp-doc h1,
 .vp-doc h2,
 .vp-doc h3 {
-  color: #3498db;
-  border-bottom: 2px solid rgba(52, 152, 219, 0.3);
-  padding-bottom: 0.3em;
+  color: #007bff;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
 .vp-doc h1 {
-  background: linear-gradient(90deg, #3498db, #2c3e50);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 2.2rem;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+}
+
+.vp-doc h2 {
+  font-size: 1.8rem;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 0.4rem;
+}
+
+.vp-doc h3 {
+  font-size: 1.5rem;
 }
 
 /* 链接样式 */
 .vp-doc a {
-  color: #3498db;
+  color: #007bff;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: all 0.3s ease;
+  font-weight: 500;
 }
 
 .vp-doc a:hover {
-  color: #5dade2;
-  border-bottom-color: #3498db;
+  color: #0056b3;
+  border-bottom-color: #007bff;
+  background-color: rgba(0, 123, 255, 0.08);
+  border-radius: 2px;
 }
 
 /* 代码块 */
 .vp-doc div[class*='language-'] {
-  background: #2c3e50 !important;
-  border: 1px solid rgba(52, 152, 219, 0.2);
+  background: #fafafa !important;
+  border: 1px solid #f0f0f0;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .vp-doc div[class*='language-'] code {
-  color: #ecf0f1;
+  color: #212529;
 }
 
 /* 行内代码 */
 .vp-doc :not(pre) > code {
-  background-color: rgba(52, 152, 219, 0.15);
-  color: #3498db;
-  padding: 3px 8px;
+  background-color: rgba(0, 123, 255, 0.08);
+  color: #007bff;
+  padding: 3px 6px;
   border-radius: 4px;
   font-weight: 500;
 }
 
 /* 引用块 */
 .vp-doc blockquote {
-  border-left: 4px solid #3498db;
-  background: rgba(52, 152, 219, 0.1);
+  border-left: 4px solid #007bff;
+  background: rgba(0, 123, 255, 0.05);
   padding: 1em 1.5em;
-  border-radius: 4px;
-  color: #ecf0f1;
+  border-radius: 0 4px 4px 0;
+  color: #212529;
+  margin: 1.5em 0;
 }
 
 /* ===== 首页 Hero 区域 ===== */
 .VPHome {
-  background: linear-gradient(180deg, #1a2a3a 0%, #0f1419 100%);
+  background: #ffffff;
+  padding: 0;
 }
 
 .VPHero {
-  background: linear-gradient(135deg, #2c3e50, #1a2a3a);
-  border-radius: 12px;
-  padding: 60px 40px;
-  margin-bottom: 40px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  background: #ffffff;
+  border-radius: 0;
+  padding: 80px 24px 40px;
+  margin-bottom: 0;
+  box-shadow: none;
+  border: none;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .VPHero .name {
-  background: linear-gradient(90deg, #3498db, #ecf0f1);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #212529;
+  margin-bottom: 0.5rem;
 }
 
 .VPHero .text {
-  color: #ecf0f1;
+  font-size: 1.5rem;
+  color: #495057;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .VPHero .tagline {
-  color: #bdc3c7;
+  font-size: 1.2rem;
+  color: #6c757d;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
 }
 
 /* Hero 按钮 */
 .VPButton.brand {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: #007bff;
   border: none;
   color: white;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  margin: 0 8px;
 }
 
 .VPButton.brand:hover {
-  background: linear-gradient(135deg, #2980b9, #21618c);
+  background: #0069d9;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.3);
 }
 
 .VPButton.alt {
-  border: 2px solid #3498db;
-  color: #3498db;
+  border: 2px solid #007bff;
+  color: #007bff;
   background: transparent;
   transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  margin: 0 8px;
 }
 
 .VPButton.alt:hover {
-  background: rgba(52, 152, 219, 0.1);
+  background: rgba(0, 123, 255, 0.1);
   transform: translateY(-2px);
 }
 
 /* ===== Features 区域 ===== */
+.VPFeatures {
+  padding: 40px 24px 60px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
 .VPFeature {
-  background: linear-gradient(135deg, #2c3e50, #34495e);
-  border: 1px solid rgba(52, 152, 219, 0.2);
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
   border-radius: 12px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 30px 24px;
+  height: 100%;
 }
 
 .VPFeature:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
-  border-color: #3498db;
+  box-shadow: 0 8px 20px rgba(0, 123, 255, 0.1);
+  border-color: #007bff;
 }
 
 .VPFeature .title {
-  color: #3498db;
+  color: #007bff;
   font-weight: 700;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
 }
 
 .VPFeature .details {
-  color: #ecf0f1;
+  color: #495057;
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 /* ===== 页脚 ===== */
 .VPFooter {
-  background: linear-gradient(135deg, #2c3e50, #1a2a3a);
-  border-top: 1px solid rgba(52, 152, 219, 0.2);
-  color: #bdc3c7;
+  background: #ffffff;
+  border-top: 1px solid #f0f0f0;
+  color: #6c757d;
+  padding: 40px 24px;
+  text-align: center;
 }
 
 /* ===== 搜索框 ===== */
 .DocSearch-Button {
-  background: rgba(52, 152, 219, 0.1) !important;
-  border: 1px solid rgba(52, 152, 219, 0.3) !important;
+  background: #fafafa !important;
+  border: 1px solid #f0f0f0 !important;
+  border-radius: 8px;
 }
 
 .DocSearch-Button:hover {
-  background: rgba(52, 152, 219, 0.2) !important;
-  box-shadow: 0 0 0 1px #3498db !important;
+  background: #f0f0f0 !important;
+  box-shadow: 0 0 0 1px #007bff !important;
 }
 
 /* ===== 目录 ===== */
 .VPDocAsideOutline {
-  background: rgba(44, 62, 80, 0.3);
+  background: #fafafa;
   border-radius: 8px;
   padding: 16px;
+  border: 1px solid #f0f0f0;
 }
 
 .VPDocAsideOutline .outline-link {
-  color: #bdc3c7;
+  color: #495057;
   transition: all 0.3s ease;
 }
 
 .VPDocAsideOutline .outline-link:hover {
-  color: #3498db;
+  color: #007bff;
 }
 
 .VPDocAsideOutline .outline-link.active {
-  color: #3498db;
+  color: #007bff;
   font-weight: 600;
 }
 
 /* ===== 滚动条样式 ===== */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a2a3a;
+  background: #fafafa;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #3498db, #2980b9);
-  border-radius: 5px;
+  background: #c0c0c0;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #2980b9, #21618c);
+  background: #a0a0a0;
 }
 
 /* ===== 响应式优化 ===== */
 @media (max-width: 768px) {
   .VPHero {
-    padding: 40px 20px;
+    padding: 60px 16px 30px;
   }
   
-  .VPNav {
-    background: linear-gradient(135deg, #2c3e50, #1a2a3a) !important;
+  .VPHero .name {
+    font-size: 2.2rem;
+  }
+  
+  .VPHero .text {
+    font-size: 1.2rem;
+  }
+  
+  .VPHero .tagline {
+    font-size: 1rem;
+  }
+  
+  .VPButton {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    margin: 0 4px;
+  }
+  
+  .VPFeatures {
+    padding: 30px 16px 40px;
+  }
+  
+  .VPFeature {
+    padding: 24px 20px;
+  }
+  
+  .vp-doc h1 {
+    font-size: 1.8rem;
+  }
+  
+  .vp-doc h2 {
+    font-size: 1.5rem;
+  }
+  
+  .vp-doc h3 {
+    font-size: 1.3rem;
   }
 }
 
@@ -350,12 +448,13 @@
 
 /* ===== 主题切换按钮 ===== */
 .VPSwitchAppearance {
-  background: rgba(52, 152, 219, 0.1) !important;
-  border: 1px solid rgba(52, 152, 219, 0.3);
+  background: #fafafa !important;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
 }
 
 .VPSwitchAppearance:hover {
-  background: rgba(52, 152, 219, 0.2) !important;
+  background: #f0f0f0 !important;
 }
 
 /* ===== 表格样式 ===== */
@@ -363,14 +462,15 @@
   border-collapse: collapse;
   width: 100%;
   margin: 1em 0;
-  background: rgba(44, 62, 80, 0.3);
+  background: #ffffff;
   border-radius: 8px;
   overflow: hidden;
+  border: 1px solid #f0f0f0;
 }
 
 .vp-doc th {
-  background: linear-gradient(135deg, #2c3e50, #34495e);
-  color: #3498db;
+  background: #fafafa;
+  color: #007bff;
   font-weight: 700;
   padding: 12px;
   text-align: left;
@@ -378,22 +478,23 @@
 
 .vp-doc td {
   padding: 10px 12px;
-  border-top: 1px solid rgba(52, 152, 219, 0.2);
-  color: #ecf0f1;
+  border-top: 1px solid #f0f0f0;
+  color: #212529;
 }
 
 .vp-doc tr:hover {
-  background: rgba(52, 152, 219, 0.1);
+  background: rgba(0, 123, 255, 0.03);
 }
 
 /* ===== 列表样式优化 ===== */
 .vp-doc ul,
 .vp-doc ol {
-  color: #ecf0f1;
+  color: #212529;
+  line-height: 1.8;
 }
 
 .vp-doc li::marker {
-  color: #3498db;
+  color: #007bff;
 }
 
 /* ===== 警告框样式 ===== */
@@ -401,20 +502,22 @@
 .vp-doc .warning,
 .vp-doc .danger {
   border-left-width: 4px;
-  border-radius: 4px;
+  border-radius: 0 4px 4px 0;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
 }
 
 .vp-doc .tip {
-  border-left-color: #3498db;
-  background: rgba(52, 152, 219, 0.1);
+  border-left-color: #007bff;
+  background: rgba(0, 123, 255, 0.05);
 }
 
 .vp-doc .warning {
-  border-left-color: #f39c12;
-  background: rgba(243, 156, 18, 0.1);
+  border-left-color: #ffc107;
+  background: rgba(255, 193, 7, 0.05);
 }
 
 .vp-doc .danger {
-  border-left-color: #e74c3c;
-  background: rgba(231, 76, 60, 0.1);
+  border-left-color: #dc3545;
+  background: rgba(220, 53, 69, 0.05);
 }

@@ -28,6 +28,9 @@
               <a href="/ProblemSession1.pdf" target="_blank" class="dropdown-link" @click="closeMenu">
                 第一次习题课
               </a>
+              <a href="/ProblemSession2.pdf" target="_blank" class="dropdown-link" @click="closeMenu">
+                第二次习题课
+              </a>
             </li>
           </ul>
         </li>
@@ -144,13 +147,14 @@ export default {
 
 <style scoped>
 .navbar {
-  background: linear-gradient(135deg, #2c3e50, #1a2a3a);
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
   padding: 15px 0;
   text-align: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 1000;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .nav-container {
@@ -163,13 +167,13 @@ export default {
 }
 
 .nav-logo a {
-  color: white;
+  color: #212529;
   font-size: 1.8rem;
   font-weight: 700;
   text-decoration: none;
   letter-spacing: 1px;
   margin: 0;
-  background: linear-gradient(90deg, #3498db, #2c3e50);
+  background: linear-gradient(90deg, #007bff, #212529);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -188,25 +192,26 @@ export default {
 }
 
 .nav-link {
-  color: #ecf0f1;
+  color: #495057;
   text-decoration: none;
   font-weight: 500;
   font-size: 1.05rem;
   padding: 8px 12px;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: all 0.3s ease;
   display: block;
 }
 
 .nav-link:hover {
-  color: #3498db;
-  background-color: rgba(255, 255, 255, 0.1);
+  color: #007bff;
+  background-color: rgba(0, 123, 255, 0.1);
   transform: translateY(-2px);
 }
 
 .nav-link.router-link-exact-active {
-  color: #3498db;
-  background-color: rgba(52, 152, 219, 0.1);
+  color: #007bff;
+  background-color: rgba(0, 123, 255, 0.15);
+  font-weight: 600;
 }
 
 .dropdown {
@@ -217,10 +222,10 @@ export default {
   position: absolute;
   top: 100%;
   left: 0;
-  background: linear-gradient(135deg, #34495e, #2c3e50);
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
   min-width: 180px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
   list-style: none;
   padding: 10px 0;
   opacity: 0;
@@ -228,6 +233,7 @@ export default {
   transform: translateY(10px);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   margin-top: 5px;
+  border: 1px solid #e9ecef;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -239,15 +245,16 @@ export default {
 .dropdown-link {
   display: block;
   padding: 12px 20px;
-  color: #ecf0f1;
+  color: #212529;
   text-decoration: none;
   transition: all 0.3s ease;
   font-size: 1rem;
+  font-weight: 500;
 }
 
 .dropdown-link:hover {
-  background-color: rgba(52, 152, 219, 0.2);
-  color: #3498db;
+  background-color: rgba(0, 123, 255, 0.1);
+  color: #007bff;
   padding-left: 25px;
 }
 
@@ -260,7 +267,7 @@ export default {
 .bar {
   width: 25px;
   height: 3px;
-  background-color: #ecf0f1;
+  background-color: #212529;
   margin: 3px 0;
   transition: 0.4s;
   border-radius: 2px;
@@ -294,10 +301,11 @@ export default {
     width: 100%;
     margin-top: 20px;
     display: none;
-    background: rgba(44, 62, 80, 0.95);
-    border-radius: 10px;
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    border-radius: 15px;
     padding: 15px 0;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e9ecef;
   }
 
   .nav-menu.active {
@@ -312,7 +320,7 @@ export default {
   .nav-link {
     padding: 12px 20px;
     margin: 5px 20px;
-    border-radius: 6px;
+    border-radius: 8px;
   }
 
   .nav-toggle {
@@ -326,18 +334,22 @@ export default {
     visibility: visible;
     transform: none;
     padding: 0;
-    background-color: transparent;
+    background: transparent;
     margin-top: 0;
     border-radius: 0;
     min-width: auto;
+    border: none;
   }
   
   .dropdown-link {
     padding: 10px 30px;
+    color: #212529;
   }
   
   .dropdown-link:hover {
     padding-left: 35px;
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #007bff;
   }
 }
 </style>
