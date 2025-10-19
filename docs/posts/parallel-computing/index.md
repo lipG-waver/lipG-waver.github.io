@@ -9,8 +9,9 @@ title: 并行计算专题
 ## 📚 文章列表
 
 ## 昇腾NPU编程
-- [介绍：从英伟达和昇腾不同的地方讲起](./ascend/intro.md)
-
+- [介绍：从英伟达和昇腾不同的地方讲起，CPU一侧](./ascend/intro.md)
+- [介绍：继续上一篇，讲解NPU Kernel函数](./ascend/intro_npu.md)
+- [AclrtSynchronizeStream实战示例](./ascend/aclrtSynchStream_example.md)
 ## 并行计算课程
 - [第一课：如何加速矩阵的乘法，前置知识、缓存服用和分块](./lesson/ParallelC-lesson1)
 
