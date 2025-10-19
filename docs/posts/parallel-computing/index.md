@@ -8,20 +8,11 @@ title: 并行计算专题
 
 ## 📚 文章列表
 
-### OpenMP 系列
-- [OpenMP 基础入门](./openmp-basics)
+## 昇腾NPU编程
+- [介绍：从英伟达和昇腾不同的地方讲起](./ascend/intro.md)
 
-### MPI 系列
-- [MPI 编程指南](./mpi-guide)
+## 并行计算课程
+- [第一课：如何加速矩阵的乘法，前置知识、缓存服用和分块](./lesson/ParallelC-lesson1)
 
-### GPU 编程
-- [CUDA 编程入门](./cuda-intro)
-
-### 并行计算第一课
-- [如何加速矩阵的乘法，前置知识、缓存服用和分块](./ParallelC-lesson1)
-## 主要内容
-
-- **共享内存并行**：OpenMP、多线程
-- **分布式计算**：MPI、集群编程
-- **异构计算**：CUDA、OpenCL
-- **性能优化**：并行算法、负载均衡
+## 问答
+- [为什么商业公司选择GPT,而不是BERT?](./ask&answer/bert-vs-gpt-commerical-performance.md)
