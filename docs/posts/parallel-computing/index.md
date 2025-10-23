@@ -14,6 +14,8 @@ title: 并行计算专题
 - [AclrtSynchronizeStream实战示例](./ascend/aclrtSynchStream_example.md)
 ## 并行计算课程
 - [第一课：如何加速矩阵的乘法，前置知识、缓存服用和分块](./lesson/ParallelC-lesson1)
+- [第三课：多核编程](./lesson/ParallelC-lesson3_pre.md)
+
 
 ## 问答
 - [为什么商业公司选择GPT,而不是BERT?](./ask&answer/bert-vs-gpt-commerical-performance.md)
