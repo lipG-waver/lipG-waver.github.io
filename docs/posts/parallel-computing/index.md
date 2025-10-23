@@ -14,7 +14,9 @@ title: 并行计算专题
 - [AclrtSynchronizeStream实战示例](./ascend/aclrtSynchStream_example.md)
 ## 并行计算课程
 - [第一课：如何加速矩阵的乘法，前置知识、缓存服用和分块](./lesson/ParallelC-lesson1)
-- [第三课：多核编程](./lesson/ParallelC-lesson3_pre.md)
+- [第三课：多核编程-前置知识](./lesson/ParallelC-lesson3_pre.md)
+- [第三课：多核编程](./lesson/ParallelC-lesson3.md)
+
 
 
 ## 问答
