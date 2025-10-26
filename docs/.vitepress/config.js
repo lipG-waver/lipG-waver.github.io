@@ -6,8 +6,21 @@ export default {
   
   head: [
     ['link', { rel: 'icon', href: '/blog/favicon.ico' }],
-    ['meta', { name: 'theme-color', content: '#3498db' }]
+    ['meta', { name: 'theme-color', content: '#3498db' }],
+    // 添加 KaTeX CSS
+    ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css' }],
+    // 添加 KaTeX JS（可选，用于更复杂的渲染）
+    ['script', { src: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js' }]
   ],
+  
+  // 配置 markdown 选项
+  markdown: {
+    config: (md) => {
+      // VitePress 内置了对数学公式的支持
+      // 这里可以添加其他 markdown-it 插件
+    },
+    math: true  // 启用数学公式支持
+  },
   
   themeConfig: {
     logo: '/logo.svg', // 可选：添加 logo 到 docs/public/logo.svg

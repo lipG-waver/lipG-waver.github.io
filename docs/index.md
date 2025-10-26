@@ -18,10 +18,10 @@ features:
     title: 并行计算
     details: 探索高性能计算的世界，包括 OpenMP、MPI、CUDA 等并行编程技术
     link: /posts/parallel-computing/
-  # - icon: 💻
-  #   title: 前端开发
-  #   details: Web 开发技术、框架使用经验和最佳实践分享
-  #   link: /posts/
+  - icon: 💻
+    title: 截面与面板数据分析助教
+    details: 作为助教的助教课
+    link: /posts/cpa-analysis/
   # - icon: 🧮
   #   title: 算法学习
   #   details: 数据结构与算法、LeetCode 题解和编程技巧
