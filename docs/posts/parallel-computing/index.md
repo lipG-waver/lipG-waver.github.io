@@ -23,3 +23,4 @@ title: 并行计算专题
 - [为什么商业公司选择GPT,而不是BERT?](./ask&answer/bert-vs-gpt-commerical-performance.md)
 - [是否有必要在进行softmax减去最大值，不减的话是否影响精度?](./ask&answer/is_minus_max_necessary.md)
 - [利用局部性和簇状最大来抽样Softmax](./ask&answer/sampling_softmax_by_locality.md)
+
