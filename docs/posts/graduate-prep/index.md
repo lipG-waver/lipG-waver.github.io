@@ -22,6 +22,7 @@ title: 研究生准备
 - [第五课：如何撰写一份CV](./lesson4-cv.md)
 - [第六课：重新回顾SOP](./sop.md)
 - [第七课：研究生推荐信如何获取](./lesson7.md)
+- [第八课：总结](./lesson8-review.md)
 
 ## 价值观
 - [为什么我需要帮助别人，为什么人饥我饥](./values.md)
