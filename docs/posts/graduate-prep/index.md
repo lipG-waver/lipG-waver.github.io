@@ -14,3 +14,5 @@ title: 研究生准备
 - [研究生申请要关注的内容](./ga-tracker.md)
 - [第一课：准备时间线](./lesson1-timeline.md)
 - [第二课：如何进行一个良好的英语表述](./lesson2-good-expression.md)
+- [第三课：系统地介绍了从准备申请、撰写材料到面试和录取管理的全过程](./lesson3.md)
+### 可操作性强，值得阅读
