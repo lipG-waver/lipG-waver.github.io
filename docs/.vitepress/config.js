@@ -27,7 +27,7 @@ export default {
     
     nav: [
       { text: '🏠 首页', link: '/' },
-      { text: '📝 文章', link: '/posts/' },
+      // { text: '📝 文章', link: '/posts/' },
       { text: '🚀 并行计算', link: '/posts/parallel-computing/' },
       { text: '👤 关于', link: '/about' },
       { 
