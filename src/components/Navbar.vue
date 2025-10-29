@@ -35,7 +35,7 @@
           </ul>
         </li>
         
-        <li class="nav-item dropdown" :class="{ active: isDropdownOpen.tech }">
+        <!-- <li class="nav-item dropdown" :class="{ active: isDropdownOpen.tech }">
           <a 
             href="#" 
             class="nav-link" 
@@ -56,8 +56,8 @@
             </li>
 
           </ul>
-        </li>
-        <li class="nav-item dropdown" :class="{ active: isDropdownOpen.tech }">
+        </li> -->
+        <!-- <li class="nav-item dropdown" :class="{ active: isDropdownOpen.tech }">
           <a 
             href="#" 
             class="nav-link" 
@@ -72,7 +72,7 @@
               </router-link>
             </li>
           </ul>
-        </li>
+        </li> -->
         <!-- 新增：VitePress 博客链接 -->
         <li class="nav-item">
           <a 
