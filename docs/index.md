@@ -34,10 +34,10 @@ features:
   #   title: 学习笔记
   #   details: 技术文档、读书笔记和知识总结
   #   link: /posts/
-  # - icon: 🎯
-  #   title: 项目实战
-  #   details: 实际项目开发经验和问题解决方案
-  #   link: /posts/
+  - icon: 🎯
+    title: 研究生申请相关资料
+    details: 来源于伯克利的课程
+    link: /posts/graduate-prep
 ---
 
 <style scoped>
