@@ -35,7 +35,7 @@
           </ul>
         </li>
         
-        <!-- <li class="nav-item dropdown" :class="{ active: isDropdownOpen.tech }">
+        <li class="nav-item dropdown" :class="{ active: isDropdownOpen.tech }">
           <a 
             href="#" 
             class="nav-link" 
@@ -56,7 +56,7 @@
             </li>
 
           </ul>
-        </li> -->
+        </li>
         <!-- <li class="nav-item dropdown" :class="{ active: isDropdownOpen.tech }">
           <a 
             href="#" 
