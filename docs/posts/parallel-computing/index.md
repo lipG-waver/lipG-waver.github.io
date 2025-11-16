@@ -18,6 +18,9 @@ title: 并行计算专题
 - [第三课：多核编程](./lesson/ParallelC-lesson3.md)
 
 
+## 线性注意力/Linear Attention
+- [线性注意力的演化过程](./linear-attention/evolution.md)
+- [Evolution of Linear Attention](./linear-attention/evolution-english.md)
 
 ## 问答
 - [为什么商业公司选择GPT,而不是BERT?](./ask&answer/bert-vs-gpt-commerical-performance.md)
