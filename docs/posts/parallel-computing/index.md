@@ -23,6 +23,9 @@ title: 并行计算专题
 - [From Standard Attention to Linear Attention](./linear-attention/softmaxToLinear-en.md)
 - [线性注意力的演化过程](./linear-attention/evolution.md)
 - [Evolution of Linear Attention](./linear-attention/evolution-english.md)
+- [Performer为什么在期望上能做到和Softmax相等](./linear-attention/performer.md)
+- [Why Performer is equal to Softmax attention in the aspect of expectation](./linear-attention//performer-en.md)
+
 
 ## 问答
 - [为什么商业公司选择GPT,而不是BERT?](./ask&answer/bert-vs-gpt-commerical-performance.md)
