@@ -32,3 +32,4 @@ title: 并行计算专题
 - [是否有必要在进行softmax减去最大值，不减的话是否影响精度?](./ask&answer/is_minus_max_necessary.md)
 - [利用局部性和簇状最大来抽样Softmax](./ask&answer/sampling_softmax_by_locality.md)
 - [是否能算出一行以后直接进行softmax?](./ask&answer/new.md)
+- [对比算完一整行的方案与目前的Online softmax方案](./ask&answer/new1.md)
