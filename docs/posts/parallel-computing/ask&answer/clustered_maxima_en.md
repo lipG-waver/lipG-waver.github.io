@@ -96,6 +96,43 @@ $$
 
 ---
 
+## Empirical Evidence from GPT-2
+
+To validate the Clustered Maxima hypothesis, we analyzed attention patterns across all 12 layers of GPT-2. For each attention row, we examined what proportion of maximum values have neighbors (within a given neighborhood size) that reach a specified ratio threshold of the maximum.
+
+![Layer-wise Maxima Neighborhood Analysis](layer_wise_maxima_neighborhood_analysis.png)
+*Figure: Layer-wise Maxima Neighborhood Analysis across GPT-2's 12 attention layers. Each heatmap shows the proportion of attention rows where neighbors within a given neighborhood size reach the specified ratio threshold of the row maximum.*
+
+### Reading the Heatmaps
+
+- **X-axis (Ratio Threshold)**: The proportion of maximum value that neighbors must reach (e.g., 0.8 means 80% of max)
+- **Y-axis (Neighborhood Size)**: How many positions before/after the maximum to consider (e.g., 1 means ±1 positions)
+- **Cell values**: Proportion of attention rows satisfying the condition
+
+For example, if Ratio Threshold = 0.8 and Neighborhood Size = 2, a cell value of 0.70 means that in 70% of attention rows, at least one element within ±2 positions of the maximum reaches 80% of the maximum value.
+
+### Key Findings
+
+The heatmaps reveal a consistent pattern: **maxima are rarely isolated**.
+
+1. **Even under strict conditions** (Ratio Threshold = 0.99, Neighborhood Size = 1), 10-15% of maxima have immediate neighbors reaching 99% of their value.
+
+2. **Under practical conditions** (Ratio Threshold = 0.8, Neighborhood Size = 2), this proportion rises to **50-70%** across most layers.
+
+3. **Layer 2 shows particularly strong clustering** (0.89-0.94 in the upper-left region), suggesting highly concentrated attention patterns—possibly corresponding to specific linguistic functions like syntactic parsing.
+
+4. **Deeper layers (8-11) show weaker clustering**, which may reflect more distributed, abstract semantic processing.
+
+### Implications for Sampling-Based Optimization
+
+This empirical evidence supports the theoretical basis for sampling-based maximum estimation:
+
+- If we sample within a small neighborhood of the true maximum, we are highly likely to find values close enough for numerically stable softmax computation
+- The clustering is strong enough that even coarse sampling (every 8-16 positions) has a good chance of landing near the true maximum
+- Some attention layers with maximum scores exceeding 20 still exhibit this clustering property, confirming robustness even for high-magnitude attention patterns
+
+---
+
 ## Algorithmic Implications: Efficient Online Softmax
 
 ### The Problem: Why is Softmax Slow?
