@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindForge - Deep Dive Simulation</title>
+    <title>MindForge - Deep Analysis Engine</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0f172a; /* Darker, more premium blue/black */
-            --accent: #3b82f6; /* Bright Blue for actions */
-            --bg-chat: #f8fafc;
+            --primary: #0f172a;
+            --accent: #6366f1; /* Indigo */
+            --bg-chat: #f1f5f9;
             --bg-sidebar: #ffffff;
             --text-main: #334155;
             --user-bubble: #3b82f6;
-            --bot-bubble: #e2e8f0;
+            --bot-bubble: #ffffff;
+            --border: #e2e8f0;
         }
 
         * { box-sizing: border-box; }
@@ -26,57 +27,76 @@
             flex-direction: column;
             background-color: var(--bg-chat);
             color: var(--text-main);
+            overflow: hidden;
         }
 
         /* Header */
         header {
             background: white;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid #e2e8f0;
+            padding: 0 2rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px;
+            height: 64px;
+            flex-shrink: 0;
         }
 
         .logo {
             font-weight: 800;
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             color: var(--primary);
-            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .logo span { color: #94a3b8; font-weight: 400; font-size: 0.9rem; margin-left: 10px;}
+        .logo-badge {
+            background: #f0f9ff;
+            color: #0ea5e9;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #bae6fd;
+            font-weight: 600;
+        }
 
-        .controls { display: flex; gap: 1rem; align-items: center; }
+        .controls { display: flex; gap: 12px; align-items: center; }
 
         select {
-            padding: 0.6rem 1rem;
+            padding: 0.5rem 1rem;
             border: 1px solid #cbd5e1;
             border-radius: 6px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             outline: none;
             background: #f8fafc;
-            min-width: 300px;
+            min-width: 320px;
+            cursor: pointer;
         }
 
         button {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 0.6rem 1.5rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 6px;
-            font-weight: 600;
+            font-weight: 500;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-
-        button:hover { background: #334155; }
+        
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        button:hover:not(:disabled) { background: #334155; }
 
         /* Main Layout */
         .container {
             display: flex;
-            height: calc(100vh - 70px);
+            flex: 1;
+            height: calc(100vh - 64px);
         }
 
         /* Chat Area */
@@ -84,28 +104,29 @@
             flex: 2;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid #e2e8f0;
-            background: white;
+            border-right: 1px solid var(--border);
+            background: var(--bg-chat);
             position: relative;
         }
 
         .chat-history {
             flex: 1;
-            padding: 2rem 15%; /* More whitespace on sides */
+            padding: 2rem 10%;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.2rem;
             scroll-behavior: smooth;
         }
 
         .message {
             max-width: 85%;
-            padding: 1rem 1.5rem;
+            padding: 1rem 1.25rem;
             border-radius: 1rem;
             font-size: 0.95rem;
             line-height: 1.6;
             position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             opacity: 0;
             transform: translateY(10px);
             animation: fadeUp 0.4s ease forwards;
@@ -128,100 +149,137 @@
         }
 
         .typing-indicator {
-            margin-left: 15%;
-            padding: 10px;
+            margin-left: 10%;
+            margin-bottom: 1rem;
             color: #94a3b8;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-style: italic;
-            display: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
+        
+        .typing-indicator.visible { opacity: 1; }
+
+        .dot-pulse {
+            width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+        .dot-pulse:nth-child(2) { animation-delay: 0.2s; }
+        .dot-pulse:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
         /* Sidebar */
         .sidebar {
             flex: 1;
-            background: #f8fafc;
-            padding: 2rem;
+            background: var(--bg-sidebar);
+            padding: 1.5rem;
             overflow-y: auto;
-            border-left: 1px solid #e2e8f0;
-            min-width: 350px;
+            min-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
-        .sidebar h2 {
-            font-size: 1.1rem;
-            color: var(--primary);
-            margin-bottom: 20px;
+        .sidebar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
         }
 
-        .live-badge {
-            background: #ef4444;
-            color: white;
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            animation: pulse 2s infinite;
+        .sidebar-header h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--primary);
         }
 
-        @keyframes pulse { 0% {opacity: 1;} 50% {opacity: 0.6;} 100% {opacity: 1;} }
+        .depth-meter {
+            font-size: 0.75rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .meter-bar {
+            width: 60px;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .meter-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 1s ease;
+        }
 
         .phase-card {
-            background: white;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 1.25rem;
             transition: all 0.4s ease;
-            position: relative;
+            background: #fcfcfc;
         }
 
-        .phase-card.locked {
-            opacity: 0.6;
-            filter: grayscale(100%);
-        }
-
+        .phase-card.locked { opacity: 0.5; filter: grayscale(100%); }
         .phase-card.active {
+            background: white;
             border-color: var(--accent);
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
-            opacity: 1;
-            filter: grayscale(0%);
+            box-shadow: 0 4px 20px -4px rgba(99, 102, 241, 0.15);
+            transform: translateY(-2px);
         }
 
-        .phase-header {
-            font-size: 0.8rem;
+        .phase-title {
+            font-size: 0.75rem;
             text-transform: uppercase;
-            color: #64748b;
+            color: #94a3b8;
             font-weight: 700;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.05em;
+            display: flex;
+            justify-content: space-between;
         }
+        
+        .phase-status { font-size: 0.7rem; color: var(--accent); opacity: 0; transition: opacity 0.3s; }
+        .active .phase-status { opacity: 1; }
 
         .phase-content {
             font-size: 0.9rem;
-            color: #334155;
+            color: var(--text-main);
+            min-height: 1.5rem;
         }
+        
+        .phase-content strong { font-weight: 600; color: #1e293b; }
 
+        .tag-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
         .insight-tag {
-            display: inline-block;
-            background: #dbeafe;
-            color: #1e40af;
-            padding: 4px 8px;
+            background: #f1f5f9;
+            color: #475569;
+            padding: 3px 8px;
             border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-
-        .ai-note {
-            position: absolute;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
             font-size: 0.75rem;
-            color: #cbd5e1;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .active .insight-tag { background: #eef2ff; color: var(--accent); border-color: #c7d2fe; }
+
+        .simulation-footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
         }
 
     </style>
@@ -229,14 +287,20 @@
 <body>
 
 <header>
-    <div class="logo">MindForge <span>| Interactive AI Demo</span></div>
+    <div class="logo">
+        MindForge <span class="logo-badge">AI SIMULATION</span>
+    </div>
     <div class="controls">
         <select id="personaSelector">
-            <option value="money_lover">Persona A: The Pragmatist (Unapologetically Driven by Wealth)</option>
-            <option value="rich_idealist">Persona B: The Wealthy Idealist (Zero Financial Pressure)</option>
-            <option value="conflicted">Persona C: The Conflicted (Needs "Money Shame" Therapy)</option>
+            <option value="A_finance">Case A: The "Money Lover" (Financial Pragmatist)</option>
+            <option value="B_idealist">Case B: The "Rich Idealist" (Post-Materialist)</option>
+            <option value="C_shame">Case C: The "Conflicted" (Overcoming Money Shame)</option>
+            <option value="D_burnout">Case D: The "Burnt Out" Elite (Escapism vs. Passion)</option>
+            <option value="E_family">Case E: The "Filial Prisoner" (Living for Parents)</option>
         </select>
-        <button onclick="startSimulation()">▶ Start Simulation</button>
+        <button id="startBtn" onclick="startSimulation()">
+            <span id="playIcon">▶</span> Run Simulation
+        </button>
     </div>
 </header>
 
@@ -245,161 +309,227 @@
         <div class="chat-history" id="chatHistory">
             <div class="message bot">Hello. I am MindForge. I'm here to dig beneath the surface. Let's skip the resume talk. Who are you, really?</div>
         </div>
-        <div class="typing-indicator" id="typingIndicator">Typing...</div>
-        <div class="ai-note">AI Generated Interface • Simulation Mode</div>
+        
+        <div class="typing-indicator" id="typingIndicator">
+            <span class="dot-pulse"></span><span class="dot-pulse"></span><span class="dot-pulse"></span>
+            <span style="margin-left: 8px; font-style: normal;">AI is analyzing psychological markers...</span>
+        </div>
     </div>
 
     <div class="sidebar">
-        <h2>Real-Time Profile <span class="live-badge">Live</span></h2>
+        <div class="sidebar-header">
+            <h2>Real-Time Profiling</h2>
+            <div class="depth-meter">
+                Depth: <div class="meter-bar"><div class="meter-fill" id="depthFill"></div></div>
+            </div>
+        </div>
 
         <div class="phase-card locked" id="phase1">
-            <div class="phase-header">Phase 1: Core Motivation</div>
+            <div class="phase-title">
+                Phase 1: Core Motivation
+                <span class="phase-status">● Analyzed</span>
+            </div>
             <div class="phase-content" id="content1">
-                <em>Waiting for deeper context...</em>
+                <em style="color:#cbd5e1">Pending deep dive...</em>
             </div>
         </div>
 
         <div class="phase-card locked" id="phase2">
-            <div class="phase-header">Phase 2: Value Creation Field</div>
+            <div class="phase-title">
+                Phase 2: Strategic Domain
+                <span class="phase-status">● Locked</span>
+            </div>
             <div class="phase-content" id="content2">
-                <em>Waiting for domain analysis...</em>
+                <em style="color:#cbd5e1">Pending domain analysis...</em>
             </div>
         </div>
 
         <div class="phase-card locked" id="phase3">
-            <div class="phase-header">Phase 3: Leadership Signature</div>
-            <div class="phase-content" id="content3">
-                <em>Waiting for behavioral patterns...</em>
+            <div class="phase-title">
+                Phase 3: Leadership Signature
+                <span class="phase-status">● Locked</span>
             </div>
+            <div class="phase-content" id="content3">
+                <em style="color:#cbd5e1">Pending behavioral data...</em>
+            </div>
+        </div>
+
+        <div class="simulation-footer">
+            MindForge AI Prototype v2.5 | Interaction Depth: Optimized (12 Turns)
         </div>
     </div>
 </div>
 
 <script>
-    // --- Persona Scripts ---
+    // --- Expanded Persona Database ---
     
     const personas = {
-        // PERSONA A: Loves Money (Direct & Honest)
-        money_lover: [
-            // Intro
-            { type: 'user', text: "I'm studying Finance. I want to break into Private Equity or Hedge Funds. I need a career path that maximizes ROI on my time.", delay: 1000 },
-            
-            // Phase 1: Motivation Digging (3 turns)
-            { type: 'bot', text: "Straight to the point. 'Maximizing ROI' usually means money. Is wealth the end goal, or a means to something else?", delay: 1500 },
-            { type: 'user', text: "It's the goal. I want 10 million liquid by 35. I grew up seeing how lack of money destroys families. I won't let that happen to me.", delay: 2000 },
-            { type: 'bot', text: "I appreciate the brutal honesty. It's rare. So your drive is actually rooted in security and control, not just luxury. Correct?", delay: 1500 },
-            { type: 'user', text: "Exactly. Money is freedom. I want total control over my life.", delay: 1500 },
+        // --- CASE A: The Honest Money Lover ---
+        A_finance: [
+            // Phase 1: Motivation (Deepening the "Why")
+            { type: 'user', text: "I'm a Finance student. I want to break into Private Equity. I need a path that maximizes ROI on my time.", delay: 800 },
+            { type: 'bot', text: "Straight to the point. 'Maximizing ROI' usually translates to money. Is wealth the end goal, or a means to something else?", delay: 1500 },
+            { type: 'user', text: "It's the goal. I want $10M liquid by 35. I grew up seeing how lack of money destroys families. I won't let that happen to me.", delay: 2000 },
+            { type: 'bot', text: "So it's not just greed; it's a defense mechanism. You equate money with safety and control. Are you willing to sacrifice work-life balance for this safety?", delay: 1800 },
+            { type: 'user', text: "100%. I'll sleep when I'm 40. I want total control over my destiny.", delay: 1200 },
             { 
-                type: 'update', phase: 1, 
-                html: `<strong>Driver:</strong> Financial Freedom & Control<br>
-                       <strong>Origin:</strong> Fear of Scarcity<br>
-                       <strong>Clarity:</strong> <span class='insight-tag'>Very High (Unapologetic)</span>` 
+                type: 'update', phase: 1, depth: 33,
+                html: `<strong>Driver:</strong> Financial Sovereignty<br>
+                       <strong>Root Cause:</strong> Trauma from Scarcity<br>
+                       <div class="tag-container"><span class="insight-tag">High Clarity</span><span class="insight-tag">Safety-Driven</span></div>` 
             },
 
-            // Phase 2: Domain (3 turns)
-            { type: 'bot', text: "Understood. Since high returns are the priority, are you better at spotting value in *companies* (Analysis) or *people* (Dealmaking)?", delay: 1500 },
-            { type: 'user', text: "I'm good with numbers, but I prefer the deal. I like the psychological warfare of negotiation.", delay: 2000 },
-            { type: 'bot', text: "Interesting. Pure quants stay in the back office. Dealmakers need to be on the front lines. How do you handle high-pressure conflict?", delay: 1500 },
-            { type: 'user', text: "I thrive on it. When others panic, I get calm. I like high-stakes poker.", delay: 1500 },
+            // Phase 2: Domain (Hunter vs. Farmer)
+            { type: 'bot', text: "Understood. Since high returns are the priority, we need to assess your risk profile. Do you prefer spotting value in companies (Analysis) or convincing people (Dealmaking)?", delay: 1500 },
+            { type: 'user', text: "I'm good with numbers, but I prefer the deal. I like the psychological warfare of negotiation. Analysis is boring.", delay: 2000 },
+            { type: 'bot', text: "Pure quants stay in the back office; they have a ceiling. Dealmakers are on the front lines. But dealmaking requires enduring rejection. How do you handle losing a deal?", delay: 1800 },
+            { type: 'user', text: "I don't get sad, I get angry. And then I find the next one immediately.", delay: 1500 },
             { 
-                type: 'update', phase: 2, 
+                type: 'update', phase: 2, depth: 66,
                 html: `<strong>Domain:</strong> M&A / Distressed Assets<br>
                        <strong>Role:</strong> Front-Office Dealmaker<br>
-                       <strong>Key Skill:</strong> <span class='insight-tag'>High-Stakes Negotiation</span>` 
+                       <div class="tag-container"><span class="insight-tag">Hunter Mindset</span><span class="insight-tag">High Aggression</span></div>` 
             },
 
-            // Phase 3: Leadership (2 turns)
+            // Phase 3: Leadership (Transactional)
             { type: 'bot', text: "Let's talk leadership. Tell me about a time you led a team and failed.", delay: 1500 },
-            { type: 'user', text: "University Investment Club. I pushed a risky stock, we lost 20% of our fund. Everyone blamed me.", delay: 2000 },
-            { type: 'bot', text: "Did you apologize?", delay: 1000 },
-            { type: 'user', text: "No. I wrote a 10-page report analyzing why the market moved against us and how we'd make it back. We made it back in 3 months.", delay: 2500 },
+            { type: 'user', text: "Investment Club. I pushed a risky stock, we lost 20%. Everyone blamed me.", delay: 1500 },
+            { type: 'bot', text: "Did you apologize to the team?", delay: 1000 },
+            { type: 'user', text: "No. Apologies don't fix the balance sheet. I wrote a 10-page report analyzing the mistake and we made the money back in 3 months.", delay: 2500 },
             { 
-                type: 'update', phase: 3, 
+                type: 'update', phase: 3, depth: 100,
                 html: `<strong>Style:</strong> Transactional / Results-First<br>
-                       <strong>Response to Failure:</strong> Analytical Aggression<br>
-                       <strong>Motto:</strong> "Results justify the method"` 
+                       <strong>Response to Failure:</strong> Analytical Action<br>
+                       <div class="tag-container"><span class="insight-tag">No-Nonsense</span><span class="insight-tag">Competence > Harmony</span></div>` 
             }
         ],
 
-        // PERSONA B: The Wealthy Idealist (Zero Money Pressure)
-        rich_idealist: [
-            // Intro
-            { type: 'user', text: "I'm an architecture student. My professors say I'm talented, but I hate the idea of designing commercial condos.", delay: 1000 },
-
-            // Phase 1: Motivation (3 turns)
-            { type: 'bot', text: "Commercial work pays the bills. What is it about condos that repels you?", delay: 1500 },
-            { type: 'user', text: "It's soulless. I don't need the money—my family has provided enough for me to not worry about rent. I want to build things that matter.", delay: 2000 },
-            { type: 'bot', text: "That is a massive privilege. If money is irrelevant, what is the currency you want to earn? Fame? Historical impact?", delay: 1500 },
-            { type: 'user', text: "Historical impact. I want to design public spaces that change how people interact in cities. Like a modern Agora.", delay: 2000 },
+        // --- CASE B: The Rich Idealist ---
+        B_idealist: [
+            { type: 'user', text: "I'm an architecture student. Professors say I'm talented, but I hate the idea of designing commercial condos for developers.", delay: 800 },
+            { type: 'bot', text: "Commercial work pays the bills. What exactly about condos repels you?", delay: 1500 },
+            { type: 'user', text: "It's soulless. I don't need the money—my family has provided enough. I want to build things that matter to history.", delay: 2000 },
+            { type: 'bot', text: "Acknowledging that privilege is important. If money is irrelevant, what currency are you chasing? Fame? Legacy? Social impact?", delay: 1800 },
+            { type: 'user', text: "Legacy. I want to design public spaces that change how people interact in cities. Like a modern Agora.", delay: 1500 },
             { 
-                type: 'update', phase: 1, 
+                type: 'update', phase: 1, depth: 33,
                 html: `<strong>Driver:</strong> Self-Actualization / Legacy<br>
-                       <strong>Financial Constraint:</strong> None (Privileged)<br>
-                       <strong>Motivation:</strong> <span class='insight-tag'>Pure Mission</span>` 
+                       <strong>Constraint:</strong> None (Privileged)<br>
+                       <div class="tag-container"><span class="insight-tag">Mission-Driven</span><span class="insight-tag">Post-Materialist</span></div>` 
             },
-
-            // Phase 2: Domain (3 turns)
-            { type: 'bot', text: "Designing for the public good is noble but bureaucratic. Do you have the patience for politics?", delay: 1500 },
-            { type: 'user', text: "Not really. I hate red tape. I just want to design.", delay: 1500 },
-            { type: 'bot', text: "Then 'City Planner' isn't for you. You might be better suited as a 'Visionary Founder' of a design studio that selects non-profit clients.", delay: 1500 },
-            { type: 'user', text: "Yes! That sounds right. I want to be the creative director, not the politician.", delay: 1500 },
+            { type: 'bot', text: "Designing for public good is noble but bureaucratic. Do you have the patience for politics and red tape?", delay: 1500 },
+            { type: 'user', text: "Not really. I hate compromise. I just want to design.", delay: 1500 },
+            { type: 'bot', text: "Then 'City Planner' isn't for you. You might be better suited as a 'Visionary Founder' of a design studio that selects non-profit clients.", delay: 1800 },
             { 
-                type: 'update', phase: 2, 
+                type: 'update', phase: 2, depth: 66,
                 html: `<strong>Domain:</strong> Public Architecture / Urban Design<br>
                        <strong>Role:</strong> Visionary Director<br>
-                       <strong>Focus:</strong> <span class='insight-tag'>Cultural Impact</span>` 
+                       <div class="tag-container"><span class="insight-tag">Creative Autonomy</span></div>` 
             },
-
-            // Phase 3: Leadership
             { type: 'bot', text: "As a Creative Director, how do you handle a team member who says your design is 'too expensive' to build?", delay: 1500 },
             { type: 'user', text: "I'd tell them to find a way. Limitations are just laziness. If the vision is good enough, we'll find the donors.", delay: 2000 },
             { 
-                type: 'update', phase: 3, 
+                type: 'update', phase: 3, depth: 100,
                 html: `<strong>Style:</strong> Visionary / Uncompromising<br>
-                       <strong>Weakness:</strong> Detached from constraints<br>
-                       <strong>Archetype:</strong> <span class='insight-tag'>The Artist King</span>` 
+                       <strong>Weakness:</strong> Detached from Reality<br>
+                       <div class="tag-container"><span class="insight-tag">The Artist King</span></div>` 
             }
         ],
 
-        // PERSONA C: The Conflicted (Shame about Money) - **HIGHLIGHT**
-        conflicted: [
-            // Intro
-            { type: 'user', text: "I'm looking into NGO work or Teaching. I want to help society.", delay: 1000 },
-
-            // Phase 1: Motivation - The Therapy Session (4 turns)
-            { type: 'bot', text: "Helping society is great. What kind of lifestyle do you envision for yourself in 10 years?", delay: 1500 },
+        // --- CASE C: The Conflicted (Shame) ---
+        C_shame: [
+            { type: 'user', text: "I'm looking into NGO work or Teaching. I want to help society.", delay: 800 },
+            { type: 'bot', text: "Helping society is great. But let's visualize your life in 10 years. Where do you live? What do you drive?", delay: 1500 },
             { type: 'user', text: "Oh, simple. I don't care about money. It's kind of shallow to chase wealth, right? Just enough to live.", delay: 2000 },
-            { type: 'bot', text: "I sense some hesitation. 'Shallow' is a judgment. Let's look at your hobbies. What do you do for fun?", delay: 2000 },
-            { type: 'user', text: "I like travel. Photography. And I really appreciate good design/fashion.", delay: 2000 },
-            { type: 'bot', text: "Travel and design are expensive. There is a conflict between your stated values (NGO) and your lifestyle needs. It is not 'bad' to want money.", delay: 2500 },
-            { type: 'user', text: "I guess... my parents always said business people are greedy. But honestly? I hate being broke. I want to help people, but I also want a Tesla.", delay: 3000 },
+            { type: 'bot', text: "I sense a 'value judgment' there. You called wealth 'shallow'. But looking at your hobbies—photography, travel—those require capital. There is a conflict here.", delay: 2000 },
+            { type: 'user', text: "I guess... my parents always said business people are greedy. But honestly? I hate being broke. I want to help people, but I also want a nice life.", delay: 2500 },
+            { type: 'bot', text: "It is not 'bad' to want money. You can be a good person and still be wealthy. Let's drop the shame.", delay: 1500 },
             { 
-                type: 'update', phase: 1, 
-                html: `<strong>Driver:</strong> Social Impact + Material Comfort<br>
+                type: 'update', phase: 1, depth: 33,
+                html: `<strong>Driver:</strong> Impact + Comfort<br>
                        <strong>Barrier:</strong> Cognitive Dissonance (Shame)<br>
-                       <strong>True Self:</strong> <span class='insight-tag'>Pragmatic Idealist</span>` 
+                       <div class="tag-container"><span class="insight-tag">Conflicted</span><span class="insight-tag">Needs Validation</span></div>` 
             },
-
-            // Phase 2: Domain (3 turns)
-            { type: 'bot', text: "Thank you for that honesty. Now we can find a real path. Pure NGO work won't buy the Tesla. Have you considered Impact Investing or ESG Consulting?", delay: 2000 },
+            { type: 'bot', text: "Now that we are honest: Pure NGO work won't buy the lifestyle you want. Have you considered ESG Consulting or Impact Investing?", delay: 1800 },
             { type: 'user', text: "What is that?", delay: 1000 },
-            { type: 'bot', text: "It's using finance tools to solve social problems. You make market-rate salaries while doing good.", delay: 1500 },
-            { type: 'user', text: "That... actually sounds perfect. I didn't know I was allowed to combine them.", delay: 1500 },
+            { type: 'bot', text: "It's using finance tools to solve social problems. You make market-rate salaries while doing good. It bridges your two needs.", delay: 1500 },
             { 
-                type: 'update', phase: 2, 
-                html: `<strong>Domain:</strong> ESG / Impact Investing / CSR<br>
+                type: 'update', phase: 2, depth: 66,
+                html: `<strong>Domain:</strong> ESG / Impact Investing<br>
                        <strong>Value:</strong> Aligning Profit with Purpose<br>
-                       <strong>Fit:</strong> <span class='insight-tag'>High</span>` 
+                       <div class="tag-container"><span class="insight-tag">Hybrid Path</span></div>` 
             },
-
-            // Phase 3: Leadership
-            { type: 'bot', text: "In this field, you have to bridge the gap between greedy investors and activists. How do you handle conflict?", delay: 2000 },
-            { type: 'user', text: "I'm good at translating. I can speak 'business' to the suits and 'mission' to the activists. I make everyone feel heard.", delay: 2500 },
+            { type: 'bot', text: "In this field, you have to bridge the gap between greedy investors and activists. How do you handle conflict?", delay: 1500 },
+            { type: 'user', text: "I'm good at translating. I can speak 'business' to the suits and 'mission' to the activists.", delay: 2000 },
             { 
-                type: 'update', phase: 3, 
+                type: 'update', phase: 3, depth: 100,
                 html: `<strong>Style:</strong> Diplomat / Bridge-Builder<br>
-                       <strong>Superpower:</strong> Code-Switching<br>
-                       <strong>Focus:</strong> <span class='insight-tag'>Consensus Building</span>` 
+                       <strong>Superpower:</strong> Code-Switching (EQ)<br>
+                       <div class="tag-container"><span class="insight-tag">Consensus Builder</span></div>` 
+            }
+        ],
+
+        // --- CASE D: The Burnt Out Elite (New) ---
+        D_burnout: [
+            { type: 'user', text: "I'm a Senior Engineer at a big tech firm. I make great money. But I want to quit and open a bakery.", delay: 800 },
+            { type: 'bot', text: "The classic 'Bakery Fantasy'. Let's test this. Do you love waking up at 3 AM to knead dough, or do you just hate code reviews?", delay: 1800 },
+            { type: 'user', text: "I... honestly, I just hate the pressure. I hate the endless meetings. I want to create something tangible with my hands.", delay: 2000 },
+            { type: 'bot', text: "So it's not about baking; it's about 'Tangibility' and 'Autonomy'. If the bakery fails and you lose your savings, will you still be happy?", delay: 1500 },
+            { type: 'user', text: "No. I have a mortgage. I can't afford to fail.", delay: 1200 },
+            { 
+                type: 'update', phase: 1, depth: 33,
+                html: `<strong>Driver:</strong> Autonomy & Tangibility<br>
+                       <strong>Current State:</strong> High Burnout<br>
+                       <div class="tag-container"><span class="insight-tag">Escapism Detected</span><span class="insight-tag">Risk-Averse</span></div>` 
+            },
+            { type: 'bot', text: "Okay, high risk aversion means a bakery is a bad idea right now. We need a 'Soft Pivot'. Where can you use your tech skills but get that tangible feeling?", delay: 1800 },
+            { type: 'user', text: "Maybe hardware? Or product management for physical products? I loved building legos as a kid.", delay: 1500 },
+            { type: 'bot', text: "IoT (Internet of Things) Product Manager. You keep the tech salary, but you deal with physical devices you can hold.", delay: 1500 },
+            { 
+                type: 'update', phase: 2, depth: 66,
+                html: `<strong>Domain:</strong> Hardware / IoT Product Mgmt<br>
+                       <strong>Value:</strong> Bridging Digital & Physical<br>
+                       <div class="tag-container"><span class="insight-tag">Soft Pivot</span></div>` 
+            },
+            { type: 'bot', text: "As a PM, you can't code the solution yourself. You have to influence others. Is that okay?", delay: 1500 },
+            { type: 'user', text: "Yes. I'm tired of coding. I want to protect the team from the stress I went through.", delay: 1800 },
+            { 
+                type: 'update', phase: 3, depth: 100,
+                html: `<strong>Style:</strong> Servant Leader / Shield<br>
+                       <strong>Motivation:</strong> Protecting the Team<br>
+                       <div class="tag-container"><span class="insight-tag">Empathy-First</span></div>` 
+            }
+        ],
+
+        // --- CASE E: The Filial Prisoner (New) ---
+        E_family: [
+            { type: 'user', text: "My parents want me to take the Civil Service exam (考公). I'm preparing for it, but I feel dead inside.", delay: 800 },
+            { type: 'bot', text: "The 'Iron Rice Bowl'. Why do they want you to take it?", delay: 1200 },
+            { type: 'user', text: "They want stability. They sacrificed everything for me. If I don't do this, I'm an ungrateful child.", delay: 1500 },
+            { type: 'bot', text: "That is a heavy burden. But if you pass the exam and are miserable for 40 years, is that really 'repaying' them? Who are you living for?", delay: 1800 },
+            { type: 'user', text: "I don't know. I've never asked myself what I want. Maybe... I like writing. I like stories.", delay: 1800 },
+            { 
+                type: 'update', phase: 1, depth: 33,
+                html: `<strong>Driver:</strong> External Validation (Parents)<br>
+                       <strong>Hidden Driver:</strong> Creative Expression<br>
+                       <div class="tag-container"><span class="insight-tag">Enmeshed Identity</span></div>` 
+            },
+            { type: 'bot', text: "Sudden rebellion usually fails. We need a synthesis. Is there a stable job that involves writing and stories?", delay: 1500 },
+            { type: 'user', text: "Journalism? Or maybe corporate communications for a big stable state-owned enterprise?", delay: 1500 },
+            { type: 'bot', text: "Brilliant. Corporate Comms in a large firm. It satisfies your parents' need for stability/prestige, but satisfies your need to write.", delay: 1500 },
+            { 
+                type: 'update', phase: 2, depth: 66,
+                html: `<strong>Domain:</strong> Corporate Affairs / PR<br>
+                       <strong>Value:</strong> Narrative Control<br>
+                       <div class="tag-container"><span class="insight-tag">The Compromise</span></div>` 
+            },
+            { type: 'bot', text: "In a big structure, you need to follow rules. Can you do that?", delay: 1200 },
+            { type: 'user', text: "I'm good at following rules. I just need a little corner to be creative.", delay: 1500 },
+            { 
+                type: 'update', phase: 3, depth: 100,
+                html: `<strong>Style:</strong> Institutional Guardian<br>
+                       <strong>Strength:</strong> Stability & Consistency<br>
+                       <div class="tag-container"><span class="insight-tag">Steady Executor</span></div>` 
             }
         ]
     };
@@ -407,6 +537,8 @@
     // --- Logic ---
     const chatHistory = document.getElementById('chatHistory');
     const typingIndicator = document.getElementById('typingIndicator');
+    const startBtn = document.getElementById('startBtn');
+    const depthFill = document.getElementById('depthFill');
     let isRunning = false;
 
     function resetUI() {
@@ -416,14 +548,19 @@
             const content = document.getElementById(`content${index + 1}`);
             card.classList.add('locked');
             card.classList.remove('active');
-            content.innerHTML = `<em>Waiting for analysis...</em>`;
+            content.innerHTML = `<em style="color:#cbd5e1">Analysis pending...</em>`;
         });
+        depthFill.style.width = '0%';
         isRunning = false;
+        startBtn.disabled = false;
+        startBtn.innerHTML = `<span id="playIcon">▶</span> Run Simulation`;
     }
 
     async function startSimulation() {
         if (isRunning) return;
         isRunning = true;
+        startBtn.disabled = true;
+        startBtn.innerHTML = `Running...`;
         resetUI();
 
         const personaKey = document.getElementById('personaSelector').value;
@@ -432,13 +569,16 @@
         for (let step of script) {
             await processStep(step);
         }
+        
+        startBtn.innerHTML = `✔ Completed`;
+        setTimeout(() => { startBtn.disabled = false; startBtn.innerHTML = `<span id="playIcon">▶</span> Run Simulation`;}, 2000);
         isRunning = false;
     }
 
     function processStep(step) {
         return new Promise(resolve => {
             if (step.type === 'update') {
-                // Update Sidebar
+                // Sidebar Update
                 const card = document.getElementById(`phase${step.phase}`);
                 const content = document.getElementById(`content${step.phase}`);
                 
@@ -446,20 +586,24 @@
                 card.classList.add('active');
                 content.innerHTML = step.html;
                 
-                // Flash effect
-                card.style.transform = "scale(1.02)";
-                setTimeout(() => card.style.transform = "scale(1)", 200);
+                // Update Depth Meter
+                if(step.depth) depthFill.style.width = step.depth + '%';
                 
                 resolve();
             } else {
                 // Chat Message
-                typingIndicator.style.display = 'block';
-                typingIndicator.innerText = step.type === 'bot' ? 'MindForge AI is analyzing...' : 'User is typing...';
+                // 1. Show Typing
+                typingIndicator.classList.add('visible');
+                const isBot = step.type === 'bot';
+                typingIndicator.innerHTML = isBot 
+                    ? `<span class="dot-pulse"></span><span class="dot-pulse"></span><span class="dot-pulse"></span> <span style="margin-left:8px">MindForge is analyzing...</span>`
+                    : `<span style="font-style:italic">User is typing...</span>`;
                 
                 chatHistory.scrollTop = chatHistory.scrollHeight;
 
                 setTimeout(() => {
-                    typingIndicator.style.display = 'none';
+                    // 2. Hide Typing & Show Message
+                    typingIndicator.classList.remove('visible');
                     
                     const msgDiv = document.createElement('div');
                     msgDiv.className = `message ${step.type}`;
