@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Me OS - Stable Demo</title>
+    <title>Me OS - English Demo</title>
     <style>
         /* --- 🎨 Theme Variables (Light Default) --- */
         :root {
@@ -46,7 +46,7 @@
         }
         body.emergency-mode.dark-mode { --glass-bg: rgba(69, 10, 10, 0.95); --text-main: white; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         
         body {
             background: var(--bg-gradient); min-height: 100vh; padding: 20px; padding-bottom: 140px;
@@ -69,7 +69,7 @@
             background: var(--glass-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px;
             display: flex; flex-direction: column; box-shadow: var(--card-shadow); transition: all 0.3s; animation: popIn 0.4s ease-out; position: relative; overflow: hidden;
         }
-        .widget-head { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 700; color: var(--text-sub); font-size: 0.85rem; text-transform: uppercase; z-index: 2; }
+        .widget-head { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 700; color: var(--text-sub); font-size: 0.85rem; text-transform: uppercase; z-index: 2; letter-spacing: 0.5px; }
 
         .chat-box { height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem; scroll-behavior: smooth; z-index: 2; }
         .msg { padding: 12px 16px; border-radius: 16px; max-width: 88%; line-height: 1.5; animation: fadeIn 0.3s; }
@@ -78,7 +78,7 @@
         .ai-name { font-size: 0.7rem; font-weight: 800; opacity: 0.8; margin-bottom: 4px; display: block; }
 
         .task-item { display: flex; gap:12px; align-items:center; padding: 12px; background: var(--btn-bg); border-radius: 12px; margin-bottom: 8px; border-left: 3px solid var(--accent-blue); }
-        .task-time { font-weight: bold; color: var(--accent-blue); min-width: 50px; font-size: 0.9rem; }
+        .task-time { font-weight: bold; color: var(--accent-blue); min-width: 60px; font-size: 0.9rem; }
 
         .app-card { background: linear-gradient(145deg, #222, #000); color: white; border-radius: 16px; padding: 15px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; }
         .app-card.locked::after { content: '🔒 LOCKED'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(239, 68, 68, 0.85); display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.5rem; letter-spacing: 2px; animation: fadeIn 0.3s; }
@@ -120,8 +120,8 @@
     <header>
         <div class="brand">Me OS</div>
         <div class="header-controls">
-            <button class="btn-icon" onclick="toggleTheme()">🌙</button>
-            <button class="btn-sim" onclick="openMenu()"><span>🎬</span> 演示模式</button>
+            <button class="btn-icon" onclick="toggleTheme()" title="Toggle Light/Dark Mode">🌙</button>
+            <button class="btn-sim" onclick="openMenu()"><span>🎬</span> Demo Mode</button>
         </div>
     </header>
 
@@ -147,7 +147,7 @@
             <button class="m-btn gpt active" onclick="setModel('gpt')">ChatGPT</button>
         </div>
         <div class="input-wrapper">
-            <input type="text" id="input" class="input" placeholder="Ask AI..." autocomplete="off">
+            <input type="text" id="input" class="input" placeholder="Ask Me..." autocomplete="off">
             <button id="mic" class="mic" onclick="toggleMic()">🎤</button>
             <button class="send" onclick="sendMsg()">➤</button>
         </div>
@@ -155,35 +155,35 @@
 
     <div id="overlay" class="overlay" onclick="if(event.target===this) closeMenu()">
         <div class="menu">
-            <h3 style="margin-bottom:20px">选择演示剧本</h3>
-            <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:20px">点击任意剧本，旧演示将立即终止</p>
+            <h3 style="margin-bottom:20px">Select Simulation Scenario</h3>
+            <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:20px">Starting a new scenario terminates the previous one.</p>
             
             <button class="scenario-btn" onclick="startSimulation('health')">
                 <span class="scenario-icon">🎓</span>
-                <div><div style="font-weight:bold">统筹记忆</div><div style="font-size:0.8rem; opacity:0.7">生病 + 文书 + 日程</div></div>
+                <div><div style="font-weight:bold">Unified Memory</div><div style="font-size:0.8rem; opacity:0.7">Health + Essay + Schedule</div></div>
             </button>
 
             <button class="scenario-btn" onclick="startSimulation('family')">
                 <span class="scenario-icon">🏠</span>
-                <div><div style="font-weight:bold">家庭时光</div><div style="font-size:0.8rem; opacity:0.7">AI 规划拜访时间</div></div>
+                <div><div style="font-weight:bold">Family Visit</div><div style="font-size:0.8rem; opacity:0.7">Proactive AI Planning</div></div>
             </button>
 
             <button class="scenario-btn" onclick="startSimulation('time')">
                 <span class="scenario-icon">⏳</span>
-                <div><div style="font-weight:bold">时间卫士</div><div style="font-size:0.8rem; opacity:0.7">智能拦截打扰</div></div>
+                <div><div style="font-weight:bold">Time Sentinel</div><div style="font-size:0.8rem; opacity:0.7">Smart Do-Not-Disturb</div></div>
             </button>
 
             <button class="scenario-btn" onclick="startSimulation('detox')">
                 <span class="scenario-icon">📱</span>
-                <div><div style="font-weight:bold">数字排毒</div><div style="font-size:0.8rem; opacity:0.7">强制锁死抖音</div></div>
+                <div><div style="font-weight:bold">Digital Detox</div><div style="font-size:0.8rem; opacity:0.7">Adaptive App Locking</div></div>
             </button>
 
             <button class="scenario-btn" onclick="startSimulation('emergency')">
                 <span class="scenario-icon">🚑</span>
-                <div><div style="font-weight:bold">紧急呼救</div><div style="font-size:0.8rem; opacity:0.7">SOS 模式</div></div>
+                <div><div style="font-weight:bold">Emergency</div><div style="font-size:0.8rem; opacity:0.7">SOS Mode</div></div>
             </button>
             
-            <button style="margin-top:15px; background:transparent; border:none; color:var(--text-sub); cursor:pointer" onclick="closeMenu()">关闭</button>
+            <button style="margin-top:15px; background:transparent; border:none; color:var(--text-sub); cursor:pointer" onclick="closeMenu()">Close Menu</button>
         </div>
     </div>
 
@@ -195,7 +195,7 @@
             simId: 0, // 🛑 The Kill Switch ID
             currentModel: 'gpt',
             activeModules: ['chat'],
-            memory: { chat: [{role: 'ai', model: 'System', text: 'Me OS 已就绪。'}], appUsage: 0 }
+            memory: { chat: [{role: 'ai', model: 'System', text: 'Me OS is ready.'}], appUsage: 0 }
         };
 
         // ============================================
@@ -215,35 +215,35 @@
                 el.className = 'widget';
                 
                 if (mod === 'chat') {
-                    el.innerHTML = `<div class="widget-head">🧠 记忆流</div>
+                    el.innerHTML = `<div class="widget-head">🧠 Memory Stream</div>
                                     <div class="chat-box" id="chat-scroll">
                                         ${System.memory.chat.map(m => `<div class="msg ${m.role}">${m.role==='ai'?`<span class="ai-name" style="color:${getModelColor(m.model)}">${m.model}</span>`:''}${m.text}</div>`).join('')}
                                     </div>`;
                 } else if (mod === 'schedule') {
                     let list = System.memory.schedule && System.memory.schedule.length ? 
                         System.memory.schedule.map(t => `<div class="task-item"><div class="task-time">${t.time}</div><div>${t.event}</div></div>`).join('') : 
-                        '<div style="color:var(--text-sub); text-align:center;">暂无安排</div>';
-                    el.innerHTML = `<div class="widget-head">📅 智能日程</div>${list}`;
+                        '<div style="color:var(--text-sub); text-align:center;">No events</div>';
+                    el.innerHTML = `<div class="widget-head">📅 Smart Schedule</div>${list}`;
                 } else if (mod === 'time_sentinel') {
                     el.classList.add('scanning');
-                    el.innerHTML = `<div class="scan-line"></div><div class="widget-head">⏳ 时间卫士</div><div class="log-console" id="time-log"><div class="log-item">> Service active...</div></div>`;
+                    el.innerHTML = `<div class="scan-line"></div><div class="widget-head">⏳ Time Sentinel</div><div class="log-console" id="time-log"><div class="log-item">> Service active...</div></div>`;
                 } else if (mod === 'app_monitor') {
                     const isLocked = System.memory.appLocked;
                     const usage = System.memory.appUsage || "14:58";
                     const barWidth = isLocked ? '100%' : '50%';
                     const barColor = isLocked ? 'var(--danger)' : 'var(--success)';
-                    el.innerHTML = `<div class="widget-head">📱 应用监控</div>
+                    el.innerHTML = `<div class="widget-head">📱 App Monitor</div>
                                     <div class="app-card ${isLocked ? 'locked' : ''}">
                                         <div style="display:flex; align-items:center; gap:10px;">
                                             <div style="width:40px; height:40px; background:white; border-radius:8px; color:black; display:flex; align-items:center; justify-content:center; font-weight:bold;">🎵</div>
-                                            <div><div>Douyin</div><small style="opacity:0.7">Entertainment</small></div>
+                                            <div><div>TikTok</div><small style="opacity:0.7">Entertainment</small></div>
                                         </div>
                                         <div style="font-family:monospace; font-size:1.5rem; font-weight:bold; color:var(--success)">${usage}</div>
                                         <div class="progress-bar" style="width:${barWidth}; background:${barColor}"></div>
                                     </div>`;
                 } else if (mod === 'emergency') {
                     el.style.borderColor = '#ef4444';
-                    el.innerHTML = `<div class="widget-head" style="color:#ef4444">🚑 紧急医疗</div><div style="font-size:2.5rem; font-weight:bold; color:var(--danger)">SOS ACTIVE</div>`;
+                    el.innerHTML = `<div class="widget-head" style="color:#ef4444">🚑 Emergency Alert</div><div style="font-size:2.5rem; font-weight:bold; color:var(--danger)">SOS ACTIVE</div>`;
                 }
                 grid.appendChild(el);
                 if(mod === 'chat') { const s = document.getElementById('chat-scroll'); if(s) s.scrollTop = s.scrollHeight; }
@@ -331,55 +331,55 @@
             setModel('deepseek');
             await wait(1000); if(System.simId !== runId) return;
             
-            await typeText("头痛，感觉发烧了。", runId);
+            await typeText("I have a headache and feel feverish.", runId);
             if(System.simId !== runId) return;
             
             System.memory.chat.push({role:'user', text: document.getElementById('input').value});
             document.getElementById('input').value = ''; render();
 
-            await aiReply('DeepSeek', '已记录状态：生病。建议休息。', runId, 2000);
+            await aiReply('DeepSeek', 'Status logged: Sick. Recommended: Rest immediately.', runId, 2000);
             if(System.simId !== runId) return;
-            addChip('生病', 'var(--danger)');
+            addChip('Sick', 'var(--danger)');
 
             setModel('gpt');
-            await wait(2000); if(System.simId !== runId) return; // User reading time
+            await wait(2000); if(System.simId !== runId) return; 
             
-            await typeText("明天有安排吗？", runId);
+            await typeText("Do I have anything scheduled tomorrow?", runId);
             if(System.simId !== runId) return;
             
             System.memory.chat.push({role:'user', text: document.getElementById('input').value});
             document.getElementById('input').value = ''; render();
 
-            await aiReply('ChatGPT', '统筹建议：你生病了，建议取消明天日程。身体第一。', runId, 2000);
+            await aiReply('ChatGPT', 'Holistic Advice: Since you are sick, I recommend cancelling tomorrow\'s schedule. Health first.', runId, 2000);
         }
 
         async function runFamily(runId) {
-            System.memory.schedule = [{ time: '周六 09:00', event: '团建' }];
+            System.memory.schedule = [{ time: 'Sat 09:00', event: 'Team Building' }];
             System.activeModules = ['chat', 'schedule']; render();
             
             await wait(1500); if(System.simId !== runId) return;
             setModel('gpt');
             
-            await typeText("想拜访爷爷奶奶，帮我规划时间。", runId);
+            await typeText("I want to visit my grandparents this week. Plan a time.", runId);
             if(System.simId !== runId) return;
 
             System.memory.chat.push({role:'user', text: document.getElementById('input').value});
             document.getElementById('input').value = ''; render();
 
-            await aiReply('ChatGPT', '正在分析日程... 周六没空。周日下午 14:00 空闲且天气好。', runId, 2500);
+            await aiReply('ChatGPT', 'Analyzing... Saturday is full (Team Building). Sunday at 2:00 PM is free and sunny.', runId, 2500);
             if(System.simId !== runId) return;
             
             await wait(2000);
-            await typeText("好的，锁定时间。", runId);
+            await typeText("Okay, lock that time in.", runId);
             if(System.simId !== runId) return;
             
             System.memory.chat.push({role:'user', text: document.getElementById('input').value});
             document.getElementById('input').value = ''; render();
 
             await wait(1000); if(System.simId !== runId) return;
-            System.memory.schedule.push({ time: '周日 14:00', event: '拜访老人' }); render();
+            System.memory.schedule.push({ time: 'Sun 14:00', event: 'Grandparents Visit' }); render();
             
-            await aiReply('ChatGPT', '已创建日程。别忘了带水果。', runId, 1000);
+            await aiReply('ChatGPT', 'Schedule created. Don\'t forget to bring some fruit! 🍎', runId, 1000);
         }
 
         async function runTime(runId) {
@@ -387,26 +387,26 @@
             await wait(1000); if(System.simId !== runId) return;
             
             setModel('deepseek');
-            await typeText("刚吃药，想睡会，别打扰我。", runId);
+            await typeText("Just took medicine, want to nap. Do not disturb.", runId);
             if(System.simId !== runId) return;
             
             System.memory.chat.push({role:'user', text: document.getElementById('input').value});
             document.getElementById('input').value = ''; render();
 
-            await aiReply('DeepSeek', '收到。状态更新：[深度休息]。', runId);
+            await aiReply('DeepSeek', 'Received. Status updated: [Deep Rest].', runId);
             if(System.simId !== runId) return;
-            addChip('深度休息', 'var(--accent-blue)');
+            addChip('Deep Rest', 'var(--accent-blue)');
 
             await wait(2000); if(System.simId !== runId) return;
             logTime("> Found: Weekly Report (Low Priority)"); 
             
             await wait(1500); if(System.simId !== runId) return;
             logTime("> Decision: SUPPRESS (User Sleeping)");
-            await aiReply('System', '已拦截低优先级通知，请安心休息。', runId, 500);
+            await aiReply('System', 'Intercepted low-priority notification. Sleep well.', runId, 500);
             
             await wait(4000); if(System.simId !== runId) return;
             logTime("> Found: Urgent Call (High Priority)");
-            showToast("检测到重要来电");
+            showToast("Urgent Call Detected");
         }
 
         async function runDetox(runId) {
@@ -414,18 +414,18 @@
             await wait(1000); if(System.simId !== runId) return;
 
             setModel('deepseek');
-            await typeText("感冒了，头晕，想刷抖音。", runId);
+            await typeText("I have a cold, feeling dizzy, just want to scroll TikTok.", runId);
             if(System.simId !== runId) return;
             
             System.memory.chat.push({role:'user', text: document.getElementById('input').value});
             document.getElementById('input').value = ''; render();
 
-            await aiReply('DeepSeek', '记录：感冒 (意志力薄弱)。', runId);
+            await aiReply('DeepSeek', 'Logged: Cold (Willpower Low).', runId);
             if(System.simId !== runId) return;
-            addChip('感冒 (Low Will)', 'var(--danger)');
+            addChip('Low Willpower', 'var(--danger)');
 
             await wait(1500); if(System.simId !== runId) return;
-            logTime("> App: Douyin"); logTime("> Standard: 30m");
+            logTime("> App: TikTok"); logTime("> Standard: 30m");
             
             await wait(1500); if(System.simId !== runId) return;
             logTime("> Context: Sick"); logTime("> Adjusting: 15m");
@@ -433,11 +433,11 @@
             await wait(1500); if(System.simId !== runId) return;
             System.memory.appUsage = "15:00"; System.memory.appLocked = true; render();
             logTime("> LIMIT REACHED. LOCKING.");
-            showToast("强制停止抖音");
+            showToast("TikTok Force Stopped");
             
-            await aiReply('System', '🛑 已强制停止。', runId, 500);
+            await aiReply('System', '🛑 App Force Stopped.', runId, 500);
             if(System.simId !== runId) return;
-            await aiReply('ChatGPT', '为了你的健康，我把限额降到了15分钟。去睡觉吧。', runId, 1500);
+            await aiReply('ChatGPT', 'I lowered your limit to 15m because you are sick. Go to sleep.', runId, 1500);
         }
 
         async function runEmergency(runId) {
@@ -445,9 +445,9 @@
             document.body.classList.add('emergency-mode'); 
             System.activeModules=['emergency','chat']; render();
             
-            await aiReply('System', 'SOS 协议启动。', runId, 500);
+            await aiReply('System', 'SOS Protocol Initiated.', runId, 500);
             if(System.simId !== runId) return;
-            await aiReply('ChatGPT', '已定位。救护车呼叫中 (ETA: 8mins)。', runId, 2000);
+            await aiReply('ChatGPT', 'Location Sent. Ambulance called (ETA: 8mins).', runId, 2000);
         }
 
         render();
