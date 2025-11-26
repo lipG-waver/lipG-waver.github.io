@@ -1,302 +1,76 @@
-# **Rethinking FlashAttention on Huawei Ascend NPUs: Why GPU-Optimized Designs Don’t Directly Transfer**
+# **Architectural Mismatch in Attention Mechanisms: Reevaluating FlashAttention Efficiency on Huawei Ascend NPUs**
 
-FlashAttention has become the de facto standard for efficient attention computation on modern GPUs. Its design—especially the **Online Softmax algorithm**—beautifully matches the architectural strengths of NVIDIA hardware: large register files, fast shared memory, and cheap warp-level reductions.
-
-But when I began porting FlashAttention-style kernels onto the **Huawei Ascend NPU**, something felt misaligned. The runtime profile looked different. Cube kernels idled. L2 traffic spiked. The performance curve no longer resembled the familiar GPU behavior.
-
-That tension raised a question:
-
-> **Does GPU-optimal FlashAttention remain optimal on NPUs?
-> Or does the hardware difference fundamentally change what "optimal" means?**
-
-This blog is my attempt to answer that question—not by trial-and-error benchmarking, but through **first-principles theoretical analysis** of the Ascend hardware.
-
-What I found is this:
-
-> **Online Softmax is not universally optimal.
-> Its design depends on NVIDIA GPU assumptions that do not hold on Huawei NPUs.**
-
-And once we account for how the Ascend architecture actually works, a different solution emerges.
+## **Abstract**
+FlashAttention has established itself as the standard for efficient attention computation on GPUs, largely due to its "Online Softmax" algorithm which exploits the tiered memory hierarchy of NVIDIA architectures. However, direct portability of this paradigm to Huawei Ascend NPUs is hindered by fundamental micro-architectural divergences. This study presents a first-principles theoretical analysis of the Ascend architecture, identifying a critical bottleneck in the decoupling of Matrix Multiplication Units (Cube) and Vector Units (Vec) via the L2 cache. We demonstrate that the frequent synchronization required by Online Softmax introduces prohibitive latency overheads on Ascend processors. Consequently, we propose a coarse-grained, large-block Softmax strategy that minimizes inter-unit communication, effectively realigning the algorithm with the hardware's operational constraints.
 
 ---
 
-# 1. The Core Architectural Mismatch
+## **1. Introduction**
+The efficacy of the FlashAttention mechanism relies heavily on hardware-specific optimizations, particularly the utilization of large register files and low-latency shared memory characteristic of NVIDIA GPUs. The Online Softmax technique reduces global memory access by fusing operations within the streaming multiprocessor (SM). However, applying this design pattern to the Huawei Ascend NPU architecture reveals significant performance degradation, characterized by low utilization of the Cube units and excessive L2 cache traffic.
 
-The key insight is simple:
-
-> **On NVIDIA GPUs, almost all intermediate values stay on-chip.
-> On Huawei Ascend NPUs, intermediate values must round-trip through L2.**
-
-Let’s look at the essential hardware pathways.
+This raises a fundamental research question: **To what extent does the architectural coupling between arithmetic units and memory hierarchy dictate the optimality of attention algorithms?** This paper argues that the specific communication model of the Ascend NPU necessitates a departure from the standard FlashAttention design, favoring minimized synchronization over minimal memory footprint.
 
 ---
 
-## 1.1 How NVIDIA GPUs Execute FlashAttention
+## **2. Architectural Analysis: The Cube-Vector Decoupling**
 
-NVIDIA GPUs are built around:
+### **2.1 The GPU Paradigm**
+NVIDIA GPUs facilitate high-throughput computation through a tightly coupled architecture where arithmetic units share access to fast on-chip memory (Shared Memory/L1) and register files. The Online Softmax algorithm leverages this by maintaining intermediate accumulation results within registers, requiring negligible communication overhead for partial updates.
 
-* large register files (tens of KB per warp)
-* warp-level shuffle instructions
-* extremely fast shared memory / L1
-* very low-latency L2
+### **2.2 The Ascend NPU Constraints**
+In contrast, the Ascend micro-architecture employs a distinct separation of concerns:
+* **Cube Unit:** Dedicated to high-throughput matrix multiplication ($GEMM$).
+* **Vector Unit (Vec):** Dedicated to non-linear operations (e.g., Softmax, LayerNorm).
+* **Communication Channel:** The L2 buffer serves as the exclusive medium for data exchange between Cube and Vec units.
 
-FlashAttention exploits all of this:
-
-* Loads a block of Q and K into registers
-* Computes partial QKᵀ locally
-* Applies Online Softmax inside registers
-* Streams through V with minimal global memory traffic
-
-**Data hardly ever touches L2**, and certainly does not need to be written repeatedly.
-
-This is why block-wise Online Softmax is optimal.
+Crucially, the architecture lacks a shared register file between these units. Consequently, every intermediate result produced by the Cube unit must be flushed to L2 before being consumed by the Vec unit, and vice versa. This introduces a mandatory round-trip memory access pattern absent in GPU architectures.
 
 ---
 
-## 1.2 How Huawei Ascend NPUs Work
+## **3. Theoretical Performance Modeling**
 
-Ascend NPUs have a very different micro-architecture:
+We model the latency cost of the Softmax operation on Ascend. Let $L_{fixed}$ denote the fixed latency overhead per L2 write operation, and $N_{sync}$ denote the number of synchronization events between Cube and Vec units.
 
-* **Cube Kernel**: high-throughput matrix multiplication unit
-* **Vec Kernel**: vector unit for Softmax, scaling, activation
-* **L2 buffer is the only communication channel between Cube and Vec**
+### **3.1 Latency Analysis of Online Softmax**
+The standard tiling approach (e.g., block size 512) requires iterative updates to the Softmax statistics. For a sequence length $S$ and block size $B$, the synchronization frequency scales linearly with the number of blocks:
+$$
+N_{sync} \propto \frac{S}{B}
+$$
+Under the Ascend memory model, the total time cost $T_{online}$ is dominated by the write latency:
+$$
+T_{online} \approx \sum_{i=1}^{S/B} (T_{compute}^{(i)} + T_{write}^{(i)} + L_{fixed})
+$$
+Given the high value of $L_{fixed}$ on Ascend, the summation of fixed overheads results in a substantial performance penalty.
 
-The critical fact:
+### **3.2 Latency Analysis of Full-Row (Coarse-Grained) Softmax**
+By computing the full row (or significantly larger blocks) prior to applying Softmax, we reduce the synchronization events to a constant factor, independent of tiling granularity within the row:
+$$
+T_{full-row} \approx T_{compute}^{total} + T_{write}^{total} + C \cdot L_{fixed}
+$$
+where $C$ is a small constant (typically $2 \text{--} 3$). Although this approach theoretically increases peak memory usage, the reduction in $N_{sync}$ leads to a net reduction in execution time.
 
-> **Every intermediate produced by Cube must be written to L2 before Vec can read it.
-> Every Vec output must be written back to L2 before Cube can consume it.**
-
-No shared register file.
-No warp shuffle.
-No SM local communication.
-
-Just L2.
-
-And on Ascend, L2 is:
-
-* wide, but
-* **latency-sensitive**
-* and all writes incur noticeable **fixed per-operation overhead**
-
-This alone is enough to change the optimal algorithm design.
+Comparative analysis suggests that for Ascend NPUs, minimizing $N_{sync}$ yields a theoretical speedup of $4\times$ to $10\times$ compared to the GPU-optimized granular approach, principally due to the amortization of $L_{fixed}$.
 
 ---
 
-# 2. Why Online Softmax Becomes Expensive on Ascend
+## **4. Optimization Strategy: Coarsening Block Granularity**
 
-On GPUs, Online Softmax is a win because:
+Based on the derived cost model, we propose re-architecting the attention kernel to prioritize **Large-Block Softmax**. Table 1 illustrates the trade-off between block size and system overhead.
 
-* it saves DRAM bandwidth
-* it controls numerical stability
-* it avoids storing full rows
+**Table 1: Impact of Block Size on Synchronization Overhead**
 
-But on Ascend:
+| Block Size ($B$) | Rescaling Ops | Sync Events ($N_{sync}$) | L2 Peak Usage |
+| :--- | :--- | :--- | :--- |
+| 512 (Baseline) | 15 | 32 | 256 KB |
+| 2048 | 3 | 8 | 1 MB |
+| **8192 (Full Row)** | **0** | **2** | **4 MB** |
 
-> **Online Softmax multiplies L2 write frequency—
-> and frequent L2 writes are exactly what the hardware is slow at.**
-
-Let’s compare two approaches for a block of 16 attention rows (my unit of analysis):
-
----
-
-## 2.1 Full-Row (Non-Online) Softmax
-
-Compute the full 16×8192 QKᵀ row at once:
-
-* Write to L2: **3 times total**
-* Synchronize Cube↔Vec: **2 times**
-* Run Softmax once per row
-* Multiply with V
-
-Total L2 writes:
-**≈ 3**
+Given the Ascend NPU's substantial L2 capacity (approx. 192 MB), the memory footprint of larger blocks (4 MB) is negligible compared to the latency gains achieved by reducing synchronization events from 32 to 2.
 
 ---
 
-## 2.2 Online Softmax (FlashAttention style)
+## **5. Conclusion and Implications**
 
-Split 8192 into 16 chunks of 512:
+This study highlights that "optimality" in deep learning kernels is not an intrinsic algorithmic property but a function of the hardware-software interface. While FlashAttention’s Online Softmax is optimal for register-rich, shared-memory architectures like GPUs, it is suboptimal for the decoupled, L2-centric architecture of Ascend NPUs.
 
-* Each chunk writes QKᵀ to L2
-* Applies local Softmax using Vec
-* Multiplies with V
-* Rescales previously accumulated partial result
-* Writes updated results to L2
-
-Total L2 writes:
-**≈ 64**
-
-Total Cube↔Vec synchronizations:
-**≈ 32**
-
----
-
-## 2.3 Why this matters: the theory
-
-For Ascend, L2 write time is well modeled as:
-
-[
-T_{\text{write}}
-= N_{\text{write}} \cdot L_{\text{fixed}}
-
-* \frac{\text{Data}}{B_{L2}}
-  ]
-
-If fixed latency ( L_{\text{fixed}} ) is non-trivial (and on Ascend it is), then:
-
-* Full-Row Softmax:
-  [
-  T \propto 3 L_{\text{fixed}}
-  ]
-
-* Online Softmax:
-  [
-  T \propto 64 L_{\text{fixed}}
-  ]
-
-Thus even if bandwidth is huge (500 GB/s),
-
-**Online Softmax can be 4× to 10× slower purely due to fixed latency**.
-
-This is not a software bug.
-This is the predictable outcome of the hardware communication model.
-
----
-
-# 3. A Theoretical Re-evaluation of “Optimality”
-
-Given these constraints, I conducted a systematic theoretical analysis:
-
-### ✔ Memory Model
-
-Evaluating L2 read/write behavior and fixed-latency impact.
-
-### ✔ Kernel Pipeline Model
-
-Analyzing the Cube–Vec scheduling timeline.
-
-### ✔ Block-size Tradeoff Model
-
-Understanding how Online Softmax scales with block granularity.
-
-### ✔ Numerical Stability Considerations
-
-Ensuring no loss of correctness when removing Online updates.
-
-From this, a clear picture emerged:
-
-> **On Ascend, the bottleneck is not arithmetic throughput.
-> The bottleneck is L2 synchronization frequency.**
-
-So an algorithm that:
-
-* minimizes L2 writes
-* minimizes Cube↔Vec synchronization
-* minimizes block fragmentation
-  is likely to outperform the GPU-optimal design.
-
-That algorithm is:
-
-> **Full-Row Softmax (or large-block Softmax).**
-
----
-
-# 4. A Better Strategy for Ascend: Large-Block Softmax
-
-Based on the theoretical modeling, I propose the following:
-
-## **Instead of 512-sized blocks (GPU style), use much larger blocks on Ascend.**
-
-For example:
-
-| Block Size          | Rescale Ops | Synchronizations | L2 Peak Usage |
-| ------------------- | ----------- | ---------------- | ------------- |
-| 512                 | 15          | 32               | 256 KB        |
-| 1024                | 7           | 16               | 512 KB        |
-| 2048                | 3           | 8                | 1 MB          |
-| **4096**            | **1**       | **4**            | **2 MB**      |
-| **8192 (full row)** | **0**       | **2**            | **4 MB**      |
-
-The result:
-
-* **Fewer L2 writes**
-* **Fewer synchronizations**
-* **Less rescaling overhead**
-* **Higher Cube utilization**
-
-And Ascend has **192 MB of L2**, so even 4 MB per row-block is entirely feasible.
-
-Thus:
-
-> **The full-row Softmax—which is suboptimal on GPUs—becomes the optimal strategy on NPUs.**
-
----
-
-# 5. What This Means for Real Attention Kernels
-
-This theoretical analysis leads to a practical conclusion:
-
----
-
-## 🎯 **FlashAttention’s Online Softmax is not universally optimal.**
-
-It is GPU-optimal, but not hardware-agnostic.
-
-On Huawei Ascend NPUs:
-
-* the memory hierarchy is different
-* Cube/Vec communication is L2-bounded
-* L2 has fixed-latency writes
-* synchronizations are costly
-* memory is not the limiting factor
-
-Therefore:
-
-> **A redesigned FlashAttention with large-block or full-row Softmax
-> yields higher performance than the standard Online Softmax.**
-
----
-
-# 6. Why This Matters (For Real-World Systems)
-
-This is not just a niche optimization.
-It’s a broader systems lesson:
-
-### **Deep learning kernels must be co-designed with hardware.**
-
-Algorithms optimized for NVIDIA GPUs cannot be assumed to be optimal for:
-
-* NPUs
-* TPUs
-* custom ASICs
-* edge processors
-* FPGA-like architectures
-
-The gap between theory and performance is often a *memory-system phenomenon*, not an arithmetic one.
-
-And bridging that gap—
-understanding it, modeling it, optimizing it—
-is exactly what I believe “real systems research” is about.
-
----
-
-# 7. Closing Thoughts
-
-This project started as a practical engineering task:
-**port FlashAttention to Huawei Ascend**.
-
-But along the way, it turned into something deeper:
-
-* a study of architectural differences
-* a theoretical performance model
-* a rethinking of attention algorithm design
-* and ultimately, a concrete optimization strategy tailored to NPUs
-
-It taught me that:
-
-> **The fastest algorithm is always hardware-dependent.
-> Understanding the hardware enables designing fundamentally better algorithms.**
-
-This is the kind of problem I hope to keep pursuing in graduate school:
-the intersection of **algorithms, hardware systems, and real performance engineering**—
-where theory meets silicon, and where a new perspective can unlock real gains.
+We conclude that effective deployment of Transformer models on non-GPU accelerators requires a **hardware-aware co-design approach**. Specifically for Ascend, algorithms must prioritize bulk-synchronous processing over fine-grained streaming to mitigate the latency costs inherent in the Cube-Vector communication pathway. Future work will focus on generalizing this cost model to other specialized AI accelerators.
