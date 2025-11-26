@@ -36,3 +36,4 @@ title: 并行计算专题
 - [Clustered Maxima: Why it is important to reduce calculation](./ask&answer/clustered_maxima_en.md)
 - [是否能算出一行以后直接进行softmax?](./ask&answer/new.md)
 - [对比算完一整行的方案与目前的Online softmax方案](./ask&answer/new1.md)
+- [Rethinking online softmax](./ask&answer/rethink_online_softmax.md)
