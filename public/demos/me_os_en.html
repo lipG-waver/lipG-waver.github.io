@@ -3,57 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Me OS — Your Personal AI Operating System</title>
+    <title>Attention OS — GENE Framework</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0a0a0f;
-            --bg-card: #12121a;
-            --bg-hover: #1a1a25;
-            --border: rgba(255,255,255,0.08);
-            --text: #f0f0f5;
-            --text-dim: #6b6b80;
-            --accent-blue: #3b82f6;
+            --bg-dark: #08080c;
+            --bg-card: #101014;
+            --bg-hover: #18181f;
+            --border: rgba(255,255,255,0.06);
+            --text: #eeeef0;
+            --text-dim: #5a5a6e;
+            
+            /* GENE Colors */
+            --guard: #f43f5e;
+            --guard-glow: rgba(244, 63, 94, 0.15);
+            --enhance: #06b6d4;
+            --enhance-glow: rgba(6, 182, 212, 0.15);
+            --navigate: #f59e0b;
+            --navigate-glow: rgba(245, 158, 11, 0.15);
+            --nurture: #10b981;
+            --nurture-glow: rgba(16, 185, 129, 0.15);
+            
             --accent-purple: #8b5cf6;
-            --accent-cyan: #06b6d4;
-            --accent-amber: #f59e0b;
-            --accent-rose: #f43f5e;
-            --accent-green: #10b981;
-            --glow-blue: rgba(59, 130, 246, 0.15);
-            --glow-purple: rgba(139, 92, 246, 0.15);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            font-family: 'Outfit', -apple-system, sans-serif;
             background: var(--bg-dark);
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* Noise overlay */
+        /* Subtle grid background */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            opacity: 0.03;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
             pointer-events: none;
-            z-index: 1000;
+            z-index: 0;
         }
 
-        /* Hero Section */
+        /* ========== HERO ========== */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -62,146 +61,187 @@
             align-items: center;
             padding: 60px 20px;
             position: relative;
-            overflow: hidden;
+            text-align: center;
         }
 
         .hero::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                radial-gradient(ellipse at 30% 20%, var(--glow-purple) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, var(--glow-blue) 0%, transparent 50%);
-            animation: nebula 20s ease-in-out infinite alternate;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, var(--enhance-glow) 0%, transparent 60%);
+            opacity: 0.5;
             z-index: -1;
-        }
-
-        @keyframes nebula {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(-5%, 5%) rotate(5deg); }
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 40px;
-            animation: fadeDown 0.8s ease-out;
+            gap: 14px;
+            margin-bottom: 48px;
+            animation: fadeIn 1s ease-out;
         }
 
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border-radius: 12px;
+        .logo-mark {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, var(--enhance), var(--accent-purple));
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 0 30px var(--glow-purple);
+            font-size: 26px;
+            box-shadow: 0 0 40px var(--enhance-glow);
         }
 
         .logo-text {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -1px;
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
         }
 
         .hero-title {
-            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-size: clamp(2.8rem, 9vw, 5.5rem);
             font-weight: 700;
-            text-align: center;
-            line-height: 1.1;
+            line-height: 1.05;
+            letter-spacing: -3px;
             margin-bottom: 24px;
-            letter-spacing: -2px;
-            animation: fadeDown 0.8s ease-out 0.1s backwards;
+            animation: fadeIn 1s ease-out 0.1s backwards;
         }
 
-        .hero-title .gradient {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue), var(--accent-purple));
+        .hero-title .line2 {
+            background: linear-gradient(90deg, var(--guard), var(--enhance), var(--navigate), var(--nurture));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .hero-subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
+        .hero-sub {
+            font-size: 1.15rem;
             color: var(--text-dim);
-            text-align: center;
-            max-width: 600px;
-            line-height: 1.6;
-            margin-bottom: 50px;
-            animation: fadeDown 0.8s ease-out 0.2s backwards;
+            max-width: 540px;
+            line-height: 1.7;
+            margin-bottom: 48px;
+            animation: fadeIn 1s ease-out 0.2s backwards;
         }
 
-        .scroll-hint {
+        .gene-pills {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeIn 1s ease-out 0.3s backwards;
+        }
+
+        .gene-pill {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .gene-pill:hover {
+            transform: translateY(-2px);
+        }
+
+        .gene-pill[data-gene="guard"]:hover { border-color: var(--guard); color: var(--guard); box-shadow: 0 8px 30px var(--guard-glow); }
+        .gene-pill[data-gene="enhance"]:hover { border-color: var(--enhance); color: var(--enhance); box-shadow: 0 8px 30px var(--enhance-glow); }
+        .gene-pill[data-gene="navigate"]:hover { border-color: var(--navigate); color: var(--navigate); box-shadow: 0 8px 30px var(--navigate-glow); }
+        .gene-pill[data-gene="nurture"]:hover { border-color: var(--nurture); color: var(--nurture); box-shadow: 0 8px 30px var(--nurture-glow); }
+
+        .scroll-cue {
             position: absolute;
             bottom: 40px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            color: var(--text-dim);
-            font-size: 0.85rem;
-            animation: bounce 2s ease-in-out infinite;
+            animation: bounce 2s infinite;
         }
 
-        .scroll-hint::after {
-            content: '↓';
-            font-size: 1.2rem;
-        }
+        .scroll-cue::after { content: '↓'; font-size: 1.2rem; }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(8px); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 
-        @keyframes fadeDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Scenarios Section */
-        .scenarios-section {
+        /* ========== GENE SECTIONS ========== */
+        .gene-section {
             padding: 100px 20px;
-            max-width: 1400px;
+            max-width: 1300px;
             margin: 0 auto;
+            position: relative;
         }
+
+        .gene-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 600px; height: 400px;
+            border-radius: 50%;
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .gene-section[data-gene="guard"]::before { background: radial-gradient(circle, var(--guard-glow) 0%, transparent 70%); }
+        .gene-section[data-gene="enhance"]::before { background: radial-gradient(circle, var(--enhance-glow) 0%, transparent 70%); }
+        .gene-section[data-gene="navigate"]::before { background: radial-gradient(circle, var(--navigate-glow) 0%, transparent 70%); }
+        .gene-section[data-gene="nurture"]::before { background: radial-gradient(circle, var(--nurture-glow) 0%, transparent 70%); }
 
         .section-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
         }
 
         .section-tag {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.8rem;
-            color: var(--accent-cyan);
-            text-transform: uppercase;
+            font-weight: 500;
             letter-spacing: 3px;
-            margin-bottom: 16px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
         }
+
+        .gene-section[data-gene="guard"] .section-tag { color: var(--guard); }
+        .gene-section[data-gene="enhance"] .section-tag { color: var(--enhance); }
+        .gene-section[data-gene="navigate"] .section-tag { color: var(--navigate); }
+        .gene-section[data-gene="nurture"] .section-tag { color: var(--nurture); }
 
         .section-title {
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
-            font-weight: 700;
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            font-weight: 600;
             letter-spacing: -1px;
+            margin-bottom: 12px;
         }
 
-        .scenarios-grid {
+        .section-desc {
+            color: var(--text-dim);
+            font-size: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .scenarios-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .scenario-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 32px;
+            padding: 28px;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
@@ -211,85 +251,61 @@
         .scenario-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 3px;
-            background: var(--card-accent);
+            background: var(--card-color);
             transform: scaleX(0);
+            transform-origin: left;
             transition: transform 0.4s;
         }
 
         .scenario-card:hover {
             background: var(--bg-hover);
             transform: translateY(-4px);
-            border-color: var(--card-accent);
-            box-shadow: 0 20px 40px -20px var(--card-glow);
+            box-shadow: 0 20px 50px -20px var(--card-glow);
+            border-color: var(--card-color);
         }
 
-        .scenario-card:hover::before {
-            transform: scaleX(1);
-        }
+        .scenario-card:hover::before { transform: scaleX(1); }
 
-        .scenario-card[data-scenario="health"] { --card-accent: var(--accent-green); --card-glow: rgba(16, 185, 129, 0.3); }
-        .scenario-card[data-scenario="family"] { --card-accent: var(--accent-amber); --card-glow: rgba(245, 158, 11, 0.3); }
-        .scenario-card[data-scenario="time"] { --card-accent: var(--accent-cyan); --card-glow: rgba(6, 182, 212, 0.3); }
-        .scenario-card[data-scenario="detox"] { --card-accent: var(--accent-purple); --card-glow: rgba(139, 92, 246, 0.3); }
-        .scenario-card[data-scenario="emergency"] { --card-accent: var(--accent-rose); --card-glow: rgba(244, 63, 94, 0.3); }
+        /* Card colors by gene type */
+        .gene-section[data-gene="guard"] .scenario-card { --card-color: var(--guard); --card-glow: var(--guard-glow); }
+        .gene-section[data-gene="enhance"] .scenario-card { --card-color: var(--enhance); --card-glow: var(--enhance-glow); }
+        .gene-section[data-gene="navigate"] .scenario-card { --card-color: var(--navigate); --card-glow: var(--navigate-glow); }
+        .gene-section[data-gene="nurture"] .scenario-card { --card-color: var(--nurture); --card-glow: var(--nurture-glow); }
 
         .scenario-icon {
-            width: 56px;
-            height: 56px;
-            background: rgba(255,255,255,0.05);
+            width: 52px; height: 52px;
+            background: rgba(255,255,255,0.04);
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            margin-bottom: 20px;
+            font-size: 26px;
+            margin-bottom: 18px;
             transition: transform 0.3s;
         }
 
-        .scenario-card:hover .scenario-icon {
-            transform: scale(1.1) rotate(-5deg);
-        }
+        .scenario-card:hover .scenario-icon { transform: scale(1.1) rotate(-5deg); }
 
         .scenario-name {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 8px;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.3px;
         }
 
         .scenario-desc {
             color: var(--text-dim);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
-        .scenario-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 20px;
-            color: var(--text-dim);
-        }
-
-        .play-hint {
+        .play-btn {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 36px;
-            height: 36px;
-            background: var(--card-accent);
+            bottom: 20px; right: 20px;
+            width: 36px; height: 36px;
+            background: var(--card-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -299,27 +315,21 @@
             transition: all 0.3s;
         }
 
-        .play-hint::after {
+        .play-btn::after {
             content: '▶';
-            font-size: 12px;
+            font-size: 11px;
             color: white;
             margin-left: 2px;
         }
 
-        .scenario-card:hover .play-hint {
-            opacity: 1;
-            transform: scale(1);
-        }
+        .scenario-card:hover .play-btn { opacity: 1; transform: scale(1); }
 
-        /* Demo Modal */
+        /* ========== MODAL ========== */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(12px);
             z-index: 2000;
             display: none;
             align-items: center;
@@ -327,20 +337,12 @@
             padding: 20px;
         }
 
-        .modal-overlay.active {
-            display: flex;
-            animation: fadeIn 0.3s;
-        }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-container {
+        .modal-box {
             width: 100%;
-            max-width: 900px;
-            max-height: 90vh;
+            max-width: 880px;
+            max-height: 88vh;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 24px;
@@ -350,13 +352,10 @@
             animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.96) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
         .modal-header {
-            padding: 24px 28px;
+            padding: 22px 26px;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
@@ -367,18 +366,28 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 600;
         }
 
-        .modal-title .icon {
-            font-size: 1.5rem;
+        .modal-title .icon { font-size: 1.4rem; }
+
+        .modal-gene-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-left: 10px;
         }
 
+        .modal-gene-tag.guard { background: var(--guard-glow); color: var(--guard); }
+        .modal-gene-tag.enhance { background: var(--enhance-glow); color: var(--enhance); }
+        .modal-gene-tag.navigate { background: var(--navigate-glow); color: var(--navigate); }
+        .modal-gene-tag.nurture { background: var(--nurture-glow); color: var(--nurture); }
+
         .modal-close {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.05);
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.04);
             border: none;
             border-radius: 10px;
             color: var(--text-dim);
@@ -387,41 +396,34 @@
             transition: all 0.2s;
         }
 
-        .modal-close:hover {
-            background: rgba(255,255,255,0.1);
-            color: var(--text);
-        }
+        .modal-close:hover { background: rgba(255,255,255,0.08); color: var(--text); }
 
         .modal-body {
             flex: 1;
             overflow-y: auto;
-            padding: 28px;
+            padding: 26px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            gap: 20px;
         }
 
-        @media (max-width: 768px) {
-            .modal-body {
-                grid-template-columns: 1fr;
-            }
-        }
+        @media (max-width: 700px) { .modal-body { grid-template-columns: 1fr; } }
 
-        /* Demo Widgets */
-        .demo-widget {
-            background: rgba(255,255,255,0.03);
+        /* ========== DEMO WIDGETS ========== */
+        .widget {
+            background: rgba(255,255,255,0.02);
             border: 1px solid var(--border);
             border-radius: 16px;
             padding: 20px;
         }
 
-        .widget-title {
+        .widget-label {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-dim);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -431,99 +433,120 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            max-height: 280px;
+            max-height: 260px;
             overflow-y: auto;
         }
 
         .chat-msg {
             padding: 12px 16px;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 0.9rem;
-            line-height: 1.5;
-            animation: msgIn 0.4s ease-out;
+            line-height: 1.55;
             max-width: 90%;
+            animation: msgIn 0.4s ease-out;
         }
 
-        @keyframes msgIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes msgIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .chat-msg.user {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.06);
             align-self: flex-end;
             border-bottom-right-radius: 4px;
         }
 
         .chat-msg.ai {
-            background: rgba(59, 130, 246, 0.15);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.15);
             align-self: flex-start;
             border-top-left-radius: 4px;
         }
 
-        .ai-label {
+        .ai-tag {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 600;
             margin-bottom: 4px;
-            opacity: 0.7;
+            opacity: 0.75;
         }
 
-        .ai-label.deepseek { color: var(--accent-cyan); }
-        .ai-label.gpt { color: var(--accent-purple); }
-        .ai-label.system { color: var(--accent-amber); }
+        .ai-tag.deepseek { color: var(--enhance); }
+        .ai-tag.gpt { color: var(--accent-purple); }
+        .ai-tag.system { color: var(--navigate); }
+
+        .status-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .chip {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            padding: 5px 12px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: chipIn 0.3s ease-out;
+        }
+
+        @keyframes chipIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        .chip-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+        }
+
+        .chip-dot.green { background: var(--nurture); }
+        .chip-dot.red { background: var(--guard); }
+        .chip-dot.blue { background: var(--enhance); }
+        .chip-dot.amber { background: var(--navigate); }
+
+        .log-box {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            background: rgba(0,0,0,0.3);
+            padding: 14px;
+            border-radius: 10px;
+            height: 140px;
+            overflow-y: auto;
+            color: var(--enhance);
+        }
+
+        .log-line {
+            margin-bottom: 5px;
+            animation: logIn 0.3s ease-out;
+        }
+
+        @keyframes logIn { from { opacity: 0; } to { opacity: 1; } }
 
         .schedule-item {
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 14px;
-            background: rgba(255,255,255,0.03);
+            gap: 14px;
+            padding: 12px 14px;
+            background: rgba(255,255,255,0.02);
             border-radius: 10px;
             margin-bottom: 10px;
-            border-left: 3px solid var(--accent-cyan);
+            border-left: 3px solid var(--enhance);
             animation: slideIn 0.4s ease-out;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
 
         .schedule-time {
             font-family: 'JetBrains Mono', monospace;
             font-weight: 600;
-            color: var(--accent-cyan);
-            min-width: 80px;
+            color: var(--enhance);
+            min-width: 75px;
         }
 
-        .log-console {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            background: rgba(0,0,0,0.3);
-            padding: 16px;
-            border-radius: 10px;
-            height: 150px;
-            overflow-y: auto;
-            color: var(--accent-cyan);
-        }
-
-        .log-line {
-            margin-bottom: 6px;
-            opacity: 0;
-            animation: logIn 0.3s ease-out forwards;
-        }
-
-        @keyframes logIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .app-monitor {
-            background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
+        .app-card {
+            background: linear-gradient(135deg, #151520, #0c0c12);
             border-radius: 14px;
-            padding: 20px;
+            padding: 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -534,138 +557,249 @@
         .app-info {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
 
         .app-icon {
-            width: 48px;
-            height: 48px;
+            width: 44px; height: 44px;
             background: white;
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 22px;
         }
 
         .app-timer {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 600;
-            color: var(--accent-green);
+            color: var(--nurture);
         }
 
-        .app-progress {
+        .app-bar {
             position: absolute;
-            bottom: 0;
-            left: 0;
+            bottom: 0; left: 0;
             height: 4px;
-            background: var(--accent-green);
+            background: var(--nurture);
             transition: all 0.5s;
         }
 
-        .app-locked-overlay {
+        .app-lock-overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(244, 63, 94, 0.9);
             display: none;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             letter-spacing: 2px;
-            animation: lockIn 0.3s;
         }
 
-        @keyframes lockIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        .app-card.locked .app-lock-overlay { display: flex; animation: fadeIn 0.3s; }
 
-        .app-monitor.locked .app-locked-overlay {
-            display: flex;
-        }
-
-        .emergency-banner {
-            background: linear-gradient(135deg, #7f1d1d, #450a0a);
-            border: 2px solid var(--accent-rose);
-            border-radius: 14px;
-            padding: 30px;
+        .pomodoro-display {
             text-align: center;
-            animation: emergencyPulse 1s ease-in-out infinite alternate;
+            padding: 20px;
+        }
+
+        .pomodoro-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: var(--enhance);
+            margin-bottom: 8px;
+        }
+
+        .pomodoro-label {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .music-player {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 14px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .music-cover {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--enhance), var(--accent-purple));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .music-info {
+            flex: 1;
+        }
+
+        .music-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .music-artist {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .music-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 20px;
+        }
+
+        .music-bar {
+            width: 3px;
+            background: var(--enhance);
+            border-radius: 2px;
+            animation: musicBar 0.5s ease-in-out infinite alternate;
+        }
+
+        .music-bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .music-bar:nth-child(2) { height: 16px; animation-delay: 0.1s; }
+        .music-bar:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+        .music-bar:nth-child(4) { height: 18px; animation-delay: 0.3s; }
+
+        @keyframes musicBar { to { height: 6px; } }
+
+        .journal-prompt {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.02));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .journal-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .journal-question {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .journal-hint {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .decision-card {
+            background: rgba(245, 158, 11, 0.06);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .decision-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .decision-item:last-child { border-bottom: none; }
+
+        .decision-label {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        .decision-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+
+        .decision-value.positive { color: var(--nurture); }
+        .decision-value.negative { color: var(--guard); }
+        .decision-value.neutral { color: var(--navigate); }
+
+        .continuity-card {
+            background: rgba(6, 182, 212, 0.06);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .continuity-icon {
+            width: 44px; height: 44px;
+            background: rgba(6, 182, 212, 0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .continuity-text {
+            flex: 1;
+        }
+
+        .continuity-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .continuity-sub {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .emergency-panel {
+            background: linear-gradient(135deg, #4a1a1a, #2d0f0f);
+            border: 2px solid var(--guard);
+            border-radius: 14px;
+            padding: 28px;
+            text-align: center;
+            animation: emergencyPulse 1.5s ease-in-out infinite alternate;
         }
 
         @keyframes emergencyPulse {
-            from { box-shadow: 0 0 20px rgba(244, 63, 94, 0.3); }
-            to { box-shadow: 0 0 40px rgba(244, 63, 94, 0.6); }
+            from { box-shadow: 0 0 20px rgba(244, 63, 94, 0.2); }
+            to { box-shadow: 0 0 40px rgba(244, 63, 94, 0.5); }
         }
 
         .emergency-title {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--accent-rose);
+            color: var(--guard);
             margin-bottom: 8px;
         }
 
-        /* Status Chips */
-        .status-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
+        .emergency-sub {
+            color: rgba(255,255,255,0.7);
         }
 
-        .status-chip {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            padding: 6px 12px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            animation: chipIn 0.4s ease-out;
-        }
-
-        @keyframes chipIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-        }
-
-        .status-dot.green { background: var(--accent-green); }
-        .status-dot.red { background: var(--accent-rose); }
-        .status-dot.blue { background: var(--accent-cyan); }
-
-        /* Input Bar (decorative) */
+        /* Demo input bar */
         .demo-input-bar {
             grid-column: 1 / -1;
-            background: rgba(255,255,255,0.03);
+            background: rgba(255,255,255,0.02);
             border: 1px solid var(--border);
             border-radius: 50px;
             padding: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .demo-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text);
-            padding: 10px 16px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            outline: none;
         }
 
         .model-pills {
@@ -675,10 +809,10 @@
 
         .model-pill {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             padding: 6px 12px;
             border-radius: 20px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.04);
             color: var(--text-dim);
             border: none;
             cursor: default;
@@ -690,6 +824,39 @@
             color: white;
         }
 
+        .demo-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            padding: 10px 14px;
+            font-family: inherit;
+            font-size: 0.92rem;
+            outline: none;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 28px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--bg-card);
+            border: 1px solid var(--navigate);
+            padding: 14px 24px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 3000;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        .toast-icon { font-size: 1.2rem; }
+        .toast-text { font-size: 0.88rem; }
+
         /* Footer */
         .footer {
             padding: 60px 20px;
@@ -700,145 +867,190 @@
         .footer-text {
             color: var(--text-dim);
             font-size: 0.9rem;
+            line-height: 1.8;
         }
 
         .footer-text a {
-            color: var(--accent-cyan);
+            color: var(--enhance);
             text-decoration: none;
         }
 
-        /* Toast */
-        .toast {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: var(--bg-card);
-            border: 1px solid var(--accent-amber);
-            padding: 16px 24px;
-            border-radius: 50px;
+        .gene-footer {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 3000;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
         }
 
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
+        .gene-letter {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
         }
 
-        .toast-icon {
-            font-size: 1.3rem;
-        }
-
-        .toast-text {
-            font-size: 0.9rem;
-        }
+        .gene-letter:nth-child(1) { color: var(--guard); }
+        .gene-letter:nth-child(2) { color: var(--enhance); }
+        .gene-letter:nth-child(3) { color: var(--navigate); }
+        .gene-letter:nth-child(4) { color: var(--nurture); }
     </style>
 </head>
 <body>
-    <!-- Hero Section -->
+
+    <!-- ========== HERO ========== -->
     <section class="hero">
         <div class="logo">
-            <div class="logo-icon">🧠</div>
-            <div class="logo-text">Me OS</div>
+            <div class="logo-mark">🧬</div>
+            <div class="logo-text">Attention OS</div>
         </div>
         
         <h1 class="hero-title">
-            Your Personal<br>
-            <span class="gradient">AI Operating System</span>
+            Reclaim Your<br>
+            <span class="line2">Cognitive Sovereignty</span>
         </h1>
         
-        <p class="hero-subtitle">
-            A unified system where multiple AI models collaborate to manage your health, schedule, attention, and emergencies — all while respecting your cognitive sovereignty.
+        <p class="hero-sub">
+            A personal AI operating system built on the GENE framework — Guard, Enhance, Navigate, Nurture — designed to protect and amplify your most precious resource: attention.
         </p>
         
-        <div class="scroll-hint">Explore Scenarios</div>
+        <div class="gene-pills">
+            <a href="#guard" class="gene-pill" data-gene="guard"><span>🛡️</span> Guard</a>
+            <a href="#enhance" class="gene-pill" data-gene="enhance"><span>⚡</span> Enhance</a>
+            <a href="#navigate" class="gene-pill" data-gene="navigate"><span>🧭</span> Navigate</a>
+            <a href="#nurture" class="gene-pill" data-gene="nurture"><span>🌱</span> Nurture</a>
+        </div>
+        
+        <div class="scroll-cue">Explore the Framework</div>
     </section>
 
-    <!-- Scenarios Section -->
-    <section class="scenarios-section">
+    <!-- ========== GUARD ========== -->
+    <section class="gene-section" data-gene="guard" id="guard">
         <div class="section-header">
-            <div class="section-tag">Interactive Demos</div>
-            <h2 class="section-title">Click any scenario to see it in action</h2>
+            <div class="section-tag">🛡️ Guard</div>
+            <h2 class="section-title">Protect Against Attention Erosion</h2>
+            <p class="section-desc">AI as your defensive perimeter — blocking distractions, filtering noise, responding to emergencies.</p>
         </div>
-
-        <div class="scenarios-grid">
-            <div class="scenario-card" data-scenario="health" onclick="openDemo('health')">
-                <div class="scenario-icon">🩺</div>
-                <div class="scenario-name">Unified Memory</div>
-                <div class="scenario-desc">
-                    Report your health status to one AI, and all others instantly know — enabling holistic advice across your entire life context.
-                </div>
-                <div class="scenario-tags">
-                    <span class="tag">Cross-Model Sync</span>
-                    <span class="tag">Health Tracking</span>
-                </div>
-                <div class="play-hint"></div>
-            </div>
-
-            <div class="scenario-card" data-scenario="family" onclick="openDemo('family')">
-                <div class="scenario-icon">🏠</div>
-                <div class="scenario-name">Proactive Planning</div>
-                <div class="scenario-desc">
-                    AI analyzes your calendar, weather, and priorities to suggest optimal times for important but easily-postponed activities.
-                </div>
-                <div class="scenario-tags">
-                    <span class="tag">Smart Scheduling</span>
-                    <span class="tag">Context-Aware</span>
-                </div>
-                <div class="play-hint"></div>
-            </div>
-
-            <div class="scenario-card" data-scenario="time" onclick="openDemo('time')">
+        
+        <div class="scenarios-row">
+            <div class="scenario-card" onclick="openDemo('time_sentinel')">
                 <div class="scenario-icon">⏳</div>
                 <div class="scenario-name">Time Sentinel</div>
-                <div class="scenario-desc">
-                    Intelligent notification filtering based on your current state — suppressing noise during focus, allowing urgent interrupts.
-                </div>
-                <div class="scenario-tags">
-                    <span class="tag">Focus Guard</span>
-                    <span class="tag">Smart DND</span>
-                </div>
-                <div class="play-hint"></div>
+                <div class="scenario-desc">Intelligent notification filtering based on your current cognitive state — silence the noise, allow the urgent.</div>
+                <div class="play-btn"></div>
             </div>
-
-            <div class="scenario-card" data-scenario="detox" onclick="openDemo('detox')">
+            
+            <div class="scenario-card" onclick="openDemo('detox')">
                 <div class="scenario-icon">📱</div>
                 <div class="scenario-name">Adaptive Detox</div>
-                <div class="scenario-desc">
-                    Dynamic app limits that adjust based on your willpower state — stricter when you're sick or tired, lenient when you're strong.
-                </div>
-                <div class="scenario-tags">
-                    <span class="tag">Willpower Tracking</span>
-                    <span class="tag">Auto-Adjust</span>
-                </div>
-                <div class="play-hint"></div>
+                <div class="scenario-desc">Dynamic app limits that flex with your willpower — stricter when you're depleted, lenient when you're strong.</div>
+                <div class="play-btn"></div>
             </div>
-
-            <div class="scenario-card" data-scenario="emergency" onclick="openDemo('emergency')">
+            
+            <div class="scenario-card" onclick="openDemo('emergency')">
                 <div class="scenario-icon">🚑</div>
                 <div class="scenario-name">Emergency SOS</div>
-                <div class="scenario-desc">
-                    One-tap emergency protocol that shares location, calls emergency services, and notifies your emergency contacts.
-                </div>
-                <div class="scenario-tags">
-                    <span class="tag">One-Tap SOS</span>
-                    <span class="tag">Auto-Contact</span>
-                </div>
-                <div class="play-hint"></div>
+                <div class="scenario-desc">One-tap protocol that shares location, calls help, and notifies loved ones — because safety can't wait.</div>
+                <div class="play-btn"></div>
             </div>
         </div>
     </section>
 
-    <!-- Demo Modal -->
+    <!-- ========== ENHANCE ========== -->
+    <section class="gene-section" data-gene="enhance" id="enhance">
+        <div class="section-header">
+            <div class="section-tag">⚡ Enhance</div>
+            <h2 class="section-title">Amplify Your Cognitive Power</h2>
+            <p class="section-desc">AI as your external brain — syncing memory, tracking focus, maintaining flow across devices.</p>
+        </div>
+        
+        <div class="scenarios-row">
+            <div class="scenario-card" onclick="openDemo('unified_memory')">
+                <div class="scenario-icon">🧠</div>
+                <div class="scenario-name">Unified Memory</div>
+                <div class="scenario-desc">Tell one AI your status, and all others know — enabling holistic advice across your entire life context.</div>
+                <div class="play-btn"></div>
+            </div>
+            
+            <div class="scenario-card" onclick="openDemo('pomodoro')">
+                <div class="scenario-icon">🍅</div>
+                <div class="scenario-name">Focus Flow</div>
+                <div class="scenario-desc">AI detects 90 minutes of deep work and prompts a break — with curated music to help you recover.</div>
+                <div class="play-btn"></div>
+            </div>
+            
+            <div class="scenario-card" onclick="openDemo('continuity')">
+                <div class="scenario-icon">🔗</div>
+                <div class="scenario-name">Cross-Device Continuity</div>
+                <div class="scenario-desc">Seamlessly resume where you left off — articles, tasks, conversations flow with you across devices.</div>
+                <div class="play-btn"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== NAVIGATE ========== -->
+    <section class="gene-section" data-gene="navigate" id="navigate">
+        <div class="section-header">
+            <div class="section-tag">🧭 Navigate</div>
+            <h2 class="section-title">Make Wiser Decisions</h2>
+            <p class="section-desc">AI as your rational mirror — surfacing your own principles when emotions cloud judgment.</p>
+        </div>
+        
+        <div class="scenarios-row">
+            <div class="scenario-card" onclick="openDemo('schedule')">
+                <div class="scenario-icon">📅</div>
+                <div class="scenario-name">Smart Scheduling</div>
+                <div class="scenario-desc">AI analyzes calendar, weather, and priorities to find the optimal time for what matters.</div>
+                <div class="play-btn"></div>
+            </div>
+            
+            <div class="scenario-card" onclick="openDemo('decision')">
+                <div class="scenario-icon">💰</div>
+                <div class="scenario-name">Decision Helper</div>
+                <div class="scenario-desc">Tempted to buy something? AI surfaces your budget and past principles — your best self, on demand.</div>
+                <div class="play-btn"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== NURTURE ========== -->
+    <section class="gene-section" data-gene="nurture" id="nurture">
+        <div class="section-header">
+            <div class="section-tag">🌱 Nurture</div>
+            <h2 class="section-title">Cultivate What Truly Matters</h2>
+            <p class="section-desc">AI as your life gardener — tending to relationships, growth, and reflection that you'd otherwise neglect.</p>
+        </div>
+        
+        <div class="scenarios-row">
+            <div class="scenario-card" onclick="openDemo('relationship')">
+                <div class="scenario-icon">👨‍👩‍👧</div>
+                <div class="scenario-name">Relationship Keeper</div>
+                <div class="scenario-desc">Gentle reminders to reach out to people who matter — because connection fades without intention.</div>
+                <div class="play-btn"></div>
+            </div>
+            
+            <div class="scenario-card" onclick="openDemo('journal')">
+                <div class="scenario-icon">📔</div>
+                <div class="scenario-name">Reflection Journal</div>
+                <div class="scenario-desc">Daily prompts that spark self-awareness — and weekly insights that reveal patterns you'd miss.</div>
+                <div class="play-btn"></div>
+            </div>
+            
+            <div class="scenario-card" onclick="openDemo('growth')">
+                <div class="scenario-icon">📚</div>
+                <div class="scenario-name">Growth Nudge</div>
+                <div class="scenario-desc">Bored and reaching for TikTok? AI suggests the book you've been meaning to read instead.</div>
+                <div class="play-btn"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== MODAL ========== -->
     <div class="modal-overlay" id="modal" onclick="if(event.target===this) closeDemo()">
-        <div class="modal-container">
+        <div class="modal-box">
             <div class="modal-header">
                 <div class="modal-title">
-                    <span class="icon" id="modal-icon">🩺</span>
-                    <span id="modal-name">Unified Memory</span>
+                    <span class="icon" id="modal-icon">🛡️</span>
+                    <span id="modal-name">Demo</span>
+                    <span class="modal-gene-tag" id="modal-gene-tag">GUARD</span>
                 </div>
                 <button class="modal-close" onclick="closeDemo()">✕</button>
             </div>
@@ -856,9 +1068,15 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p class="footer-text">
-            Me OS — A concept prototype exploring human-AI collaboration.<br>
-            Built by <a href="#">Yunlong Zhou</a> as part of the Attention OS research.
+        <div class="gene-footer">
+            <span class="gene-letter">G</span>
+            <span class="gene-letter">E</span>
+            <span class="gene-letter">N</span>
+            <span class="gene-letter">E</span>
+        </div>
+        <p class="footer-text" style="margin-top: 20px">
+            Attention OS — A conceptual framework for human-AI collaboration.<br>
+            Built by <a href="#">Yunlong Zhou</a> · Exploring cognitive sovereignty in the age of AI.
         </p>
     </footer>
 
@@ -866,37 +1084,24 @@
         // ============================================
         // CORE STATE
         // ============================================
-        const State = {
-            runId: 0,
-            currentDemo: null
-        };
+        const State = { runId: 0 };
 
         const DEMOS = {
-            health: {
-                icon: '🩺',
-                name: 'Unified Memory',
-                accent: '#10b981'
-            },
-            family: {
-                icon: '🏠',
-                name: 'Proactive Planning',
-                accent: '#f59e0b'
-            },
-            time: {
-                icon: '⏳',
-                name: 'Time Sentinel',
-                accent: '#06b6d4'
-            },
-            detox: {
-                icon: '📱',
-                name: 'Adaptive Detox',
-                accent: '#8b5cf6'
-            },
-            emergency: {
-                icon: '🚑',
-                name: 'Emergency SOS',
-                accent: '#f43f5e'
-            }
+            // GUARD
+            time_sentinel: { icon: '⏳', name: 'Time Sentinel', gene: 'guard' },
+            detox: { icon: '📱', name: 'Adaptive Detox', gene: 'guard' },
+            emergency: { icon: '🚑', name: 'Emergency SOS', gene: 'guard' },
+            // ENHANCE
+            unified_memory: { icon: '🧠', name: 'Unified Memory', gene: 'enhance' },
+            pomodoro: { icon: '🍅', name: 'Focus Flow', gene: 'enhance' },
+            continuity: { icon: '🔗', name: 'Cross-Device Continuity', gene: 'enhance' },
+            // NAVIGATE
+            schedule: { icon: '📅', name: 'Smart Scheduling', gene: 'navigate' },
+            decision: { icon: '💰', name: 'Decision Helper', gene: 'navigate' },
+            // NURTURE
+            relationship: { icon: '👨‍👩‍👧', name: 'Relationship Keeper', gene: 'nurture' },
+            journal: { icon: '📔', name: 'Reflection Journal', gene: 'nurture' },
+            growth: { icon: '📚', name: 'Growth Nudge', gene: 'nurture' }
         };
 
         // ============================================
@@ -911,25 +1116,35 @@
             setTimeout(() => toast.classList.remove('show'), 3500);
         }
 
+        async function typeInto(input, text, runId) {
+            input.value = '';
+            for (let c of text) {
+                if (State.runId !== runId) return;
+                input.value += c;
+                await wait(35 + Math.random() * 35);
+            }
+        }
+
         // ============================================
-        // MODAL CONTROL
+        // MODAL
         // ============================================
         function openDemo(type) {
             const demo = DEMOS[type];
             document.getElementById('modal-icon').textContent = demo.icon;
             document.getElementById('modal-name').textContent = demo.name;
+            
+            const tag = document.getElementById('modal-gene-tag');
+            tag.textContent = demo.gene.toUpperCase();
+            tag.className = 'modal-gene-tag ' + demo.gene;
+            
             document.getElementById('modal').classList.add('active');
-            
-            State.currentDemo = type;
             State.runId++;
-            
             runDemo(type, State.runId);
         }
 
         function closeDemo() {
             document.getElementById('modal').classList.remove('active');
-            State.runId++; // Kill any running demo
-            State.currentDemo = null;
+            State.runId++;
         }
 
         // ============================================
@@ -938,54 +1153,207 @@
         async function runDemo(type, runId) {
             const body = document.getElementById('modal-body');
             
-            if (type === 'health') await runHealthDemo(body, runId);
-            else if (type === 'family') await runFamilyDemo(body, runId);
-            else if (type === 'time') await runTimeDemo(body, runId);
-            else if (type === 'detox') await runDetoxDemo(body, runId);
-            else if (type === 'emergency') await runEmergencyDemo(body, runId);
+            // GUARD
+            if (type === 'time_sentinel') await runTimeSentinel(body, runId);
+            else if (type === 'detox') await runDetox(body, runId);
+            else if (type === 'emergency') await runEmergency(body, runId);
+            // ENHANCE
+            else if (type === 'unified_memory') await runUnifiedMemory(body, runId);
+            else if (type === 'pomodoro') await runPomodoro(body, runId);
+            else if (type === 'continuity') await runContinuity(body, runId);
+            // NAVIGATE
+            else if (type === 'schedule') await runSchedule(body, runId);
+            else if (type === 'decision') await runDecision(body, runId);
+            // NURTURE
+            else if (type === 'relationship') await runRelationship(body, runId);
+            else if (type === 'journal') await runJournal(body, runId);
+            else if (type === 'growth') await runGrowth(body, runId);
         }
 
-        async function runHealthDemo(body, runId) {
+        // ========== GUARD DEMOS ==========
+        async function runTimeSentinel(body, runId) {
             body.innerHTML = `
-                <div class="demo-widget" style="grid-column: 1 / -1">
-                    <div class="widget-title">🧠 Memory Stream</div>
-                    <div class="status-bar" id="status-bar"></div>
+                <div class="widget">
+                    <div class="widget-label">🧠 Memory Stream</div>
+                    <div class="status-bar" id="status"></div>
+                    <div class="chat-stream" id="chat"></div>
+                </div>
+                <div class="widget">
+                    <div class="widget-label">⏳ Time Sentinel</div>
+                    <div class="log-box" id="log"></div>
+                </div>
+                <div class="demo-input-bar">
+                    <div class="model-pills"><span class="model-pill active">DeepSeek</span></div>
+                    <input class="demo-input" id="input" readonly placeholder="Typing...">
+                </div>
+            `;
+
+            const chat = document.getElementById('chat');
+            const log = document.getElementById('log');
+            const input = document.getElementById('input');
+            const status = document.getElementById('status');
+
+            log.innerHTML = `<div class="log-line">> Service active...</div>`;
+
+            await wait(800);
+            await typeInto(input, "Just took medicine, want to nap. Do not disturb.", runId);
+            if (State.runId !== runId) return;
+
+            chat.innerHTML += `<div class="chat-msg user">Just took medicine, want to nap. Do not disturb.</div>`;
+            input.value = '';
+
+            await wait(1200);
+            if (State.runId !== runId) return;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag deepseek">DeepSeek</div>Understood. Status → [Deep Rest]. All non-urgent notifications will be suppressed.</div>`;
+            status.innerHTML = `<div class="chip"><div class="chip-dot blue"></div>Deep Rest</div>`;
+
+            await wait(1800);
+            if (State.runId !== runId) return;
+            log.innerHTML += `<div class="log-line">> Incoming: Weekly Report (Priority: Low)</div>`;
+            
+            await wait(1200);
+            log.innerHTML += `<div class="log-line" style="color: var(--navigate)">> Decision: SUPPRESS — User in Deep Rest</div>`;
+
+            await wait(1000);
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag system">System</div>Intercepted low-priority notification. Sleep well. 😴</div>`;
+
+            await wait(2500);
+            if (State.runId !== runId) return;
+            log.innerHTML += `<div class="log-line" style="color: var(--guard)">> Incoming: Mom calling (Priority: HIGH)</div>`;
+            log.innerHTML += `<div class="log-line" style="color: var(--guard)">> Decision: ALLOW THROUGH</div>`;
+            showToast("📞 Urgent: Mom is calling — allowing through");
+        }
+
+        async function runDetox(body, runId) {
+            body.innerHTML = `
+                <div class="widget">
+                    <div class="widget-label">🧠 Memory Stream</div>
+                    <div class="status-bar" id="status"></div>
+                    <div class="chat-stream" id="chat"></div>
+                </div>
+                <div class="widget">
+                    <div class="widget-label">📱 App Monitor</div>
+                    <div class="app-card" id="app">
+                        <div class="app-info">
+                            <div class="app-icon">🎵</div>
+                            <div><div style="font-weight:600">TikTok</div><div style="font-size:0.75rem; opacity:0.6">Entertainment</div></div>
+                        </div>
+                        <div class="app-timer" id="timer">14:58</div>
+                        <div class="app-bar" id="bar" style="width:50%"></div>
+                        <div class="app-lock-overlay">🔒 LOCKED</div>
+                    </div>
+                    <div class="log-box" id="log" style="margin-top:14px; height:100px"></div>
+                </div>
+                <div class="demo-input-bar">
+                    <div class="model-pills"><span class="model-pill active" id="pill-ds">DeepSeek</span><span class="model-pill" id="pill-gpt">GPT</span></div>
+                    <input class="demo-input" id="input" readonly placeholder="Typing...">
+                </div>
+            `;
+
+            const chat = document.getElementById('chat');
+            const log = document.getElementById('log');
+            const input = document.getElementById('input');
+            const status = document.getElementById('status');
+            const app = document.getElementById('app');
+            const timer = document.getElementById('timer');
+            const bar = document.getElementById('bar');
+
+            await wait(800);
+            await typeInto(input, "I have a cold, feeling dizzy, just want to scroll TikTok.", runId);
+            if (State.runId !== runId) return;
+
+            chat.innerHTML += `<div class="chat-msg user">I have a cold, feeling dizzy, just want to scroll TikTok.</div>`;
+            input.value = '';
+
+            await wait(1200);
+            if (State.runId !== runId) return;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag deepseek">DeepSeek</div>Logged: Cold symptoms detected. Willpower assessment: Low.</div>`;
+            status.innerHTML = `<div class="chip"><div class="chip-dot red"></div>Sick</div><div class="chip"><div class="chip-dot red"></div>Low Willpower</div>`;
+
+            await wait(1400);
+            log.innerHTML = `<div class="log-line">> App: TikTok | Default limit: 30m</div>`;
+            
+            await wait(1200);
+            if (State.runId !== runId) return;
+            log.innerHTML += `<div class="log-line" style="color: var(--navigate)">> Context: Sick + Low willpower</div>`;
+            log.innerHTML += `<div class="log-line" style="color: var(--navigate)">> Adjusting limit → 15m</div>`;
+
+            await wait(1400);
+            if (State.runId !== runId) return;
+            timer.textContent = '15:00';
+            bar.style.width = '100%';
+            bar.style.background = 'var(--guard)';
+            log.innerHTML += `<div class="log-line" style="color: var(--guard)">> LIMIT REACHED — LOCKING APP</div>`;
+
+            await wait(500);
+            app.classList.add('locked');
+            showToast("🛑 TikTok force stopped");
+
+            await wait(1200);
+            document.getElementById('pill-ds').classList.remove('active');
+            document.getElementById('pill-gpt').classList.add('active');
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>I shortened your limit because you're sick. Your future self will thank you. Rest up! 💤</div>`;
+        }
+
+        async function runEmergency(body, runId) {
+            body.innerHTML = `
+                <div class="widget" style="grid-column: 1 / -1">
+                    <div class="widget-label" style="color: var(--guard)">🚑 Emergency Protocol</div>
+                    <div class="emergency-panel" id="panel" style="display:none">
+                        <div class="emergency-title">SOS ACTIVE</div>
+                        <div class="emergency-sub">All emergency systems engaged</div>
+                    </div>
+                    <div class="chat-stream" id="chat" style="margin-top:16px"></div>
+                </div>
+            `;
+
+            const chat = document.getElementById('chat');
+            const panel = document.getElementById('panel');
+
+            await wait(600);
+            if (State.runId !== runId) return;
+            panel.style.display = 'block';
+
+            await wait(800);
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag system">System</div>🚨 SOS Protocol initiated.</div>`;
+
+            await wait(1500);
+            if (State.runId !== runId) return;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>📍 Location shared with emergency contacts.<br>📞 Ambulance dispatched. ETA: 8 minutes.<br>👨‍👩‍👧 Family notified via SMS and call.</div>`;
+            showToast("🚑 Emergency services on the way");
+        }
+
+        // ========== ENHANCE DEMOS ==========
+        async function runUnifiedMemory(body, runId) {
+            body.innerHTML = `
+                <div class="widget" style="grid-column: 1 / -1">
+                    <div class="widget-label">🧠 Unified Memory Stream</div>
+                    <div class="status-bar" id="status"></div>
                     <div class="chat-stream" id="chat"></div>
                 </div>
                 <div class="demo-input-bar">
-                    <div class="model-pills">
-                        <span class="model-pill" id="pill-ds">DeepSeek</span>
-                        <span class="model-pill" id="pill-gpt">GPT</span>
-                    </div>
+                    <div class="model-pills"><span class="model-pill active" id="pill-ds">DeepSeek</span><span class="model-pill" id="pill-gpt">GPT</span></div>
                     <input class="demo-input" id="input" readonly placeholder="Typing...">
                 </div>
             `;
 
             const chat = document.getElementById('chat');
             const input = document.getElementById('input');
-            const statusBar = document.getElementById('status-bar');
+            const status = document.getElementById('status');
 
-            // Step 1: User types to DeepSeek
-            document.getElementById('pill-ds').classList.add('active');
+            await wait(800);
             await typeInto(input, "I have a headache and feel feverish.", runId);
             if (State.runId !== runId) return;
 
-            await wait(500);
             chat.innerHTML += `<div class="chat-msg user">I have a headache and feel feverish.</div>`;
             input.value = '';
 
-            await wait(1500);
+            await wait(1200);
             if (State.runId !== runId) return;
-            chat.innerHTML += `
-                <div class="chat-msg ai">
-                    <div class="ai-label deepseek">DeepSeek</div>
-                    Status logged: Sick. Recommended: Rest immediately.
-                </div>
-            `;
-            statusBar.innerHTML += `<div class="status-chip"><div class="status-dot red"></div>Sick</div>`;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag deepseek">DeepSeek</div>Status logged: Sick. Recommendation: Rest immediately. Syncing to unified memory...</div>`;
+            status.innerHTML = `<div class="chip"><div class="chip-dot red"></div>Sick</div><div class="chip"><div class="chip-dot blue"></div>Memory Synced</div>`;
 
-            // Step 2: Switch to GPT
-            await wait(2000);
+            await wait(1800);
             if (State.runId !== runId) return;
             document.getElementById('pill-ds').classList.remove('active');
             document.getElementById('pill-gpt').classList.add('active');
@@ -993,35 +1361,125 @@
             await typeInto(input, "Do I have anything scheduled tomorrow?", runId);
             if (State.runId !== runId) return;
 
-            await wait(500);
             chat.innerHTML += `<div class="chat-msg user">Do I have anything scheduled tomorrow?</div>`;
             input.value = '';
 
-            await wait(2000);
+            await wait(1500);
             if (State.runId !== runId) return;
-            chat.innerHTML += `
-                <div class="chat-msg ai">
-                    <div class="ai-label gpt">ChatGPT</div>
-                    Holistic Advice: Since you are sick, I recommend cancelling tomorrow's schedule. Health first.
-                </div>
-            `;
-            chat.scrollTop = chat.scrollHeight;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>You have a team meeting at 10am. However, since you logged "Sick" with DeepSeek, I recommend rescheduling. Health first. 🩺</div>`;
         }
 
-        async function runFamilyDemo(body, runId) {
+        async function runPomodoro(body, runId) {
             body.innerHTML = `
-                <div class="demo-widget">
-                    <div class="widget-title">🧠 Memory Stream</div>
+                <div class="widget">
+                    <div class="widget-label">🍅 Focus Session</div>
+                    <div class="pomodoro-display">
+                        <div class="pomodoro-time" id="pomo-time">01:28:45</div>
+                        <div class="pomodoro-label">Deep Work Session</div>
+                    </div>
+                    <div id="music-area"></div>
+                </div>
+                <div class="widget">
+                    <div class="widget-label">🧠 AI Assistant</div>
                     <div class="chat-stream" id="chat"></div>
                 </div>
-                <div class="demo-widget">
-                    <div class="widget-title">📅 Smart Schedule</div>
+            `;
+
+            const chat = document.getElementById('chat');
+            const pomoTime = document.getElementById('pomo-time');
+            const musicArea = document.getElementById('music-area');
+
+            await wait(1000);
+            if (State.runId !== runId) return;
+            pomoTime.textContent = '01:29:50';
+
+            await wait(1200);
+            pomoTime.textContent = '01:30:00';
+            pomoTime.style.color = 'var(--navigate)';
+
+            await wait(800);
+            if (State.runId !== runId) return;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag system">System</div>🎉 90 minutes of deep work detected! Time for a well-deserved break.</div>`;
+            showToast("🍅 90min deep work complete!");
+
+            await wait(1500);
+            if (State.runId !== runId) return;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>Here's some music to help you decompress. You've earned it.</div>`;
+
+            await wait(800);
+            musicArea.innerHTML = `
+                <div class="music-player">
+                    <div class="music-cover">🎵</div>
+                    <div class="music-info">
+                        <div class="music-title">Weightless</div>
+                        <div class="music-artist">Marconi Union</div>
+                    </div>
+                    <div class="music-bars">
+                        <div class="music-bar"></div>
+                        <div class="music-bar"></div>
+                        <div class="music-bar"></div>
+                        <div class="music-bar"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function runContinuity(body, runId) {
+            body.innerHTML = `
+                <div class="widget" style="grid-column: 1 / -1">
+                    <div class="widget-label">🔗 Cross-Device Continuity</div>
+                    <div id="continuity-area"></div>
+                    <div class="chat-stream" id="chat" style="margin-top:16px"></div>
+                </div>
+            `;
+
+            const chat = document.getElementById('chat');
+            const area = document.getElementById('continuity-area');
+
+            await wait(800);
+            if (State.runId !== runId) return;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag system">System</div>Welcome back. I noticed some unfinished items from your phone session.</div>`;
+
+            await wait(1200);
+            area.innerHTML = `
+                <div class="continuity-card" style="margin-bottom:10px">
+                    <div class="continuity-icon">📄</div>
+                    <div class="continuity-text">
+                        <div class="continuity-title">"The Age of AI" — Chapter 3</div>
+                        <div class="continuity-sub">Read 62% on iPhone · 12 min remaining</div>
+                    </div>
+                </div>
+            `;
+
+            await wait(1000);
+            if (State.runId !== runId) return;
+            area.innerHTML += `
+                <div class="continuity-card">
+                    <div class="continuity-icon">💬</div>
+                    <div class="continuity-text">
+                        <div class="continuity-title">Chat with Alex about project</div>
+                        <div class="continuity-sub">Last message: "Let me check the specs"</div>
+                    </div>
+                </div>
+            `;
+
+            await wait(1200);
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>Would you like to continue reading, or respond to Alex first?</div>`;
+        }
+
+        // ========== NAVIGATE DEMOS ==========
+        async function runSchedule(body, runId) {
+            body.innerHTML = `
+                <div class="widget">
+                    <div class="widget-label">🧠 AI Planner</div>
+                    <div class="chat-stream" id="chat"></div>
+                </div>
+                <div class="widget">
+                    <div class="widget-label">📅 Smart Schedule</div>
                     <div id="schedule"></div>
                 </div>
                 <div class="demo-input-bar">
-                    <div class="model-pills">
-                        <span class="model-pill active">GPT</span>
-                    </div>
+                    <div class="model-pills"><span class="model-pill active">GPT</span></div>
                     <input class="demo-input" id="input" readonly placeholder="Typing...">
                 </div>
             `;
@@ -1032,266 +1490,167 @@
 
             schedule.innerHTML = `<div class="schedule-item"><span class="schedule-time">Sat 09:00</span><span>Team Building</span></div>`;
 
-            await wait(1000);
-            await typeInto(input, "I want to visit my grandparents this week. Plan a time.", runId);
+            await wait(800);
+            await typeInto(input, "I want to visit my grandparents this week.", runId);
             if (State.runId !== runId) return;
 
-            await wait(500);
-            chat.innerHTML += `<div class="chat-msg user">I want to visit my grandparents this week. Plan a time.</div>`;
+            chat.innerHTML += `<div class="chat-msg user">I want to visit my grandparents this week.</div>`;
             input.value = '';
 
-            await wait(2500);
+            await wait(1800);
             if (State.runId !== runId) return;
-            chat.innerHTML += `
-                <div class="chat-msg ai">
-                    <div class="ai-label gpt">ChatGPT</div>
-                    Analyzing... Saturday is full (Team Building). Sunday at 2:00 PM is free and sunny. ☀️
-                </div>
-            `;
-
-            await wait(2000);
-            await typeInto(input, "Okay, lock that time in.", runId);
-            if (State.runId !== runId) return;
-
-            await wait(500);
-            chat.innerHTML += `<div class="chat-msg user">Okay, lock that time in.</div>`;
-            input.value = '';
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>Analyzing your week...<br>• Saturday: Team Building (all day)<br>• Sunday 2pm: Free + Weather is sunny ☀️<br><br>Recommend: Sunday 2:00 PM</div>`;
 
             await wait(1500);
+            await typeInto(input, "Lock it in.", runId);
             if (State.runId !== runId) return;
-            schedule.innerHTML += `<div class="schedule-item" style="border-color: #f59e0b"><span class="schedule-time" style="color: #f59e0b">Sun 14:00</span><span>Grandparents Visit 👴👵</span></div>`;
+
+            chat.innerHTML += `<div class="chat-msg user">Lock it in.</div>`;
+            input.value = '';
 
             await wait(1000);
-            chat.innerHTML += `
-                <div class="chat-msg ai">
-                    <div class="ai-label gpt">ChatGPT</div>
-                    Schedule created. Don't forget to bring some fruit! 🍎
-                </div>
-            `;
-            chat.scrollTop = chat.scrollHeight;
+            if (State.runId !== runId) return;
+            schedule.innerHTML += `<div class="schedule-item" style="border-color: var(--navigate)"><span class="schedule-time" style="color: var(--navigate)">Sun 14:00</span><span>Visit Grandparents 👴👵</span></div>`;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>Done! Don't forget to bring some fruit 🍎</div>`;
         }
 
-        async function runTimeDemo(body, runId) {
+        async function runDecision(body, runId) {
             body.innerHTML = `
-                <div class="demo-widget">
-                    <div class="widget-title">🧠 Memory Stream</div>
-                    <div class="status-bar" id="status-bar"></div>
+                <div class="widget">
+                    <div class="widget-label">🧠 Decision Context</div>
                     <div class="chat-stream" id="chat"></div>
                 </div>
-                <div class="demo-widget">
-                    <div class="widget-title">⏳ Time Sentinel</div>
-                    <div class="log-console" id="log"></div>
+                <div class="widget">
+                    <div class="widget-label">💰 Your Financial Principles</div>
+                    <div class="decision-card" id="principles" style="opacity:0.3"></div>
                 </div>
                 <div class="demo-input-bar">
-                    <div class="model-pills">
-                        <span class="model-pill active" id="pill-ds">DeepSeek</span>
-                    </div>
+                    <div class="model-pills"><span class="model-pill active">GPT</span></div>
                     <input class="demo-input" id="input" readonly placeholder="Typing...">
                 </div>
             `;
 
             const chat = document.getElementById('chat');
-            const log = document.getElementById('log');
+            const principles = document.getElementById('principles');
             const input = document.getElementById('input');
-            const statusBar = document.getElementById('status-bar');
 
-            log.innerHTML = `<div class="log-line" style="animation-delay: 0s">> Service active...</div>`;
+            principles.innerHTML = `
+                <div class="decision-item"><span class="decision-label">Monthly Budget</span><span class="decision-value neutral">$500 remaining</span></div>
+                <div class="decision-item"><span class="decision-label">Your Rule</span><span class="decision-value">"Sleep on purchases > $100"</span></div>
+                <div class="decision-item"><span class="decision-label">Similar Past Purchase</span><span class="decision-value negative">Regretted 2/3 times</span></div>
+            `;
 
-            await wait(1000);
-            await typeInto(input, "Just took medicine, want to nap. Do not disturb.", runId);
+            await wait(800);
+            await typeInto(input, "I really want to buy this $299 gadget. Should I?", runId);
             if (State.runId !== runId) return;
 
-            await wait(500);
-            chat.innerHTML += `<div class="chat-msg user">Just took medicine, want to nap. Do not disturb.</div>`;
+            chat.innerHTML += `<div class="chat-msg user">I really want to buy this $299 gadget. Should I?</div>`;
             input.value = '';
 
-            await wait(1500);
+            await wait(1200);
             if (State.runId !== runId) return;
-            chat.innerHTML += `
-                <div class="chat-msg ai">
-                    <div class="ai-label deepseek">DeepSeek</div>
-                    Received. Status updated: [Deep Rest].
-                </div>
-            `;
-            statusBar.innerHTML += `<div class="status-chip"><div class="status-dot blue"></div>Deep Rest</div>`;
-
-            await wait(2000);
-            if (State.runId !== runId) return;
-            log.innerHTML += `<div class="log-line" style="animation-delay: 0.1s">> Found: Weekly Report (Low Priority)</div>`;
-
-            await wait(1500);
-            if (State.runId !== runId) return;
-            log.innerHTML += `<div class="log-line" style="animation-delay: 0.1s; color: #f59e0b">> Decision: SUPPRESS (User Sleeping)</div>`;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>Let me surface your own principles before you decide...</div>`;
 
             await wait(1000);
-            chat.innerHTML += `
-                <div class="chat-msg ai">
-                    <div class="ai-label system">System</div>
-                    Intercepted low-priority notification. Sleep well. 😴
-                </div>
-            `;
+            principles.style.opacity = '1';
+            principles.style.transition = 'opacity 0.5s';
 
-            await wait(3000);
+            await wait(1500);
             if (State.runId !== runId) return;
-            log.innerHTML += `<div class="log-line" style="animation-delay: 0.1s; color: #f43f5e">> Found: Urgent Call (High Priority)</div>`;
-            log.innerHTML += `<div class="log-line" style="animation-delay: 0.2s; color: #f43f5e">> Decision: ALLOW THROUGH</div>`;
-            showToast("⚠️ Urgent Call Detected — Allowing Through");
-            chat.scrollTop = chat.scrollHeight;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>Based on your own rules: this exceeds $100, so you'd normally sleep on it. You've also regretted similar impulse buys. Still want it tomorrow? Then go for it. 🎯</div>`;
         }
 
-        async function runDetoxDemo(body, runId) {
+        // ========== NURTURE DEMOS ==========
+        async function runRelationship(body, runId) {
             body.innerHTML = `
-                <div class="demo-widget">
-                    <div class="widget-title">🧠 Memory Stream</div>
-                    <div class="status-bar" id="status-bar"></div>
+                <div class="widget" style="grid-column: 1 / -1">
+                    <div class="widget-label">👨‍👩‍👧 Relationship Keeper</div>
                     <div class="chat-stream" id="chat"></div>
                 </div>
-                <div class="demo-widget">
-                    <div class="widget-title">📱 App Monitor</div>
-                    <div class="app-monitor" id="app-monitor">
-                        <div class="app-info">
-                            <div class="app-icon">🎵</div>
-                            <div>
-                                <div style="font-weight: 600">TikTok</div>
-                                <div style="font-size: 0.8rem; opacity: 0.6">Entertainment</div>
-                            </div>
-                        </div>
-                        <div class="app-timer" id="timer">14:58</div>
-                        <div class="app-progress" id="progress" style="width: 50%"></div>
-                        <div class="app-locked-overlay">🔒 LOCKED</div>
-                    </div>
-                    <div class="log-console" id="log" style="margin-top: 16px; height: 100px"></div>
-                </div>
-                <div class="demo-input-bar">
-                    <div class="model-pills">
-                        <span class="model-pill active" id="pill-ds">DeepSeek</span>
-                        <span class="model-pill" id="pill-gpt">GPT</span>
-                    </div>
-                    <input class="demo-input" id="input" readonly placeholder="Typing...">
-                </div>
             `;
 
             const chat = document.getElementById('chat');
-            const log = document.getElementById('log');
-            const input = document.getElementById('input');
-            const statusBar = document.getElementById('status-bar');
-            const appMonitor = document.getElementById('app-monitor');
-            const timer = document.getElementById('timer');
-            const progress = document.getElementById('progress');
-
-            await wait(1000);
-            await typeInto(input, "I have a cold, feeling dizzy, just want to scroll TikTok.", runId);
-            if (State.runId !== runId) return;
-
-            await wait(500);
-            chat.innerHTML += `<div class="chat-msg user">I have a cold, feeling dizzy, just want to scroll TikTok.</div>`;
-            input.value = '';
-
-            await wait(1500);
-            if (State.runId !== runId) return;
-            chat.innerHTML += `
-                <div class="chat-msg ai">
-                    <div class="ai-label deepseek">DeepSeek</div>
-                    Logged: Cold (Willpower Low).
-                </div>
-            `;
-            statusBar.innerHTML += `<div class="status-chip"><div class="status-dot red"></div>Low Willpower</div>`;
-
-            await wait(1500);
-            if (State.runId !== runId) return;
-            log.innerHTML += `<div class="log-line">> App: TikTok</div>`;
-            log.innerHTML += `<div class="log-line">> Standard limit: 30m</div>`;
-
-            await wait(1500);
-            if (State.runId !== runId) return;
-            log.innerHTML += `<div class="log-line" style="color: #f59e0b">> Context: Sick + Low willpower</div>`;
-            log.innerHTML += `<div class="log-line" style="color: #f59e0b">> Adjusting limit: 15m</div>`;
-
-            await wait(1500);
-            if (State.runId !== runId) return;
-            timer.textContent = '15:00';
-            progress.style.width = '100%';
-            progress.style.background = '#f43f5e';
-            log.innerHTML += `<div class="log-line" style="color: #f43f5e">> LIMIT REACHED. LOCKING APP.</div>`;
-
-            await wait(500);
-            appMonitor.classList.add('locked');
-            showToast("🛑 TikTok Force Stopped");
-
-            await wait(1000);
-            chat.innerHTML += `
-                <div class="chat-msg ai">
-                    <div class="ai-label system">System</div>
-                    🛑 App Force Stopped.
-                </div>
-            `;
-
-            await wait(1500);
-            if (State.runId !== runId) return;
-            document.getElementById('pill-ds').classList.remove('active');
-            document.getElementById('pill-gpt').classList.add('active');
-            chat.innerHTML += `
-                <div class="chat-msg ai">
-                    <div class="ai-label gpt">ChatGPT</div>
-                    I lowered your limit to 15m because you're sick. Your future self will thank you. Go rest. 💤
-                </div>
-            `;
-            chat.scrollTop = chat.scrollHeight;
-        }
-
-        async function runEmergencyDemo(body, runId) {
-            body.innerHTML = `
-                <div class="demo-widget" style="grid-column: 1 / -1">
-                    <div class="widget-title" style="color: #f43f5e">🚑 Emergency Protocol</div>
-                    <div class="emergency-banner" id="banner" style="display: none">
-                        <div class="emergency-title">SOS ACTIVE</div>
-                        <div style="opacity: 0.8">All emergency systems engaged</div>
-                    </div>
-                    <div class="chat-stream" id="chat" style="margin-top: 20px"></div>
-                </div>
-            `;
-
-            const chat = document.getElementById('chat');
-            const banner = document.getElementById('banner');
 
             await wait(800);
             if (State.runId !== runId) return;
-            banner.style.display = 'block';
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag system">System</div>Good evening! A gentle reminder...</div>`;
 
-            await wait(1000);
-            chat.innerHTML += `
-                <div class="chat-msg ai">
-                    <div class="ai-label system">System</div>
-                    🚨 SOS Protocol Initiated.
+            await wait(1200);
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>You haven't talked to <strong>Grandma</strong> in 3 weeks. Last time you called, she mentioned her garden was blooming. 🌸<br><br>Maybe a quick call this weekend?</div>`;
+
+            await wait(2000);
+            if (State.runId !== runId) return;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>Also, <strong>Alex</strong>'s birthday is in 5 days. You usually get him books — want me to suggest some?</div>`;
+        }
+
+        async function runJournal(body, runId) {
+            body.innerHTML = `
+                <div class="widget">
+                    <div class="widget-label">📔 Evening Reflection</div>
+                    <div class="journal-prompt" id="prompt">
+                        <div class="journal-icon">✨</div>
+                        <div class="journal-question">What was the most meaningful moment of your day?</div>
+                        <div class="journal-hint">Take a moment to reflect...</div>
+                    </div>
+                </div>
+                <div class="widget">
+                    <div class="widget-label">📊 Weekly Insight</div>
+                    <div class="chat-stream" id="chat"></div>
                 </div>
             `;
+
+            const chat = document.getElementById('chat');
 
             await wait(1500);
             if (State.runId !== runId) return;
-            chat.innerHTML += `
-                <div class="chat-msg ai">
-                    <div class="ai-label gpt">ChatGPT</div>
-                    📍 Location shared with emergency contacts.<br>
-                    📞 Ambulance called. ETA: 8 minutes.<br>
-                    👨‍👩‍👧 Family notified via SMS.
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>Based on your journal entries this week, I noticed a pattern...</div>`;
+
+            await wait(1800);
+            if (State.runId !== runId) return;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>Your energy tends to dip on <strong>Wednesdays</strong> — that's when you have back-to-back meetings. Consider blocking focus time on Wednesday mornings?</div>`;
+
+            await wait(1500);
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>Also: you mentioned "grateful" 5 times this week. That's up from last week. You're growing. 🌱</div>`;
+        }
+
+        async function runGrowth(body, runId) {
+            body.innerHTML = `
+                <div class="widget" style="grid-column: 1 / -1">
+                    <div class="widget-label">📚 Growth Nudge</div>
+                    <div class="status-bar" id="status"></div>
+                    <div class="chat-stream" id="chat"></div>
                 </div>
             `;
-            showToast("🚑 Emergency services dispatched");
+
+            const chat = document.getElementById('chat');
+            const status = document.getElementById('status');
+
+            await wait(600);
+            if (State.runId !== runId) return;
+            status.innerHTML = `<div class="chip"><div class="chip-dot amber"></div>Boredom Detected</div>`;
+
+            await wait(1000);
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag system">System</div>I noticed you've unlocked your phone 8 times in 10 minutes without doing anything specific. Feeling bored?</div>`;
+
+            await wait(1800);
+            if (State.runId !== runId) return;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>Instead of scrolling, how about this?<br><br>📖 <strong>"Atomic Habits"</strong> — you're 40% through<br>⏱️ 12 min to finish Chapter 5<br><br>Your past self wanted to finish this book. Want to pick it up?</div>`;
+
+            await wait(2000);
+            if (State.runId !== runId) return;
+            chat.innerHTML += `<div class="chat-msg ai"><div class="ai-tag gpt">ChatGPT</div>I can also read it aloud while you rest. Just say the word. 🎧</div>`;
         }
 
-        // Type animation helper
-        async function typeInto(input, text, runId) {
-            input.value = '';
-            for (let c of text) {
-                if (State.runId !== runId) return;
-                input.value += c;
-                await wait(40 + Math.random() * 40);
-            }
-        }
+        // Close on Escape
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDemo(); });
 
-        // Close modal on Escape
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeDemo();
+        // Smooth scroll for nav
+        document.querySelectorAll('.gene-pill').forEach(pill => {
+            pill.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(pill.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            });
         });
     </script>
 </body>
