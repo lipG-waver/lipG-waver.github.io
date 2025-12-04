@@ -3,370 +3,894 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindForge - Deep Analysis Engine</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>MindForge — Cognitive Guidance System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0f172a;
-            --accent: #6366f1; /* Indigo */
-            --bg-chat: #f1f5f9;
-            --bg-sidebar: #ffffff;
-            --text-main: #334155;
-            --user-bubble: #3b82f6;
+            --ink: #0a0a0a;
+            --paper: #faf9f7;
+            --accent: #1a1a2e;
+            --accent-glow: #4f46e5;
+            --muted: #71717a;
+            --border: #e4e4e7;
+            --user-bubble: #18181b;
             --bot-bubble: #ffffff;
-            --border: #e2e8f0;
+            --gradient-start: #f5f3ff;
+            --gradient-end: #faf9f7;
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            height: 100vh;
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background-color: var(--bg-chat);
-            color: var(--text-main);
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, var(--gradient-start) 0%, var(--paper) 100%);
+            position: relative;
             overflow: hidden;
         }
 
-        /* Header */
-        header {
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(79, 70, 229, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(79, 70, 229, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(250, 249, 247, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .logo {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--ink); }
+
+        .nav-cta {
+            background: var(--ink);
+            color: white !important;
+            padding: 0.6rem 1.4rem;
+            border-radius: 100px;
+            font-weight: 500;
+        }
+
+        .nav-cta:hover { background: #333; }
+
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-glow);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .eyebrow::before,
+        .eyebrow::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--accent-glow);
+            opacity: 0.3;
+        }
+
+        .hero-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--accent-glow);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--muted);
+            max-width: 580px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--ink);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+        }
+
+        .hero-cta svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s;
+        }
+
+        .hero-cta:hover svg { transform: translateX(4px); }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--muted);
+            font-size: 0.75rem;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* === MANIFESTO SECTION === */
+        .manifesto {
+            padding: 8rem 2rem;
+            background: var(--ink);
+            color: white;
+            position: relative;
+        }
+
+        .manifesto-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .manifesto-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 3rem;
+        }
+
+        .manifesto-text {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            line-height: 1.5;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .manifesto-text .highlight {
+            color: var(--accent-glow);
+            background: linear-gradient(120deg, rgba(79, 70, 229, 0.2) 0%, rgba(79, 70, 229, 0) 100%);
+            padding: 0 0.2em;
+        }
+
+        .manifesto-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 5rem;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .manifesto-stat {
+            text-align: left;
+        }
+
+        .manifesto-stat-number {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+            color: white;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .manifesto-stat-label {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.5;
+        }
+
+        /* === PHILOSOPHY SECTION === */
+        .philosophy {
+            padding: 8rem 2rem;
+            background: var(--paper);
+        }
+
+        .philosophy-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .philosophy-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-eyebrow {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+        }
+
+        .philosophy-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .philosophy-card {
             background: white;
-            padding: 0 2rem;
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .philosophy-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-glow), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .philosophy-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+        }
+
+        .philosophy-card:hover::before { opacity: 1; }
+
+        .card-number {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 4rem;
+            font-weight: 400;
+            color: rgba(79, 70, 229, 0.1);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* === DEMO SECTION === */
+        .demo-section {
+            padding: 6rem 2rem 8rem;
+            background: linear-gradient(180deg, var(--paper) 0%, #f4f4f5 100%);
+        }
+
+        .demo-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.08), 0 0 0 1px var(--border);
+        }
+
+        /* Demo Controls */
+        .demo-controls {
+            padding: 1.5rem 2rem;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 64px;
-            flex-shrink: 0;
+            background: #fafafa;
         }
 
-        .logo {
-            font-weight: 800;
-            font-size: 1.25rem;
-            color: var(--primary);
+        .demo-controls select {
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            background: white;
+            min-width: 340px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .demo-controls select:focus {
+            border-color: var(--accent-glow);
+        }
+
+        .run-btn {
+            background: var(--ink);
+            color: white;
+            border: none;
+            padding: 0.65rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-        
-        .logo-badge {
-            background: #f0f9ff;
-            color: #0ea5e9;
-            font-size: 0.65rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            border: 1px solid #bae6fd;
-            font-weight: 600;
-        }
-
-        .controls { display: flex; gap: 12px; align-items: center; }
-
-        select {
-            padding: 0.5rem 1rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            outline: none;
-            background: #f8fafc;
-            min-width: 320px;
-            cursor: pointer;
-        }
-
-        button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 6px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            cursor: pointer;
             transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
-        
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        button:hover:not(:disabled) { background: #334155; }
 
-        /* Main Layout */
-        .container {
-            display: flex;
-            flex: 1;
-            height: calc(100vh - 64px);
-        }
+        .run-btn:hover:not(:disabled) { background: #333; }
+        .run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* Chat Area */
         .chat-area {
-            flex: 2;
+            flex: 1.4;
             display: flex;
             flex-direction: column;
             border-right: 1px solid var(--border);
-            background: var(--bg-chat);
-            position: relative;
+            background: #fafafa;
         }
 
         .chat-history {
             flex: 1;
-            padding: 2rem 10%;
+            padding: 2rem;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
-            scroll-behavior: smooth;
+            gap: 1rem;
+            min-height: 500px;
+            max-height: 600px;
         }
 
         .message {
-            max-width: 85%;
+            max-width: 80%;
             padding: 1rem 1.25rem;
-            border-radius: 1rem;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            position: relative;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.65;
             opacity: 0;
             transform: translateY(10px);
             animation: fadeUp 0.4s ease forwards;
         }
 
-        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .message.bot {
             align-self: flex-start;
             background: var(--bot-bubble);
-            color: #1e293b;
-            border-bottom-left-radius: 2px;
+            color: var(--ink);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
         }
 
         .message.user {
             align-self: flex-end;
             background: var(--user-bubble);
             color: white;
-            border-bottom-right-radius: 2px;
+            border-bottom-right-radius: 4px;
         }
 
         .typing-indicator {
-            margin-left: 10%;
-            margin-bottom: 1rem;
-            color: #94a3b8;
+            padding: 0 2rem 1rem;
+            color: var(--muted);
             font-size: 0.8rem;
             font-style: italic;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             opacity: 0;
             transition: opacity 0.3s;
+            height: 24px;
         }
-        
+
         .typing-indicator.visible { opacity: 1; }
 
         .dot-pulse {
-            width: 6px; height: 6px; background: #cbd5e1; border-radius: 50%;
+            width: 5px;
+            height: 5px;
+            background: var(--muted);
+            border-radius: 50%;
             animation: pulse 1s infinite;
         }
-        .dot-pulse:nth-child(2) { animation-delay: 0.2s; }
-        .dot-pulse:nth-child(3) { animation-delay: 0.4s; }
-        
-        @keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+        .dot-pulse:nth-child(2) { animation-delay: 0.15s; }
+        .dot-pulse:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
 
         /* Sidebar */
         .sidebar {
             flex: 1;
-            background: var(--bg-sidebar);
-            padding: 1.5rem;
-            overflow-y: auto;
-            min-width: 380px;
+            background: white;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
+            min-width: 360px;
         }
 
         .sidebar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 1rem;
+            padding-bottom: 1.25rem;
             border-bottom: 1px solid var(--border);
         }
 
-        .sidebar-header h2 {
-            font-size: 1rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--primary);
+        .sidebar-header h3 {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.1rem;
+            font-weight: 400;
         }
 
         .depth-meter {
-            font-size: 0.75rem;
-            color: #64748b;
+            font-size: 0.7rem;
+            color: var(--muted);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
-        
+
         .meter-bar {
             width: 60px;
-            height: 6px;
-            background: #e2e8f0;
-            border-radius: 3px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
             overflow: hidden;
         }
-        
+
         .meter-fill {
             height: 100%;
-            background: var(--accent);
+            background: var(--accent-glow);
             width: 0%;
-            transition: width 1s ease;
+            transition: width 0.8s ease;
         }
 
         .phase-card {
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 1.25rem;
             transition: all 0.4s ease;
             background: #fcfcfc;
         }
 
-        .phase-card.locked { opacity: 0.5; filter: grayscale(100%); }
+        .phase-card.locked { opacity: 0.4; }
+
         .phase-card.active {
             background: white;
-            border-color: var(--accent);
-            box-shadow: 0 4px 20px -4px rgba(99, 102, 241, 0.15);
-            transform: translateY(-2px);
+            border-color: var(--accent-glow);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.08);
         }
 
         .phase-title {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
-            color: #94a3b8;
-            font-weight: 700;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            font-weight: 600;
             margin-bottom: 0.75rem;
-            letter-spacing: 0.05em;
             display: flex;
             justify-content: space-between;
         }
-        
-        .phase-status { font-size: 0.7rem; color: var(--accent); opacity: 0; transition: opacity 0.3s; }
+
+        .phase-status {
+            font-size: 0.6rem;
+            color: var(--accent-glow);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
         .active .phase-status { opacity: 1; }
 
         .phase-content {
-            font-size: 0.9rem;
-            color: var(--text-main);
-            min-height: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--ink);
+            line-height: 1.6;
         }
-        
-        .phase-content strong { font-weight: 600; color: #1e293b; }
 
-        .tag-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+        .phase-content strong {
+            font-weight: 600;
+        }
+
+        .phase-content em {
+            color: #a1a1aa;
+            font-style: italic;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
         .insight-tag {
-            background: #f1f5f9;
-            color: #475569;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .active .insight-tag { background: #eef2ff; color: var(--accent); border-color: #c7d2fe; }
-
-        .simulation-footer {
-            margin-top: auto;
-            text-align: center;
+            background: #f4f4f5;
+            color: #52525b;
+            padding: 4px 10px;
+            border-radius: 100px;
             font-size: 0.7rem;
-            color: #94a3b8;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
+            font-weight: 500;
         }
 
+        .active .insight-tag {
+            background: #eef2ff;
+            color: var(--accent-glow);
+        }
+
+        /* === FOOTER === */
+        footer {
+            padding: 4rem 2rem;
+            background: var(--ink);
+            color: white;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            max-width: 400px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-links a {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: white; }
+
+        .footer-copy {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.3);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .demo-container {
+                flex-direction: column;
+            }
+
+            .chat-area {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .sidebar {
+                min-width: auto;
+            }
+
+            .manifesto-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .philosophy-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 4rem;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .demo-controls select {
+                min-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo">
-        MindForge <span class="logo-badge">AI SIMULATION</span>
+<!-- Navigation -->
+<nav class="hero-nav">
+    <div class="logo">MindForge</div>
+    <div class="nav-links">
+        <a href="#philosophy">Philosophy</a>
+        <a href="#demo">Experience</a>
+        <a href="#" class="nav-cta">Get Started</a>
     </div>
-    <div class="controls">
-        <select id="personaSelector">
-            <option value="A_finance">Case A: The "Money Lover" (Financial Pragmatist)</option>
-            <option value="B_idealist">Case B: The "Rich Idealist" (Post-Materialist)</option>
-            <option value="C_shame">Case C: The "Conflicted" (Overcoming Money Shame)</option>
-            <option value="D_burnout">Case D: The "Burnt Out" Elite (Escapism vs. Passion)</option>
-            <option value="E_family">Case E: The "Filial Prisoner" (Living for Parents)</option>
-        </select>
-        <button id="startBtn" onclick="startSimulation()">
-            <span id="playIcon">▶</span> Run Simulation
-        </button>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="eyebrow">Cognitive Guidance System</div>
+        <h1 class="hero-title">Your attention is<br>your most <em>precious</em> asset</h1>
+        <p class="hero-subtitle">MindForge doesn't tell you what to do. Through structured dialogue, it helps you discover what you truly want—before algorithms decide for you.</p>
+        <a href="#demo" class="hero-cta">
+            Experience the Demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
     </div>
-</header>
-
-<div class="container">
-    <div class="chat-area">
-        <div class="chat-history" id="chatHistory">
-            <div class="message bot">Hello. I am MindForge. I'm here to dig beneath the surface. Let's skip the resume talk. Who are you, really?</div>
-        </div>
-        
-        <div class="typing-indicator" id="typingIndicator">
-            <span class="dot-pulse"></span><span class="dot-pulse"></span><span class="dot-pulse"></span>
-            <span style="margin-left: 8px; font-style: normal;">AI is analyzing psychological markers...</span>
-        </div>
+    <div class="scroll-hint">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 5v14M19 12l-7 7-7-7"/>
+        </svg>
     </div>
+</section>
 
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h2>Real-Time Profiling</h2>
-            <div class="depth-meter">
-                Depth: <div class="meter-bar"><div class="meter-fill" id="depthFill"></div></div>
+<!-- Manifesto Section -->
+<section class="manifesto">
+    <div class="manifesto-inner">
+        <div class="manifesto-label">The Problem</div>
+        <p class="manifesto-text">
+            Every day, platforms compete to capture your attention. They optimize for engagement, not for <span class="highlight">your flourishing</span>. The result? A generation drifting—not because they lack ability, but because they've never had the space to ask: <em>"What do I actually want?"</em>
+        </p>
+        <div class="manifesto-grid">
+            <div class="manifesto-stat">
+                <div class="manifesto-stat-number">4.8h</div>
+                <div class="manifesto-stat-label">Average daily time spent on algorithmically-curated feeds</div>
             </div>
-        </div>
-
-        <div class="phase-card locked" id="phase1">
-            <div class="phase-title">
-                Phase 1: Core Motivation
-                <span class="phase-status">● Analyzed</span>
+            <div class="manifesto-stat">
+                <div class="manifesto-stat-number">73%</div>
+                <div class="manifesto-stat-label">of young professionals report feeling "directionless" in career choices</div>
             </div>
-            <div class="phase-content" id="content1">
-                <em style="color:#cbd5e1">Pending deep dive...</em>
+            <div class="manifesto-stat">
+                <div class="manifesto-stat-number">12</div>
+                <div class="manifesto-stat-label">Structured turns to surface authentic motivation patterns</div>
             </div>
-        </div>
-
-        <div class="phase-card locked" id="phase2">
-            <div class="phase-title">
-                Phase 2: Strategic Domain
-                <span class="phase-status">● Locked</span>
-            </div>
-            <div class="phase-content" id="content2">
-                <em style="color:#cbd5e1">Pending domain analysis...</em>
-            </div>
-        </div>
-
-        <div class="phase-card locked" id="phase3">
-            <div class="phase-title">
-                Phase 3: Leadership Signature
-                <span class="phase-status">● Locked</span>
-            </div>
-            <div class="phase-content" id="content3">
-                <em style="color:#cbd5e1">Pending behavioral data...</em>
-            </div>
-        </div>
-
-        <div class="simulation-footer">
-            MindForge AI Prototype v2.5 | Interaction Depth: Optimized (12 Turns)
         </div>
     </div>
-</div>
+</section>
+
+<!-- Philosophy Section -->
+<section class="philosophy" id="philosophy">
+    <div class="philosophy-inner">
+        <div class="philosophy-header">
+            <div class="section-eyebrow">Our Approach</div>
+            <h2 class="section-title">Three Layers of Self-Discovery</h2>
+        </div>
+        <div class="philosophy-cards">
+            <div class="philosophy-card">
+                <div class="card-number">01</div>
+                <h3 class="card-title">Core Motivation</h3>
+                <p class="card-desc">We dig beneath surface-level goals. Not "I want to work in finance" but why—security from childhood scarcity? Proving something? Or genuine fascination with markets?</p>
+            </div>
+            <div class="philosophy-card">
+                <div class="card-number">02</div>
+                <h3 class="card-title">Value Creation</h3>
+                <p class="card-desc">Where does your energy meet the world's needs? We identify the domains where your authentic self can create disproportionate impact.</p>
+            </div>
+            <div class="philosophy-card">
+                <div class="card-number">03</div>
+                <h3 class="card-title">Leadership Signature</h3>
+                <p class="card-desc">How do you naturally influence others? Through empathy, through analysis, through vision? Your style shapes where you'll thrive.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Demo Section -->
+<section class="demo-section" id="demo">
+    <div class="demo-header">
+        <div class="section-eyebrow">Live Simulation</div>
+        <h2 class="section-title">Watch MindForge in Action</h2>
+        <p style="color: var(--muted); margin-top: 1rem; font-size: 0.95rem;">Select a persona and observe how structured dialogue reveals hidden motivations.</p>
+    </div>
+
+    <div class="demo-container">
+        <div class="chat-area">
+            <div class="demo-controls">
+                <select id="personaSelector">
+                    <option value="A_finance">Case A: The "Money Lover" (Financial Pragmatist)</option>
+                    <option value="B_idealist">Case B: The "Rich Idealist" (Post-Materialist)</option>
+                    <option value="C_shame">Case C: The "Conflicted" (Overcoming Money Shame)</option>
+                    <option value="D_burnout">Case D: The "Burnt Out" Elite (Escapism vs. Passion)</option>
+                    <option value="E_family">Case E: The "Filial Prisoner" (Living for Parents)</option>
+                </select>
+                <button class="run-btn" id="startBtn" onclick="startSimulation()">
+                    <span id="playIcon">▶</span> Run Simulation
+                </button>
+            </div>
+            <div class="chat-history" id="chatHistory">
+                <div class="message bot">Hello. I am MindForge. I'm here to dig beneath the surface. Let's skip the resume talk. Who are you, really?</div>
+            </div>
+            <div class="typing-indicator" id="typingIndicator">
+                <span class="dot-pulse"></span><span class="dot-pulse"></span><span class="dot-pulse"></span>
+                <span style="margin-left: 8px; font-style: normal;">Analyzing response patterns...</span>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>Real-Time Profiling</h3>
+                <div class="depth-meter">
+                    Depth <div class="meter-bar"><div class="meter-fill" id="depthFill"></div></div>
+                </div>
+            </div>
+
+            <div class="phase-card locked" id="phase1">
+                <div class="phase-title">
+                    Phase 1: Core Motivation
+                    <span class="phase-status">● Analyzed</span>
+                </div>
+                <div class="phase-content" id="content1">
+                    <em>Awaiting deep dive...</em>
+                </div>
+            </div>
+
+            <div class="phase-card locked" id="phase2">
+                <div class="phase-title">
+                    Phase 2: Strategic Domain
+                    <span class="phase-status">● Analyzing</span>
+                </div>
+                <div class="phase-content" id="content2">
+                    <em>Awaiting domain analysis...</em>
+                </div>
+            </div>
+
+            <div class="phase-card locked" id="phase3">
+                <div class="phase-title">
+                    Phase 3: Leadership Signature
+                    <span class="phase-status">● Analyzing</span>
+                </div>
+                <div class="phase-content" id="content3">
+                    <em>Awaiting behavioral data...</em>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-logo">MindForge</div>
+    <p class="footer-text">A cognitive guidance system designed to help you reclaim sovereignty over your most precious resource: attention.</p>
+    <div class="footer-links">
+        <a href="#">About</a>
+        <a href="#">Philosophy</a>
+        <a href="#">Contact</a>
+        <a href="#">GitHub</a>
+    </div>
+    <div class="footer-copy">© 2025 MindForge. Built with intention.</div>
+</footer>
 
 <script>
-    // --- Expanded Persona Database ---
-    
+    // --- Persona Database ---
     const personas = {
-        // --- CASE A: The Honest Money Lover ---
         A_finance: [
-            // Phase 1: Motivation (Deepening the "Why")
             { type: 'user', text: "I'm a Finance student. I want to break into Private Equity. I need a path that maximizes ROI on my time.", delay: 800 },
             { type: 'bot', text: "Straight to the point. 'Maximizing ROI' usually translates to money. Is wealth the end goal, or a means to something else?", delay: 1500 },
             { type: 'user', text: "It's the goal. I want $10M liquid by 35. I grew up seeing how lack of money destroys families. I won't let that happen to me.", delay: 2000 },
@@ -378,8 +902,6 @@
                        <strong>Root Cause:</strong> Trauma from Scarcity<br>
                        <div class="tag-container"><span class="insight-tag">High Clarity</span><span class="insight-tag">Safety-Driven</span></div>` 
             },
-
-            // Phase 2: Domain (Hunter vs. Farmer)
             { type: 'bot', text: "Understood. Since high returns are the priority, we need to assess your risk profile. Do you prefer spotting value in companies (Analysis) or convincing people (Dealmaking)?", delay: 1500 },
             { type: 'user', text: "I'm good with numbers, but I prefer the deal. I like the psychological warfare of negotiation. Analysis is boring.", delay: 2000 },
             { type: 'bot', text: "Pure quants stay in the back office; they have a ceiling. Dealmakers are on the front lines. But dealmaking requires enduring rejection. How do you handle losing a deal?", delay: 1800 },
@@ -390,8 +912,6 @@
                        <strong>Role:</strong> Front-Office Dealmaker<br>
                        <div class="tag-container"><span class="insight-tag">Hunter Mindset</span><span class="insight-tag">High Aggression</span></div>` 
             },
-
-            // Phase 3: Leadership (Transactional)
             { type: 'bot', text: "Let's talk leadership. Tell me about a time you led a team and failed.", delay: 1500 },
             { type: 'user', text: "Investment Club. I pushed a risky stock, we lost 20%. Everyone blamed me.", delay: 1500 },
             { type: 'bot', text: "Did you apologize to the team?", delay: 1000 },
@@ -404,7 +924,6 @@
             }
         ],
 
-        // --- CASE B: The Rich Idealist ---
         B_idealist: [
             { type: 'user', text: "I'm an architecture student. Professors say I'm talented, but I hate the idea of designing commercial condos for developers.", delay: 800 },
             { type: 'bot', text: "Commercial work pays the bills. What exactly about condos repels you?", delay: 1500 },
@@ -436,7 +955,6 @@
             }
         ],
 
-        // --- CASE C: The Conflicted (Shame) ---
         C_shame: [
             { type: 'user', text: "I'm looking into NGO work or Teaching. I want to help society.", delay: 800 },
             { type: 'bot', text: "Helping society is great. But let's visualize your life in 10 years. Where do you live? What do you drive?", delay: 1500 },
@@ -469,7 +987,6 @@
             }
         ],
 
-        // --- CASE D: The Burnt Out Elite (New) ---
         D_burnout: [
             { type: 'user', text: "I'm a Senior Engineer at a big tech firm. I make great money. But I want to quit and open a bakery.", delay: 800 },
             { type: 'bot', text: "The classic 'Bakery Fantasy'. Let's test this. Do you love waking up at 3 AM to knead dough, or do you just hate code reviews?", delay: 1800 },
@@ -501,7 +1018,6 @@
             }
         ],
 
-        // --- CASE E: The Filial Prisoner (New) ---
         E_family: [
             { type: 'user', text: "My parents want me to take the Civil Service exam (考公). I'm preparing for it, but I feel dead inside.", delay: 800 },
             { type: 'bot', text: "The 'Iron Rice Bowl'. Why do they want you to take it?", delay: 1200 },
@@ -548,7 +1064,7 @@
             const content = document.getElementById(`content${index + 1}`);
             card.classList.add('locked');
             card.classList.remove('active');
-            content.innerHTML = `<em style="color:#cbd5e1">Analysis pending...</em>`;
+            content.innerHTML = `<em>Awaiting analysis...</em>`;
         });
         depthFill.style.width = '0%';
         isRunning = false;
@@ -569,48 +1085,43 @@
         for (let step of script) {
             await processStep(step);
         }
-        
-        startBtn.innerHTML = `✔ Completed`;
-        setTimeout(() => { startBtn.disabled = false; startBtn.innerHTML = `<span id="playIcon">▶</span> Run Simulation`;}, 2000);
+
+        startBtn.innerHTML = `✔ Complete`;
+        setTimeout(() => { startBtn.disabled = false; startBtn.innerHTML = `<span id="playIcon">▶</span> Run Simulation`; }, 2000);
         isRunning = false;
     }
 
     function processStep(step) {
         return new Promise(resolve => {
             if (step.type === 'update') {
-                // Sidebar Update
                 const card = document.getElementById(`phase${step.phase}`);
                 const content = document.getElementById(`content${step.phase}`);
-                
+
                 card.classList.remove('locked');
                 card.classList.add('active');
                 content.innerHTML = step.html;
-                
-                // Update Depth Meter
-                if(step.depth) depthFill.style.width = step.depth + '%';
-                
+
+                if (step.depth) depthFill.style.width = step.depth + '%';
+
                 resolve();
             } else {
-                // Chat Message
-                // 1. Show Typing
                 typingIndicator.classList.add('visible');
                 const isBot = step.type === 'bot';
-                typingIndicator.innerHTML = isBot 
+                typingIndicator.innerHTML = isBot
                     ? `<span class="dot-pulse"></span><span class="dot-pulse"></span><span class="dot-pulse"></span> <span style="margin-left:8px">MindForge is analyzing...</span>`
                     : `<span style="font-style:italic">User is typing...</span>`;
-                
+
                 chatHistory.scrollTop = chatHistory.scrollHeight;
 
                 setTimeout(() => {
-                    // 2. Hide Typing & Show Message
                     typingIndicator.classList.remove('visible');
-                    
+
                     const msgDiv = document.createElement('div');
                     msgDiv.className = `message ${step.type}`;
                     msgDiv.innerText = step.text;
                     chatHistory.appendChild(msgDiv);
                     chatHistory.scrollTop = chatHistory.scrollHeight;
-                    
+
                     resolve();
                 }, step.delay);
             }
