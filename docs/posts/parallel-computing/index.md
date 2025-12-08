@@ -27,6 +27,8 @@ title: 并行计算专题
 - [Why Performer is equal to Softmax attention in the aspect of expectation](./linear-attention//performer-en.md)
 - [11/22汇报](./linear-attention/pre1122.md)
 
+- [Kimi Delta Attention: 原理及并行算法](./linear-attention/kda.md)
+
 
 ## 问答 (Ask&Answer)
 - [为什么商业公司选择GPT,而不是BERT?](./ask&answer/bert-vs-gpt-commerical-performance.md)

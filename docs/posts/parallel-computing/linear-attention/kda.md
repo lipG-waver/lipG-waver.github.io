@@ -1,527 +1,239 @@
+# Kimi Delta Attention (KDA) Chunkwise 并行算法详解
 
-# 📘 **Kimi Delta Attention on Ascend**
+## 1. 引言
 
-## **数学推导 + 算法结构 + 昇腾实现设计文档**
-
-作者：周云龙
-日期：2025/12/05
+Kimi Delta Attention (KDA) 是 Kimi Linear 模型的核心组件，它在 Gated DeltaNet 的基础上引入了**细粒度的 channel-wise gating 机制**。本文档重点讲解如何通过 **chunkwise parallelization** 来高效计算状态矩阵 $\mathbf{S}$ 和输出矩阵 $\mathbf{O}$。
 
 ---
 
-# Part 1. 数学推导（完整推导链）
+## 2. KDA 的递归形式
 
-目标：从原始递推式推导到可在昇腾上高效实现的 **UT transform + Chunkwise** 结构，并获得最终输出公式 Eq.(9)。
-
----
-
-# **1. 原始递推公式**
-
-Kimi / Delta Attention 的核心递推为：
+KDA 的核心递归更新公式为：
 
 $$
-S_t = (I - \beta_t k_t k_t^\top),\mathrm{Diag}(\alpha_t), S_{t-1}
-+ \beta_t k_t v_t^\top .
+\mathbf{S}_t = \left(\mathbf{I} - \beta_t \mathbf{k}_t \mathbf{k}_t^\top \right) \text{Diag}(\boldsymbol{\alpha}_t) \mathbf{S}_{t-1} + \beta_t \mathbf{k}_t \mathbf{v}_t^\top
+$$
+
+$$
+\mathbf{o}_t = \mathbf{S}_t^\top \mathbf{q}_t
 $$
 
 其中：
+- $\mathbf{S}_t \in \mathbb{R}^{d_k \times d_v}$：状态矩阵（关联记忆）
+- $\mathbf{q}_t, \mathbf{k}_t \in \mathbb{R}^{d_k}$：query 和 key 向量
+- $\mathbf{v}_t \in \mathbb{R}^{d_v}$：value 向量
+- $\boldsymbol{\alpha}_t \in [0,1]^{d_k}$：**channel-wise decay gate**（细粒度遗忘门）
+- $\beta_t \in [0,1]$：学习率标量
 
-* $$k_t \in \mathbb{R}^{d_k},\quad v_t\in \mathbb{R}^{d_v}$$
-* $$\alpha_t\in (0,1)^{d_k}$$（每通道 decay）
-* $$\beta_t\in(0,1)$$（时间门控）
-* $$S_t\in\mathbb{R}^{d_k\times d_v}$$ 状态矩阵
+### 直观理解
 
-定义：
-
-$$
-A_t = (I-\beta_t k_t k_t^\top)\mathrm{Diag}(\alpha_t),
-\qquad
-B_t = \beta_t k_t v_t^\top ,
-$$
-
-于是：
-
-$$
-S_t = A_t S_{t-1} + B_t .
-$$
-
-对一个 chunk（长度 C=64）：
-
-$$
-S_{t+C} =
-A_{t+C}\cdots A_{t+1} S_t
-+
-\sum_{i=1}^{C} A_{t+C}\cdots A_{t+i+1} B_{t+i}.
-$$
-
-我们需要把整段 $A$ 的乘积和所有 $B$ 的贡献进行一次性压缩计算。
+这个更新可以分解为两步：
+1. **Decay + Delta Rule**：先对旧状态施加细粒度衰减 $\text{Diag}(\boldsymbol{\alpha}_t)$，再通过 Householder-like 变换 $(\mathbf{I} - \beta_t \mathbf{k}_t \mathbf{k}_t^\top)$ 进行纠错
+2. **Hebbian Update**：加入新的 key-value 关联 $\beta_t \mathbf{k}_t \mathbf{v}_t^\top$
 
 ---
 
-# **2. Aₜ 的结构：DPLR（Diagonal + rank-1）**
+## 3. Chunkwise 展开
 
-展开：
+将长度为 $L$ 的序列划分为 $L/C$ 个 chunk，每个 chunk 长度为 $C$。
 
-$$
-A_t
-= (I-\beta_t k_tk_t^\top)\mathrm{Diag}(\alpha_t)
-= \mathrm{Diag}(\alpha_t)
+### 符号约定
 
-* \beta_t k_t (k_t^\top \mathrm{Diag}(\alpha_t)).
-  $$
+- $\square_{[t]}$：第 $t$ 个 chunk 内的矩阵（堆叠 chunk 内所有向量）
+- $\square_{[t]}^r$：第 $t$ 个 chunk 内第 $r$ 个元素
+- $\mathbf{S}_{[t]} := \mathbf{S}_{[t]}^0$：chunk 起始状态
+- 累积衰减：$\gamma_{[t]}^{i \to j} := \prod_{k=i}^{j} \alpha_{[t]}^k$
 
-定义：
+### Chunk 内的状态展开
 
-$$
-u_t = -\beta_t k_t, \qquad
-w_t^\top = k_t^\top\mathrm{Diag}(\alpha_t),
-$$
-
-则：
+对于 chunk $[t]$ 内的第 $r$ 个位置：
 
 $$
-A_t = \mathrm{Diag}(\alpha_t) + u_t w_t^\top .
+\mathbf{S}_{[t]}^r = \underbrace{\left( \prod_{i=1}^{r} \left(\mathbf{I} - \beta_{[t]}^i \mathbf{k}_{[t]}^i {\mathbf{k}_{[t]}^i}^\top \right) \text{Diag}(\boldsymbol{\alpha}_{[t]}^i) \right)}_{:= \mathbf{P}_{[t]}^r} \cdot \mathbf{S}_{[t]}^0 + \underbrace{\sum_{i=1}^{r} \left( \prod_{j=i+1}^{r} (\cdots) \right) \cdot \beta_{[t]}^i \mathbf{k}_{[t]}^i {\mathbf{v}_{[t]}^i}^\top}_{:= \mathbf{H}_{[t]}^r}
 $$
 
-这个结构非常重要，它保证：
-
-> **任意多个 $A_t$ 的乘积仍然保持 “对角矩阵 + 低秩” 的形式。**
-
----
-
-# **3. DPLR × DPLR 仍是 DPLR**
-
-两个：
-
+即：
 $$
-A_2A_1 = D_2D_1 + D_2u_1w_1^\top + u_2 w_2^\top D_1
-+ u_2(w_2^\top u_1) w_1^\top .
+\mathbf{S}_{[t]}^r = \mathbf{P}_{[t]}^r \cdot \mathbf{S}_{[t]}^0 + \mathbf{H}_{[t]}^r
 $$
-
-仍然是：
-
-$$
-\text{Diagonal} + \text{rank-≤2}.
-$$
-
-r 个连续相乘 => rank r。
-但 rank 会随着 chunk 的长度线性增长（如最多 64），不适合直接存储。
-
-这时需要 **WY Representation**。
-
----
-
-# **4. WY Representation：把 rank-r 写成 V T Vᵀ 结构**
-
-WY 定理（Householder 反射积）：
-
-若：
-
-$$
-A_i = I - \beta_i v_i v_i^\top ,
-$$
-
-则：
-
-$$
-A_r \cdots A_1 = I - V T V^\top ,
-$$
-
-其中 V 为列拼接，T 为上三角矩阵。
-
-Kimi 的 $A_t$ 是额外乘上了 $\mathrm{Diag}(\alpha_t)$ 的结构，但因为所有对角矩阵可交换，所以 WY 的低秩结构依然成立。
-
-这导致：
-
-$$
-A_{t+r}\cdots A_{t+1}
-= \mathrm{Diag}(\gamma^r)
-
-* \sum_{i=1}^r \mathrm{Diag}(\gamma^{i\to r}) k_i w_i^\top ,
-  $$
 
 其中：
+- $\mathbf{P}_{[t]}^r$：累积转移矩阵
+- $\mathbf{H}_{[t]}^r$：chunk 内累积的新信息
+
+---
+
+## 4. WY 表示法：将累积乘积压缩为稠密形式
+
+### 4.1 转移矩阵 $\mathbf{P}$ 的 WY 表示
+
+**核心思想**：一系列 rank-1 更新可以用紧凑的矩阵乘法表示。
 
 $$
-\gamma^{i\to r} = \prod_{u=i}^r \alpha_u .
+\mathbf{P}_{[t]}^r = \text{Diag}(\boldsymbol{\gamma}_{[t]}^r) - \sum_{i=1}^{r} \text{Diag}(\boldsymbol{\gamma}_{[t]}^{i \to r}) \mathbf{k}_{[t]}^i {\mathbf{w}_{[t]}^i}^\top
+$$
+
+辅助向量 $\mathbf{w}_{[t]}^r$ 通过递推计算：
+
+$$
+\mathbf{w}_{[t]}^r = \beta_{[t]}^r \left( \text{Diag}(\boldsymbol{\gamma}_{[t]}^r) \mathbf{k}_{[t]}^r - \sum_{i=1}^{r-1} \mathbf{w}_{[t]}^i \left( {\mathbf{k}_{[t]}^i}^\top \text{Diag}(\boldsymbol{\gamma}_{[t]}^{i \to r}) \mathbf{k}_{[t]}^r \right) \right)
+$$
+
+### 4.2 信息累积项 $\mathbf{H}$ 的表示
+
+$$
+\mathbf{H}_{[t]}^r = \sum_{i=1}^{r} \text{Diag}(\boldsymbol{\gamma}_{[t]}^{i \to r}) \mathbf{k}_{[t]}^i {\mathbf{u}_{[t]}^i}^\top
+$$
+
+辅助向量 $\mathbf{u}_{[t]}^r$ 递推：
+
+$$
+\mathbf{u}_{[t]}^r = \beta_{[t]}^r \left( \mathbf{v}_{[t]}^r - \sum_{i=1}^{r-1} \mathbf{u}_{[t]}^i \left( {\mathbf{k}_{[t]}^i}^\top \text{Diag}(\boldsymbol{\gamma}_{[t]}^{i \to r}) \mathbf{k}_{[t]}^r \right) \right)
 $$
 
 ---
 
-# **5. 将 WY 递推转换为 UT Transform（方程组形式）**
+## 5. UT 变换：减少非 MatMul FLOPs
 
-让我们定义：
-
-$$
-\tilde k_r = \gamma^{1\to r} \odot k_r.
-$$
-
-有重要恒等式：
+为了更好地利用 Tensor Core，引入 UT 变换将递推转化为矩阵运算：
 
 $$
-k_i^\top \mathrm{Diag}(\gamma^{i\to r}) k_r
-===========================================
-
-(\tilde k_i)^\top (\tilde k_r).
+\mathbf{M}_{[t]} = \left( \mathbf{I} + \text{StrictTril}\left( \text{Diag}(\boldsymbol{\beta}_{[t]}) \left( \boldsymbol{\Gamma}_{[t]}^{1 \to C} \odot \mathbf{K}_{[t]} \right) \left( \frac{\mathbf{K}_{[t]}}{\boldsymbol{\Gamma}_{[t]}^{1 \to C}} \right)^\top \right) \right)^{-1} \text{Diag}(\boldsymbol{\beta}_{[t]})
 $$
 
-于是 WY 的递推可写成：
+然后：
 
 $$
-w_r = \beta_r \left(
-\tilde k_r - \sum_{i<r} w_i (\tilde k_i^\top \tilde k_r)
-\right),
+\mathbf{W}_{[t]} = \mathbf{M}_{[t]} \left( \boldsymbol{\Gamma}_{[t]}^{1 \to C} \odot \mathbf{K}_{[t]} \right), \quad \mathbf{U}_{[t]} = \mathbf{M}_{[t]} \mathbf{V}_{[t]}
 $$
 
-$$
-u_r = \beta_r \left(
-v_r - \sum_{i<r} u_i (\tilde k_i^\top \tilde k_r)
-\right).
-$$
-
-定义矩阵堆叠：
-
-* $$\tilde K\in\mathbb{R}^{C\times d_k}$$
-* $$W,U\in\mathbb{R}^{C\times d_*}$$
-
-令：
-
-$$
-L = \mathrm{StrictTril}(\mathrm{Diag}(\beta), \tilde K \tilde K^\top) .
-$$
-
-可以得到：
-
-$$
-(I+L) W = \mathrm{Diag}(\beta)\tilde K ,
-$$
-
-$$
-(I+L) U = \mathrm{Diag}(\beta)V .
-$$
-
-这里 $(I+L)$ 是 **64×64 单位下三角矩阵** ——可以用前向代入求解。
-
-最终：
-
-$$
-W = M\tilde K,\qquad U = MV,\qquad
-M = (I+L)^{-1}\mathrm{Diag}(\beta).
-$$
+**关键点**：下三角矩阵的逆可以通过前向替换（Gaussian elimination）高效计算。
 
 ---
 
-# **6. Chunkwise S 更新（论文 Eq.(8)）**
+## 6. Chunk 间状态更新
 
-令 $S$ 为上一个 chunk 的状态，则本 chunk 内的贡献为：
-
-$$
-X = W S,
-\quad
-Y = U - X,
-\quad
-Z = \tilde K^\top Y,
-$$
-
-并记 chunk 减衰为：
+Chunk 结束时的状态更新（用于下一个 chunk）：
 
 $$
-\gamma^C = \gamma^{1\to C}.
+\mathbf{S}_{[t+1]} = \text{Diag}(\boldsymbol{\gamma}_{[t]}^C) \mathbf{S}_{[t]} + \left( \boldsymbol{\Gamma}_{[t]}^{i \to C} \odot \mathbf{K}_{[t]} \right)^\top \left( \mathbf{U}_{[t]} - \mathbf{W}_{[t]} \mathbf{S}_{[t]} \right)
 $$
 
-最终：
-
-$$
-S_{\text{next}}
-===============
-
-\mathrm{Diag}(\gamma^C) S + Z .
-$$
-
-这一步全部 GEMM 操作，非常适合 Ascend Cube。
+这里的结构清晰：
+- **衰减旧状态**：$\text{Diag}(\boldsymbol{\gamma}_{[t]}^C) \mathbf{S}_{[t]}$
+- **加入新信息**：来自当前 chunk 的累积
 
 ---
 
-# **7. 输出阶段（论文 Eq.(9））**
+## 7. 输出计算：Inter-chunk 递归 + Intra-chunk 并行
 
-对于本 chunk 的所有 Query：
-
-## **(1) inter-chunk**
+最终输出的计算采用**混合策略**：
 
 $$
-O_{\mathrm{inter}}
-==================
-
-(\Gamma^{1\to C}\odot Q), S ,
+\mathbf{O}_{[t]} = \underbrace{\left( \boldsymbol{\Gamma}_{[t]}^{1 \to C} \odot \mathbf{Q}_{[t]} \right) \mathbf{S}_{[t]}}_{\text{inter-chunk}} + \underbrace{\text{Tril}\left( \left( \boldsymbol{\Gamma}_{[t]}^{1 \to C} \odot \mathbf{Q}_{[t]} \right) \left( \frac{\mathbf{K}_{[t]}}{\boldsymbol{\Gamma}_{[t]}^{1 \to C}} \right)^\top \right)}_{\text{intra-chunk}} \underbrace{\left( \mathbf{U}_{[t]} - \mathbf{W}_{[t]} \mathbf{S}_{[t]} \right)}_{\text{"pseudo"-value}}
 $$
 
-即用 decay 后的 Q 乘 S。
+### 计算策略
 
-## **(2) pseudo-value**
+1. **Inter-chunk**（跨 chunk）：查询历史状态，**递归**进行
+2. **Intra-chunk**（chunk 内）：计算 chunk 内的注意力，**并行**进行
 
-$$
-\mathrm{pseudo} = U - W S .
-$$
-
-## **(3) intra-chunk**
-
-需要构造：
-
-$$
-A_{\mathrm{intra}} =
-\mathrm{Tril}!\left[
-(\Gamma^{1\to C}\odot Q)(K / \Gamma^{1\to C})^\top
-\right] ,
-$$
-
-于是：
-
-$$
-O_{\mathrm{intra}} = A_{\mathrm{intra}},\mathrm{pseudo}.
-$$
-
----
-
-## **最终输出**
-
-$$
-\boxed{
-O
-=
-
-(\Gamma^{1\to C}\odot Q), S
-+
-\mathrm{Tril}!\left[
-(\Gamma^{1\to C}\odot Q)(K / \Gamma^{1\to C})^\top
-\right]
-,
-(U - W S).
-}
-$$
-
-这与论文 Eq.(9) 完全一致。
-
----
-
-# Part 2. Chunkwise Forward 总流程（数学版）
-
-每个 chunk（长度 C=64）：
-
-1. 计算前缀衰减
-   $$\Gamma^{1\to C}.$$
-2. 计算
-   $$\tilde K = \Gamma^{1\to C}\odot K.$$
-3. 计算 Gram
-   $$G = \tilde K \tilde K^\top.$$
-4. 构造
-   $$L = \mathrm{StrictTril}(\mathrm{Diag}(\beta) G).$$
-5. 解线性系统：
-   $$(I+L)W = \mathrm{Diag}(\beta)\tilde K,$$
-   $$(I+L)U = \mathrm{Diag}(\beta)V.$$
-6. 计算
-   $$S_{\text{next}} = \mathrm{Diag}(\gamma^C) S + \tilde K^\top(U - W S).$$
-7. 输出：
-   $$O = (\Gamma^{1\to C}\odot Q) S
-
-   * A_{\mathrm{intra}} (U - W S).$$
-
----
-
-# Part 3. 昇腾实现设计（Cube/Vec Kernel Mapping）
-
-下面是上述数学步骤在 Ascend NPU 上的映射。
-
----
-
-## **Step 1: 计算前缀衰减 Γ（Vec Kernel）**
-
-$$
-\gamma^r = \prod_{i=1}^r \alpha_i .
-$$
-
-C×d_k 的逐元素 prefix multiply，使用 VecAdd/VecMul 即可。
-
----
-
-## **Step 2: 计算 $\tilde K = \Gamma\odot K$（Vec Kernel）**
-
-逐元素乘。
-
----
-
-## **Step 3: Gram 矩阵 $G = \tilde K\tilde K^\top$（Cube Kernel）**
-
-$$
-(64\times d_k)(d_k\times 64) = 64\times 64.
-$$
-
-这是 CubeMatMul 的最优场景。
-
----
-
-## **Step 4: 构造 L（Vec Kernel）**
-
-$$
-L = \mathrm{StrictTril}(\mathrm{Diag}(\beta) G).
-$$
-
-* 逐行乘以 $\beta$
-* mask 成 StrictTril
-
----
-
-## **Step 5: UT transform —— 解下三角线性系统（Vec Kernel）**
-
-解：
-
-$$
-(I+L)W = RHS_1,
-\qquad
-(I+L)U = RHS_2.
-$$
-
-forward-substitution：
+### 示意图理解
 
 ```
-for r in 0..63:
-    W[r] = RHS[r]
-    for i in 0..r-1:
-        W[r] -= L[r,i] * W[i]
-```
-
-每行都是 d_k 向量 FMA → 典型 Vec kernel。
-
----
-
-## **Step 6: S_next 更新（Cube + Vec）**
-
-1. $$X = W S$$ → Cube
-2. $$Y = U - X$$ → Vec
-3. $$Z = \tilde K^\top Y$$ → Cube
-4. $$S_{next} = \gamma^C\odot S + Z$$ → Vec
-
----
-
-## **Step 7: 输出（Cube + Vec）**
-
-### inter-chunk:
-
-$$
-O_{\mathrm{inter}} = Q_\mathrm{decay} S
-$$
-
-Cube (C×d_k × d_k×d_v)
-
-### pseudo:
-
-$$
-\mathrm{pseudo} = U - WS
-$$
-
-### intra-chunk:
-
-1. $$Q K^{-1} = Q_\mathrm{decay}(K/\Gamma)^\top$$（Cube）
-2. StrictTril（Vec）
-3. $$O_{\mathrm{intra}} = A_{\mathrm{intra}} \mathrm{pseudo}$$（Cube）
-
-### 最终：
-
-$$
-O = O_{\mathrm{inter}} + O_{\mathrm{intra}}.
-$$
-
----
-
-# Part 4. 完整 Pipeline（可直接写成算子实现文档）
-
-## **输入：**
-
-* $Q,K,V$
-* $S_{\text{init}}$
-* $\alpha,\beta$
-
-## **输出：**
-
-* 整个序列的 O（或只要最后一 token）
-
----
-
-## **For each head:**
-
-```
-S = zeros(dk, dv)
-
-for each chunk t:
-    # 1 prefix decay
-    Gamma = prefix_mul(alpha_chunk)
-
-    # 2 K_tilde
-    K_tilde = Gamma * K_chunk
-
-    # 3 Gram
-    G = K_tilde @ K_tilde^T
-
-    # 4 L
-    L = StrictTril( beta * G )
-
-    # 5 UT
-    W = solve_lower_tri( I+L, beta*K_tilde )
-    U = solve_lower_tri( I+L, beta*V_chunk )
-
-    # 6 Update S
-    X = W @ S
-    Y = U - X
-    Z = K_tilde^T @ Y
-    S = Gamma[-1] * S + Z
-
-    # 7 Output
-    Q_decay  = Gamma * Q_chunk
-    pseudo   = U - W @ S
-    K_invdec = K_chunk / Gamma
-    A        = StrictTril( Q_decay @ K_invdec^T )
-    O_chunk  = Q_decay @ S + A @ pseudo
-
-return all O_chunk
+输出 O = [历史信息贡献] + [当前chunk内信息贡献]
+         └── 递归累积的S ──┘   └── 可并行的矩阵乘法 ──┘
 ```
 
 ---
 
-# Part 5. 工程优化建议（Ascend）
+## 8. 与通用 DPLR 的效率对比
 
-### **1. 尽可能在 UB 内做 Vec 操作**
+### 通用 DPLR 形式
 
-UT 的 forward-substitution 完全可以在 UB 里做：
+$$
+\mathbf{S}_t = (\mathbf{D} - \mathbf{a}_t \mathbf{b}_t^\top) \mathbf{S}_{t-1} + \mathbf{k}_t \mathbf{v}_t^\top
+$$
 
-* L（64×64）
-* W、U（64×d_k）
-* 减少 GM 往返
+### KDA 的约束形式
 
----
+$$
+\mathbf{S}_t = \left( \text{Diag}(\boldsymbol{\alpha}_t) - \beta_t \mathbf{k}_t (\mathbf{k}_t \odot \boldsymbol{\alpha}_t)^\top \right) \mathbf{S}_{t-1} + \beta_t \mathbf{k}_t \mathbf{v}_t^\top
+$$
 
-### **2. 融合 Vec kernel**
+即：$\mathbf{D} = \text{Diag}(\boldsymbol{\alpha}_t)$，$\mathbf{a}_t = \beta_t \mathbf{k}_t$，$\mathbf{b}_t = \mathbf{k}_t \odot \boldsymbol{\alpha}_t$
 
-可融合：
+### KDA 的效率优势
 
-* Gamma prefix + K_tilde
-* RHS 生成
-* pseudo = U - W@S
-* 最终 O = O_inter + O_intra
+| 对比项 | 通用 DPLR | KDA |
+|-------|----------|-----|
+| 二级 chunk 矩阵计算次数 | 4 次 | 2 次 |
+| 额外矩阵乘法 | 3 次 | 0 次 |
+| 数值稳定性 | 需要 log 域计算 | 直接计算 |
+| 实测速度 | 基准 | **约 2× 加速** |
 
-不可跨越 Cube kernel。
-
----
-
-### **3. 为多 head 并行做 tiling**
-
-多 head 独立，适合批并行。
+**核心洞察**：通过将 $\mathbf{a}$ 和 $\mathbf{b}$ 都绑定到 $\mathbf{k}$，KDA 在保持表达能力的同时大幅减少了计算开销。
 
 ---
 
-### **4. chunk 内全部操作固定大小（64）——利于 kernel 静态优化**
+## 9. 伪代码总结
 
-例如：
-
-* UT 可 unroll
-* Cube 的 tile 可完全固定
+```python
+def chunk_kda(Q, K, V, g, beta, chunk_size=64):
+    # 1. 分 chunk
+    Q, K, V, g, beta = reshape_to_chunks(...)
+    
+    # 2. 计算累积衰减
+    gc = g.cumsum(dim=-2)
+    
+    # 3. 构建并求逆 M 矩阵（UT 变换）
+    A = compute_kk_attention_matrix(K, gc, beta)
+    A_inv = forward_substitution(I + StrictTril(A))
+    M = A_inv @ Diag(beta)
+    
+    # 4. 计算辅助矩阵
+    W = M @ (gc.exp() * K)  # 用于状态更新
+    U = M @ V               # "pseudo"-value
+    
+    # 5. 逐 chunk 递归 + 并行输出
+    S = initial_state
+    for chunk_idx in range(num_chunks):
+        # Intra-chunk attention (并行)
+        A_qk = compute_qk_attention(Q[chunk_idx], K[chunk_idx], gc[chunk_idx])
+        
+        # 输出 = inter-chunk + intra-chunk
+        O[chunk_idx] = (Q[chunk_idx] * gc.exp()) @ S + A_qk @ (U - W @ S)
+        
+        # 更新状态 (递归)
+        decay = gc[chunk_idx, -1].exp()
+        S = S * decay + (K[chunk_idx] * decay_within_chunk).T @ (U - W @ S)
+    
+    return O
+```
 
 ---
 
+## 10. 关键要点总结
+
+1. **Chunkwise 并行化**：将序列分成 chunks，chunk 间递归传递状态，chunk 内并行计算
+
+2. **WY 表示法**：将累积的 Householder 变换压缩成紧凑的矩阵形式，支持高效的矩阵乘法
+
+3. **UT 变换**：将递推关系转化为矩阵求逆问题，通过前向替换高效求解
+
+4. **输出的双重结构**：
+   - Inter-chunk：历史信息通过递归状态 $\mathbf{S}$ 传递
+   - Intra-chunk：当前 chunk 内的注意力可完全并行
+
+5. **效率优势**：相比通用 DPLR，KDA 的约束形式减少了计算量，实现约 2× 加速
+
+6. **硬件友好**：充分利用 Tensor Core 的矩阵乘法能力，最大化 GPU 利用率
+
+---
+
+## 参考
+
+- Kimi Linear Technical Report (arXiv:2510.26692v2)
+- Gated DeltaNet [Yang et al., 2025]
+- WY Representation [Bischof & Van Loan, 1987]
+- UT Transform [Joffrain et al., 2006]
