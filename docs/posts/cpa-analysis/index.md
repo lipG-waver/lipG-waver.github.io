@@ -9,3 +9,4 @@ title: 截面与面板数据分析
 ## 📚 文章列表
 - [第三课](./lesson3.md)
 - [第四课](./lesson4.md)
+- [第五课](./lesson5.md)
