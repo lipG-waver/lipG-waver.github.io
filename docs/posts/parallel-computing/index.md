@@ -28,6 +28,7 @@ title: 并行计算专题
 - [11/22汇报](./linear-attention/pre1122.md)
 
 - [Kimi Delta Attention: 原理及并行算法](./linear-attention/kda.md)
+- [Kimi Delta Attention: 初始任务](./linear-attention/kda_impl.md)
 
 
 ## 问答 (Ask&Answer)
