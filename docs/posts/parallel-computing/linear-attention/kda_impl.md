@@ -1,4 +1,4 @@
-# KDA Chunkwise 算法在昇腾 NPU 上的实现方案
+# KDA Chunkwise 算法在昇腾 NPU 上的实现方案_v1
 
 ## 1. 硬件约束总结
 
