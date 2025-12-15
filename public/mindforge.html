@@ -857,6 +857,190 @@
             color: var(--ink);
         }
 
+        /* === ORIGIN SECTION === */
+        .origin-section {
+            padding: 6rem 2rem;
+            background: var(--paper);
+        }
+
+        .origin-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .origin-story {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .origin-content h3 {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .origin-content p {
+            color: var(--muted);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .origin-visual {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .origin-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .origin-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--paper);
+            border-radius: 8px;
+        }
+
+        .origin-step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-glow);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .origin-step-text {
+            font-size: 0.9rem;
+            color: var(--ink);
+        }
+
+        .role-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.08), rgba(79, 70, 229, 0.02));
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            border-radius: 12px;
+        }
+
+        .role-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-glow);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .role-text {
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* === STATUS SECTION === */
+        .status-section {
+            padding: 6rem 2rem;
+            background: white;
+            border-top: 1px solid var(--border);
+        }
+
+        .status-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .status-card {
+            padding: 2rem;
+            border-radius: 16px;
+        }
+
+        .status-card.ongoing {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.02));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .status-card.next {
+            background: var(--ink);
+            color: white;
+        }
+
+        .status-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .status-card.ongoing .status-label {
+            color: #f59e0b;
+        }
+
+        .status-card.next .status-label {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .status-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-list {
+            list-style: none;
+        }
+
+        .status-list li {
+            font-size: 0.9rem;
+            padding: 0.5rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .status-card.ongoing .status-list li {
+            color: var(--muted);
+        }
+
+        .status-card.ongoing .status-list li::before {
+            content: '○';
+            position: absolute;
+            left: 0;
+            color: #f59e0b;
+        }
+
+        .status-card.next .status-list li {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .status-card.next .status-list li::before {
+            content: '?';
+            position: absolute;
+            left: 0;
+            color: var(--accent-glow);
+            font-weight: 600;
+        }
+
         /* === RESPONSIVE === */
         @media (max-width: 1024px) {
             .demo-container {
@@ -890,6 +1074,15 @@
             }
 
             .case-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .origin-story {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .status-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -934,7 +1127,7 @@
 <section class="hero">
     <div class="hero-content">
         <div class="eyebrow">Cognitive Guidance System</div>
-        <h1 class="hero-title">Your attention is<br>your most <em>precious</em> asset</h1>
+        <h1 class="hero-title">What do <br>you <em> actually </em> want</h1>
         <p class="hero-subtitle">MindForge doesn't tell you what to do. Through structured dialogue, it helps you discover what you truly want—before algorithms decide for you.</p>
         <a href="#demo" class="hero-cta">
             Experience the Demo
@@ -969,6 +1162,59 @@
             <div class="manifesto-stat">
                 <div class="manifesto-stat-number">12</div>
                 <div class="manifesto-stat-label">Structured turns to surface authentic motivation patterns</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Origin & Role Section -->
+<section class="origin-section" id="origin">
+    <div class="origin-inner">
+        <div class="section-header" style="margin-bottom: 3rem;">
+            <div class="section-eyebrow">Origin Story</div>
+            <h2 class="section-title">From One Conversation to a System</h2>
+        </div>
+
+        <div class="origin-story">
+            <div class="origin-content">
+                <h3>It started with a simple question</h3>
+                <p>A classmate came to me for advice about graduate school. Instead of giving recommendations, I asked: <em>"Why do you want to pursue a graduate degree?"</em></p>
+                <p>Through Socratic questioning, I guided him to clarify his values before exploring options. The conversation worked—he left with genuine clarity, not just more information to process.</p>
+                <p>Afterward, I realized this framework could be systematized. I turned it into a prompt, then built it into a full system.</p>
+
+                <div class="role-box">
+                    <div class="role-label">My Role</div>
+                    <p class="role-text"><strong>Solo project:</strong> Extracted framework from real conversation → Prompt design → System development → WeChat deployment → 50+ user sessions → Ongoing validation through Meal Chatting Hours (10+ structured interviews)</p>
+                </div>
+            </div>
+
+            <div class="origin-visual">
+                <div class="origin-flow">
+                    <div class="origin-step">
+                        <div class="origin-step-number">1</div>
+                        <div class="origin-step-text">Real conversation that worked</div>
+                    </div>
+                    <div class="origin-step">
+                        <div class="origin-step-number">2</div>
+                        <div class="origin-step-text">Extract the underlying framework</div>
+                    </div>
+                    <div class="origin-step">
+                        <div class="origin-step-number">3</div>
+                        <div class="origin-step-text">Encode into constrained prompts</div>
+                    </div>
+                    <div class="origin-step">
+                        <div class="origin-step-number">4</div>
+                        <div class="origin-step-text">Build & deploy on WeChat</div>
+                    </div>
+                    <div class="origin-step">
+                        <div class="origin-step-number">5</div>
+                        <div class="origin-step-text">50+ users, collect feedback</div>
+                    </div>
+                    <div class="origin-step">
+                        <div class="origin-step-number">6</div>
+                        <div class="origin-step-text">Validate with human conversations</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1088,13 +1334,10 @@
                 <div class="research-stat-label">Structured interviews with undergraduates</div>
             </div>
             <div class="research-stat">
-                <div class="research-stat-number">~90min</div>
+                <div class="research-stat-number">~60min</div>
                 <div class="research-stat-label">Average conversation length</div>
             </div>
-            <div class="research-stat">
-                <div class="research-stat-number">8</div>
-                <div class="research-stat-label">Distinct anxiety patterns identified</div>
-            </div>
+
         </div>
 
         <div class="findings-container">
@@ -1138,13 +1381,51 @@
         <div class="research-insight">
             <div class="insight-marker">→</div>
             <div class="insight-body">
-                <p class="insight-quote">"I am essentially manually executing what an Attention OS should do computationally: helping users distinguish real vs. imagined constraints, align short-term actions with long-term values, and build cognitive frameworks that reduce unnecessary anxiety."</p>
+                <p class="insight-quote">"I am essentially manually executing what an MindForge should do computationally: helping users distinguish real vs. imagined constraints, align short-term actions with long-term values, and build cognitive frameworks that reduce unnecessary anxiety."</p>
             </div>
         </div>
 
         <div class="connection-box">
             <div class="connection-label">Connection to MindForge</div>
             <p class="connection-text">These interviews directly informed MindForge's design principle: <strong>articulate values before exploring options</strong>. Users who skip self-reflection chase external validation instead of internal purpose. The three-phase dialogue structure exists because Meal Chatting Hours revealed that jumping to "what should I do?" fails when users haven't answered "what do I actually want?"</p>
+        </div>
+    </div>
+</section>
+
+<!-- Current Status & Next Questions -->
+<section class="status-section" id="status">
+    <div class="status-inner">
+        <div class="section-header" style="margin-bottom: 3rem;">
+            <div class="section-eyebrow">Current Status</div>
+            <h2 class="section-title">What's Working, What's Next</h2>
+        </div>
+
+        <div class="status-grid">
+            <div class="status-card ongoing">
+                <div class="status-label">Not Yet Solved</div>
+                <h3 class="status-title">Open Challenges</h3>
+                <ul class="status-list">
+                    <li><strong>30/70 Segmentation:</strong> Users split into Explorers (need deep probing) vs. Executors (need tactical support). Adaptive pathways designed but not yet implemented.</li>
+                    <li><strong>Domain Knowledge Gap:</strong> Users report MindForge helps them think clearly, but lacks specific career/industry knowledge.</li>
+                    <li><strong>Sample Size:</strong> 50+ users provide signal, but more data needed for systematic validation.</li>
+                </ul>
+            </div>
+
+            <div class="status-card next">
+                <div class="status-label">Research Questions</div>
+                <h3 class="status-title">What I Want to Answer</h3>
+                <ul class="status-list">
+                    <li>Can this Socratic dialogue model systematically help undergraduates with career clarity?</li>
+                    <li>How can we detect goal-clarity in the first 2-3 turns to route users to the right pathway?</li>
+                    <li>What patterns from human conversations (Meal Chatting Hours) can transfer to AI?</li>
+                    <li>Which intervention patterns are automatable, and which require human judgment?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="connection-box">
+            <div class="connection-label">The Path Forward</div>
+            <p class="connection-text">Meal Chatting Hours serves a dual purpose: it validates that this dialogue approach works when delivered by a human, and it generates training data for improving the AI system. Every conversation I have is a data point that can answer: <strong>what makes this work, and how do we scale it?</strong></p>
         </div>
     </div>
 </section>
