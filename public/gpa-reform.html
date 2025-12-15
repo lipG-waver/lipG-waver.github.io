@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Policy Reform — When Rules Don't Change Minds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0a0a0a;
+            --paper: #faf9f7;
+            --accent: #dc2626;
+            --accent-soft: #fef2f2;
+            --accent-glow: #ef4444;
+            --muted: #71717a;
+            --border: #e4e4e7;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* === NAVIGATION === */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(250, 249, 247, 0.9);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .logo {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.5rem;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--ink); }
+
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(180deg, #fef2f2 0%, var(--paper) 100%);
+            position: relative;
+            text-align: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(220, 38, 38, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(220, 38, 38, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .eyebrow::before, .eyebrow::after {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--accent);
+            opacity: 0.3;
+        }
+
+        .hero-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--muted);
+            font-size: 0.75rem;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* === TIMELINE SECTION === */
+        .timeline-section {
+            padding: 8rem 2rem;
+            background: var(--ink);
+            color: white;
+        }
+
+        .timeline-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 1rem;
+        }
+
+        .section-title-white {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 4rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 3rem;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -40px;
+            top: 4px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--ink);
+            border: 2px solid var(--accent);
+        }
+
+        .timeline-item[data-status="success"] .timeline-dot {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .timeline-item[data-status="warning"] .timeline-dot {
+            background: var(--warning);
+            border-color: var(--warning);
+        }
+
+        .timeline-item[data-status="failure"] .timeline-dot {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .timeline-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-desc {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* === PROBLEM SECTION === */
+        .problem-section {
+            padding: 8rem 2rem;
+            background: var(--paper);
+        }
+
+        .problem-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-eyebrow {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .problem-visual {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+        }
+
+        .visual-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        .grade-bar {
+            display: flex;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .grade-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
+        }
+
+        .grade-a { background: var(--accent); width: 30%; }
+        .grade-b { background: #f59e0b; width: 35%; }
+        .grade-c { background: #71717a; width: 35%; }
+
+        .grade-legend {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .problem-content h3 {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-content p {
+            color: var(--muted);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .problem-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .problem-list li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.75rem;
+            color: var(--muted);
+        }
+
+        .problem-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* === OUTCOME SECTION === */
+        .outcome-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, #fef2f2 0%, var(--paper) 100%);
+        }
+
+        .outcome-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .outcome-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .outcome-stat {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .outcome-stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .outcome-stat-label {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .outcome-breakdown {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .breakdown-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .breakdown-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .breakdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .breakdown-label {
+            width: 200px;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .breakdown-bar {
+            flex: 1;
+            height: 32px;
+            background: #f4f4f5;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .breakdown-fill {
+            height: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .fill-intended { background: var(--success); }
+        .fill-avoid { background: var(--accent); }
+
+        /* === INSIGHT SECTION === */
+        .insight-section {
+            padding: 8rem 2rem;
+            background: var(--ink);
+            color: white;
+        }
+
+        .insight-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .insight-quote {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 400;
+            line-height: 1.4;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .insight-quote em {
+            color: var(--accent-glow);
+            font-style: italic;
+        }
+
+        .insight-explanation {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* === GOODHART SECTION === */
+        .goodhart-section {
+            padding: 8rem 2rem;
+            background: var(--paper);
+        }
+
+        .goodhart-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .goodhart-card {
+            background: white;
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .goodhart-visual {
+            text-align: center;
+        }
+
+        .goodhart-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .goodhart-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+        }
+
+        .goodhart-content h3 {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .goodhart-content p {
+            color: var(--muted);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .goodhart-examples {
+            background: var(--accent-soft);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .goodhart-examples h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .goodhart-examples ul {
+            list-style: none;
+        }
+
+        .goodhart-examples li {
+            font-size: 0.9rem;
+            color: var(--muted);
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(220, 38, 38, 0.1);
+        }
+
+        .goodhart-examples li:last-child {
+            border-bottom: none;
+        }
+
+        /* === NEXT SECTION === */
+        .next-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--paper) 0%, #f0eeeb 100%);
+        }
+
+        .next-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .next-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        .next-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .next-text {
+            color: var(--muted);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .next-questions {
+            background: var(--ink);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: left;
+        }
+
+        .next-questions h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 1rem;
+        }
+
+        .next-questions ul {
+            list-style: none;
+        }
+
+        .next-questions li {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.8);
+            padding: 0.75rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .next-questions li::before {
+            content: '?';
+            position: absolute;
+            left: 0;
+            color: var(--accent-glow);
+            font-weight: 600;
+        }
+
+        /* === FOOTER === */
+        footer {
+            padding: 4rem 2rem;
+            background: var(--ink);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: white; }
+
+        .footer-copy {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.3);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .problem-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .goodhart-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .outcome-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .breakdown-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .breakdown-label {
+                width: auto;
+            }
+
+            .breakdown-bar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+    <a href="index.html" class="logo">← Portfolio</a>
+    <div class="nav-links">
+        <a href="#timeline">Timeline</a>
+        <a href="#outcome">Outcome</a>
+        <a href="#insight">Insight</a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="eyebrow">Social Algorithms Case Study</div>
+        <h1 class="hero-title">When Rules <em>Don't</em><br>Change Minds</h1>
+        <p class="hero-subtitle">A two-year campaign that succeeded in changing Fudan's grading policy—then revealed why changing rules isn't enough.</p>
+    </div>
+    <div class="scroll-hint">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 5v14M19 12l-7 7-7-7"/>
+        </svg>
+    </div>
+</section>
+
+<!-- Timeline Section -->
+<section class="timeline-section" id="timeline">
+    <div class="timeline-inner">
+        <div class="section-label">The Journey</div>
+        <h2 class="section-title-white">Two Years of Advocacy</h2>
+
+        <div class="timeline">
+            <div class="timeline-item" data-status="start">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">2022 — Observation</div>
+                <div class="timeline-title">Identifying the Problem</div>
+                <div class="timeline-desc">Fudan's grading policy capped A and A- grades at 30% per class, forcing students into zero-sum competition. The result: grade deflation, risk aversion, and students optimizing for safety over learning.</div>
+            </div>
+
+            <div class="timeline-item" data-status="start">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">2022–2023 — Advocacy</div>
+                <div class="timeline-title">Building the Case</div>
+                <div class="timeline-desc">Published analysis on my WeChat public account (100K+ readers). Compared policies across peer institutions. Mobilized student consensus. Engaged with faculty and administration.</div>
+            </div>
+
+            <div class="timeline-item" data-status="success">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">2023 — Victory</div>
+                <div class="timeline-title">Policy Adopted</div>
+                <div class="timeline-desc">The 30% cap was removed. Additionally, my proposal for a Pass/No Pass (PNP) option—designed to encourage exploration in challenging courses—was adopted in the reform plan.</div>
+            </div>
+
+            <div class="timeline-item" data-status="failure">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">2024 — Reality Check</div>
+                <div class="timeline-title">The Data Speaks</div>
+                <div class="timeline-desc">Returning from UC Berkeley, I analyzed usage data. The results silenced me: 80% of students used PNP to avoid challenge, not embrace exploration. The rule changed. The behavior didn't.</div>
+            </div>
+
+            <div class="timeline-item" data-status="warning">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">2024 — Response</div>
+                <div class="timeline-title">Follow-Up Diagnostic</div>
+                <div class="timeline-desc">Collected student interviews, wrote a situation report, and submitted it to the Academic Affairs Office. The goal: reframe the conversation from "student compliance" to "systemic incentive alignment."</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Problem Section -->
+<section class="problem-section" id="problem">
+    <div class="problem-inner">
+        <div class="section-header">
+            <div class="section-eyebrow">The Original Problem</div>
+            <h2 class="section-title">Zero-Sum by Design</h2>
+        </div>
+
+        <div class="problem-grid">
+            <div class="problem-visual">
+                <div class="visual-title">Original Grade Distribution (Mandated)</div>
+                <div class="grade-bar">
+                    <div class="grade-segment grade-a">≤30%</div>
+                    <div class="grade-segment grade-b">~35%</div>
+                    <div class="grade-segment grade-c">~35%</div>
+                </div>
+                <div class="grade-legend">
+                    <span>A & A- (capped)</span>
+                    <span>B range</span>
+                    <span>C range & below</span>
+                </div>
+            </div>
+
+            <div class="problem-content">
+                <h3>The 30% Cap Created Perverse Incentives</h3>
+                <p>When only 30% of students can receive top grades regardless of performance, learning becomes a competition against peers rather than mastery of material.</p>
+                <ul class="problem-list">
+                    <li>Students avoided challenging courses to protect GPA</li>
+                    <li>Collaboration suffered as classmates became competitors</li>
+                    <li>Risk-taking in learning was systematically punished</li>
+                    <li>Fudan students faced disadvantage vs. peer institutions with grade inflation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Outcome Section -->
+<section class="outcome-section" id="outcome">
+    <div class="outcome-inner">
+        <div class="section-header">
+            <div class="section-eyebrow">The Unexpected Outcome</div>
+            <h2 class="section-title">Victory, Then Silence</h2>
+        </div>
+
+        <div class="outcome-stats">
+            <div class="outcome-stat">
+                <div class="outcome-stat-number">80%</div>
+                <div class="outcome-stat-label">used PNP to avoid challenge</div>
+            </div>
+            <div class="outcome-stat">
+                <div class="outcome-stat-number">20%</div>
+                <div class="outcome-stat-label">used PNP as intended (exploration)</div>
+            </div>
+            <div class="outcome-stat">
+                <div class="outcome-stat-number">0%</div>
+                <div class="outcome-stat-label">change in risk-taking culture</div>
+            </div>
+        </div>
+
+        <div class="outcome-breakdown">
+            <h3 class="breakdown-title">How Students Actually Used PNP</h3>
+            <div class="breakdown-bars">
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Used for required "easy" courses</div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill fill-avoid" style="width: 65%">65%</div>
+                    </div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Used to hedge perceived "risky" courses</div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill fill-avoid" style="width: 15%">15%</div>
+                    </div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Used to explore challenging new domains</div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill fill-intended" style="width: 20%">20%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Insight Section -->
+<section class="insight-section" id="insight">
+    <div class="insight-inner">
+        <p class="insight-quote">"Changing rules <em>doesn't</em> change minds."</p>
+        <p class="insight-explanation">I designed for a static environment, ignoring the dynamic incentive loop where students would rationally game the system to minimize risk. You cannot change behavior by simply patching a rule; you must design mechanisms that are robust to strategic adaptation.</p>
+    </div>
+</section>
+
+<!-- Goodhart Section -->
+<section class="goodhart-section">
+    <div class="goodhart-inner">
+        <div class="goodhart-card">
+            <div class="goodhart-visual">
+                <div class="goodhart-icon">📊</div>
+                <div class="goodhart-label">Goodhart's Law</div>
+            </div>
+            <div class="goodhart-content">
+                <h3>When a Measure Becomes a Target</h3>
+                <p>The PNP option was designed to reduce the cost of exploration. But once it existed, students optimized for it as a risk-reduction tool—exactly the opposite of its intended purpose.</p>
+                <p>In kernel optimization, hardware constraints are rigid but passive. In social systems, however, the agents are adversarial—they actively adapt their strategies to exploit the rules.</p>
+
+                <div class="goodhart-examples">
+                    <h4>The Pattern Repeats</h4>
+                    <ul>
+                        <li>Standardized tests → Teaching to the test</li>
+                        <li>Citation metrics → Citation gaming</li>
+                        <li>Engagement metrics → Clickbait optimization</li>
+                        <li>PNP for exploration → PNP for avoidance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Next Section -->
+<section class="next-section">
+    <div class="next-inner">
+        <div class="next-card">
+            <h3 class="next-title">What This Project Taught Me</h3>
+            <p class="next-text">This experience crystallized my research direction: understanding why people choose what they choose, and designing systems that remain robust even when users adapt strategically. It's not enough to change the rules—you must understand the incentive landscape.</p>
+
+            <div class="next-questions">
+                <h4>Research Questions This Opens</h4>
+                <ul>
+                    <li>How do we design mechanisms that are incentive-compatible under strategic behavior?</li>
+                    <li>When does rule change fail, and when does it succeed?</li>
+                    <li>How can systems surface users' own long-term values against short-term optimization?</li>
+                    <li>What makes some people "immune" to gaming (the 20% who used PNP as intended)?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-logo">GPA Policy Reform</div>
+    <p class="footer-text">A case study in why changing rules isn't enough—and what it taught me about mechanism design and human behavior.</p>
+    <div class="footer-links">
+        <a href="index.html">Portfolio</a>
+        <a href="mindforge.html">MindForge</a>
+        <a href="attention-os.html">Attention OS</a>
+    </div>
+    <div class="footer-copy">Yunlong Zhou · 2025</div>
+</footer>
+
+</body>
+</html>

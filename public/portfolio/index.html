@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yunlong Zhou — Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0a0a0a;
+            --paper: #faf9f7;
+            --muted: #71717a;
+            --border: #e4e4e7;
+            --accent-red: #dc2626;
+            --accent-blue: #06b6d4;
+            --accent-purple: #8b5cf6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.6;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 400;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--accent-red);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--muted);
+            max-width: 600px;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--muted);
+        }
+
+        .hero-meta {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .hero-meta strong {
+            color: var(--ink);
+        }
+
+        .projects-section {
+            padding: 6rem 2rem;
+            background: white;
+            border-top: 1px solid var(--border);
+        }
+
+        .projects-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-red);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 400;
+        }
+
+        .projects-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .project-card {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            padding: 3rem;
+            background: var(--paper);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--card-accent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+            border-color: var(--card-accent);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card[data-project="mindforge"] { --card-accent: var(--accent-purple); }
+        .project-card[data-project="attention-os"] { --card-accent: var(--accent-blue); }
+        .project-card[data-project="gpa-reform"] { --card-accent: var(--accent-red); }
+
+        .project-meta {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .project-category {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            display: inline-block;
+            width: fit-content;
+            margin-bottom: 1rem;
+        }
+
+        .project-card[data-project="mindforge"] .project-category {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent-purple);
+        }
+
+        .project-card[data-project="attention-os"] .project-category {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-blue);
+        }
+
+        .project-card[data-project="gpa-reform"] .project-category {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--accent-red);
+        }
+
+        .project-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-arrow {
+            font-size: 1.5rem;
+            color: var(--muted);
+            transition: all 0.3s;
+        }
+
+        .project-card:hover .project-arrow {
+            color: var(--card-accent);
+            transform: translateX(8px);
+        }
+
+        .project-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .project-subtitle {
+            font-size: 1rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .project-insight {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--ink);
+            padding-left: 1rem;
+            border-left: 2px solid var(--card-accent);
+        }
+
+        .research-section {
+            padding: 6rem 2rem;
+            background: var(--ink);
+            color: white;
+        }
+
+        .research-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label-light {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 1rem;
+        }
+
+        .section-title-light {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 400;
+            color: white;
+            margin-bottom: 4rem;
+        }
+
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .research-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .research-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 1rem;
+        }
+
+        .research-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .research-desc {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 1.5rem;
+        }
+
+        .research-stat {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+        }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--accent-red);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .technical-section {
+            padding: 6rem 2rem;
+            background: var(--paper);
+        }
+
+        .technical-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .technical-card {
+            background: var(--ink);
+            border-radius: 20px;
+            padding: 3rem;
+            color: white;
+        }
+
+        .tech-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 1rem;
+        }
+
+        .tech-title {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-desc {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .tech-stats {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .tech-stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tech-stat .number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+        }
+
+        .tech-stat .label {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .other-section {
+            padding: 6rem 2rem;
+            background: white;
+            border-top: 1px solid var(--border);
+        }
+
+        .other-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .other-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .other-item {
+            display: flex;
+            gap: 1.25rem;
+            padding: 1.5rem;
+            background: var(--paper);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .other-icon {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .other-content h4 {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .other-content p {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        footer {
+            padding: 4rem 2rem;
+            background: var(--paper);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-info h4 {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .footer-info p {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--ink);
+        }
+
+        @media (max-width: 768px) {
+            .project-card {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .project-meta {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .research-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .other-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<section class="hero">
+    <div class="hero-label">Portfolio</div>
+    <h1 class="hero-title">I study why people get <em>stuck</em>—and build systems to help them get unstuck.</h1>
+    <p class="hero-subtitle">Exploring the intersection of human cognition, AI systems, and mechanism design to restore attention sovereignty.</p>
+    <div class="hero-tags">
+        <span class="tag">Human-AI Interaction</span>
+        <span class="tag">Cognitive Systems</span>
+        <span class="tag">Mechanism Design</span>
+        <span class="tag">Attention Economics</span>
+    </div>
+    <p class="hero-meta">
+        <strong>Economics @ Fudan University</strong> · Visiting Student @ UC Berkeley (2024–25)
+    </p>
+</section>
+
+<section class="projects-section" id="projects">
+    <div class="projects-inner">
+        <div class="section-header">
+            <div class="section-label">Featured Projects</div>
+            <h2 class="section-title">Three lenses on attention sovereignty</h2>
+        </div>
+
+        <div class="projects-grid">
+            <a href="mindforge.html" class="project-card" data-project="mindforge">
+                <div class="project-meta">
+                    <div>
+                        <span class="project-category">Cyborg Psychology</span>
+                        <h3 class="project-title">MindForge</h3>
+                    </div>
+                    <span class="project-arrow">→</span>
+                </div>
+                <div class="project-content">
+                    <p class="project-subtitle">AI-assisted Socratic dialogue for career decision clarity. Helping users articulate values before exploring options—so they chase purpose, not validation.</p>
+                    <p class="project-insight">"Users segment by goal-clarity: one-size-fits-all doesn't work. 30% need deep exploration; 70% need tactical execution support."</p>
+                </div>
+            </a>
+
+            <a href="attention-os.html" class="project-card" data-project="attention-os">
+                <div class="project-meta">
+                    <div>
+                        <span class="project-category">Fluid Interfaces</span>
+                        <h3 class="project-title">Attention OS</h3>
+                    </div>
+                    <span class="project-arrow">→</span>
+                </div>
+                <div class="project-content">
+                    <p class="project-subtitle">Designing an operating system that treats human attention as a first-class resource—with provable robustness against adversarial applications.</p>
+                    <p class="project-insight">"App-level defense cannot counter OS-level capture. Protection requires reimagining the entire computational stack."</p>
+                </div>
+            </a>
+
+            <a href="gpa-reform.html" class="project-card" data-project="gpa-reform">
+                <div class="project-meta">
+                    <div>
+                        <span class="project-category">Social Algorithms</span>
+                        <h3 class="project-title">GPA Policy Reform</h3>
+                    </div>
+                    <span class="project-arrow">→</span>
+                </div>
+                <div class="project-content">
+                    <p class="project-subtitle">A two-year campaign that succeeded in changing Fudan's grading policy—then revealed why changing rules doesn't change minds.</p>
+                    <p class="project-insight">"80% of students used the new Pass/No Pass option to avoid challenge, not embrace exploration. Goodhart's Law in action."</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="research-section" id="research">
+    <div class="research-inner">
+        <div class="section-label-light">Empirical Research</div>
+        <h2 class="section-title-light">Understanding humans before building for them</h2>
+
+        <div class="research-grid">
+            <div class="research-card">
+                <div class="research-type">Quantitative Study</div>
+                <h3 class="research-title">Smartphone Regret Survey</h3>
+                <p class="research-desc">Measuring the gap between in-the-moment engagement and reflective evaluation of phone use among university students.</p>
+                <div class="research-stat">
+                    <span class="stat-number">81%</span>
+                    <span class="stat-label">reported regretting their phone use</span>
+                </div>
+            </div>
+
+            <div class="research-card">
+                <div class="research-type">Qualitative Study</div>
+                <h3 class="research-title">Meal Chatting Hours</h3>
+                <p class="research-desc">Structured one-on-one interviews to understand why students get stuck in wrong frameworks.</p>
+                <div class="research-stat">
+                    <span class="stat-number">10+</span>
+                    <span class="stat-label">structured interviews with undergraduates</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="technical-section" id="technical">
+    <div class="technical-inner">
+        <div class="section-header">
+            <div class="section-label">Technical Work</div>
+            <h2 class="section-title">Building at the edge</h2>
+        </div>
+
+        <div class="technical-card">
+            <div class="tech-label">Systems Optimization</div>
+            <h3 class="tech-title">FlashAttention on Huawei Ascend NPU</h3>
+            <p class="tech-desc">Adapting attention mechanisms for edge deployment. If attention protection systems are to be ubiquitous, they must run continuously on constrained devices.</p>
+            <div class="tech-stats">
+                <div class="tech-stat">
+                    <span class="number">56%</span>
+                    <span class="label">Reduction in L2 cache access</span>
+                </div>
+                <div class="tech-stat">
+                    <span class="number">42%</span>
+                    <span class="label">Memory bandwidth savings</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="other-section" id="other">
+    <div class="other-inner">
+        <div class="section-header">
+            <div class="section-label">Other Experiences</div>
+            <h2 class="section-title">Beyond research</h2>
+        </div>
+
+        <div class="other-grid">
+            <div class="other-item">
+                <div class="other-icon">🏐</div>
+                <div class="other-content">
+                    <h4>Volleyball Team Captain</h4>
+                    <p>Led a high school team from losing every match to winning the district championship in one year.</p>
+                </div>
+            </div>
+
+            <div class="other-item">
+                <div class="other-icon">✍️</div>
+                <div class="other-content">
+                    <h4>Public Writing</h4>
+                    <p>WeChat public account with 10,000+ subscribers and 100,000+ cumulative readers on educational policy.</p>
+                </div>
+            </div>
+
+            <div class="other-item">
+                <div class="other-icon">🎓</div>
+                <div class="other-content">
+                    <h4>UC Berkeley Exchange</h4>
+                    <p>CS coursework: Architecture (A), Data Structures (A), Algorithms (A), Machine Learning (A).</p>
+                </div>
+            </div>
+
+            <div class="other-item">
+                <div class="other-icon">👨‍🏫</div>
+                <div class="other-content">
+                    <h4>Tutoring Experience</h4>
+                    <p>Private tutoring that shaped my understanding: behind every "broken" child, there's often a broken system.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-info">
+            <h4>Yunlong Zhou</h4>
+            <p>ylzhou21@m.fudan.edu.cn</p>
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/lipg-waver" target="_blank">GitHub</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
