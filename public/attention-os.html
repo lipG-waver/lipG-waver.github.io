@@ -1030,6 +1030,367 @@
             font-weight: 500;
         }
 
+        /* ========== ORIGIN SECTION ========== */
+        .origin-section {
+            padding: 100px 20px;
+            background: var(--bg-card);
+            position: relative;
+        }
+
+        .origin-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .origin-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .origin-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-purple);
+            margin-bottom: 14px;
+        }
+
+        .origin-title {
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            font-weight: 600;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .origin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .origin-story {
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .origin-story p {
+            margin-bottom: 1.5rem;
+        }
+
+        .origin-story em {
+            color: var(--text);
+            font-style: italic;
+        }
+
+        .origin-story strong {
+            color: var(--guard);
+        }
+
+        .role-card {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .role-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-purple);
+            margin-bottom: 12px;
+        }
+
+        .role-text {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .origin-visual {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .layer-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .layer-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .layer-item[data-layer="app"] {
+            background: rgba(244, 63, 94, 0.1);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
+
+        .layer-item[data-layer="os"] {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .layer-item[data-layer="compute"] {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .layer-icon {
+            font-size: 1.5rem;
+        }
+
+        .layer-content {
+            flex: 1;
+        }
+
+        .layer-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .layer-desc {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .layer-item[data-layer="app"] .layer-name { color: var(--guard); }
+        .layer-item[data-layer="os"] .layer-name { color: var(--navigate); }
+        .layer-item[data-layer="compute"] .layer-name { color: var(--enhance); }
+
+        /* ========== TECHNICAL SECTION ========== */
+        .technical-section {
+            padding: 100px 20px;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #0a0a10 100%);
+        }
+
+        .technical-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .technical-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .technical-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--enhance);
+            margin-bottom: 14px;
+        }
+
+        .technical-title {
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            font-weight: 600;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .technical-desc {
+            color: var(--text-dim);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .technical-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .tech-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .tech-card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .tech-card-subtitle {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        .tech-stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .tech-stat {
+            text-align: right;
+        }
+
+        .tech-stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--enhance);
+        }
+
+        .tech-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .tech-explanation {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .tech-insight {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .tech-insight-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--enhance);
+            margin-bottom: 8px;
+        }
+
+        .tech-insight-text {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* ========== STATUS SECTION ========== */
+        .status-section {
+            padding: 100px 20px;
+            background: var(--bg-card);
+        }
+
+        .status-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .status-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .status-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--navigate);
+            margin-bottom: 14px;
+        }
+
+        .status-title {
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            font-weight: 600;
+            letter-spacing: -1px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .status-card {
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .status-card.challenges {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .status-card.questions {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+        }
+
+        .status-card-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .status-card.challenges .status-card-label { color: var(--navigate); }
+        .status-card.questions .status-card-label { color: var(--guard); }
+
+        .status-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .status-list {
+            list-style: none;
+        }
+
+        .status-list li {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            padding: 12px 0;
+            padding-left: 24px;
+            position: relative;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .status-list li:last-child {
+            border-bottom: none;
+        }
+
+        .status-card.challenges .status-list li::before {
+            content: '○';
+            position: absolute;
+            left: 0;
+            color: var(--navigate);
+        }
+
+        .status-card.questions .status-list li::before {
+            content: '?';
+            position: absolute;
+            left: 0;
+            color: var(--guard);
+            font-weight: 600;
+        }
+
         /* Footer */
         .footer {
             padding: 60px 20px;
@@ -1157,6 +1518,56 @@
         </div>
     </section>
 
+    <!-- ========== ORIGIN & ROLE ========== -->
+    <section class="origin-section" id="origin">
+        <div class="origin-container">
+            <div class="origin-header">
+                <div class="origin-tag">💡 Origin Story</div>
+                <h2 class="origin-title">Why I Started This</h2>
+            </div>
+
+            <div class="origin-grid">
+                <div class="origin-story">
+                    <p>I once built an AI assistant called <em>"Me"</em>—designed to help me manage my life. It could schedule tasks, send reminders, and offer advice.</p>
+                    <p>It was completely useless.</p>
+                    <p>The moment a TikTok notification appeared, all my assistant's good intentions evaporated. <strong>It had no power to protect my attention</strong>—it was just another app, competing for the same screen space as the very distractions it was supposed to fight.</p>
+                    <p>That failure taught me something crucial: <em>app-level tools cannot solve OS-level problems.</em> If we want AI to genuinely serve human flourishing, it needs to operate at the infrastructure layer—not as another app begging for attention, but as the system that decides what gets attention in the first place.</p>
+
+                    <div class="role-card">
+                        <div class="role-label">My Role</div>
+                        <p class="role-text"><strong>Solo conceptual work:</strong> Problem diagnosis through personal failure → Three-layer architecture design (Incentive / OS / Computation) → GENE framework → Survey research (n=31) → FlashAttention optimization for edge deployment</p>
+                    </div>
+                </div>
+
+                <div class="origin-visual">
+                    <div class="layer-diagram">
+                        <div class="layer-item" data-layer="app">
+                            <div class="layer-icon">📱</div>
+                            <div class="layer-content">
+                                <div class="layer-name">App Layer (Where "Me" Failed)</div>
+                                <div class="layer-desc">Apps compete for attention. Even helpful apps lose to predatory ones.</div>
+                            </div>
+                        </div>
+                        <div class="layer-item" data-layer="os">
+                            <div class="layer-icon">⚙️</div>
+                            <div class="layer-content">
+                                <div class="layer-name">OS Layer (Where Control Lives)</div>
+                                <div class="layer-desc">The operating system decides what gets screen time. This is where protection must happen.</div>
+                            </div>
+                        </div>
+                        <div class="layer-item" data-layer="compute">
+                            <div class="layer-icon">🔧</div>
+                            <div class="layer-content">
+                                <div class="layer-name">Compute Layer (The Constraint)</div>
+                                <div class="layer-desc">Attention mechanisms have O(N²) complexity. Edge deployment requires optimization.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ========== GUARD ========== -->
     <section class="gene-section" data-gene="guard" id="guard">
         <div class="section-header">
@@ -1274,6 +1685,38 @@
                 <div class="scenario-name">Growth Nudge</div>
                 <div class="scenario-desc">Bored and reaching for TikTok? AI suggests the book you've been meaning to read instead.</div>
                 <div class="play-btn"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== STATUS & NEXT QUESTIONS ========== -->
+    <section class="status-section" id="status">
+        <div class="status-container">
+            <div class="status-header">
+                <div class="status-tag">📍 Current Status</div>
+                <h2 class="status-title">What's Solved, What's Not</h2>
+            </div>
+
+            <div class="status-grid">
+                <div class="status-card challenges">
+                    <div class="status-card-label">Open Challenges</div>
+                    <h3 class="status-card-title">What's Not Yet Solved</h3>
+                    <ul class="status-list">
+                        <li><strong>OS integration requires platform cooperation:</strong> Conceptually clear, but implementation needs Apple/Google/Huawei buy-in or root access.</li>
+                        <li><strong>Incentive alignment unsolved:</strong> Tech companies profit from attention capture. What business model supports attention protection?</li>
+                        <li><strong>User agency paradox:</strong> Users want protection but also want the option to override it. Where's the line?</li>
+                    </ul>
+                </div>
+
+                <div class="status-card questions">
+                    <div class="status-card-label">Research Questions</div>
+                    <h3 class="status-card-title">What I Want to Answer</h3>
+                    <ul class="status-list">
+                        <li>What OS-level mechanisms are incentive-compatible—protecting users while remaining viable for platforms?</li>
+                        <li>How do we handle informed consent with time-inconsistent preferences? (User wants TikTok now, regrets it later)</li>
+                        <li>Can we prove robustness against adversarial apps mathematically, not just empirically?</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
