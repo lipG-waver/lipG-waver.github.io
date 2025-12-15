@@ -14,6 +14,7 @@
             --accent-red: #dc2626;
             --accent-blue: #06b6d4;
             --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -169,6 +170,7 @@
         .project-card[data-project="mindforge"] { --card-accent: var(--accent-purple); }
         .project-card[data-project="attention-os"] { --card-accent: var(--accent-blue); }
         .project-card[data-project="gpa-reform"] { --card-accent: var(--accent-red); }
+        .project-card[data-project="flashattention"] { --card-accent: var(--accent-green); }
 
         .project-meta {
             display: flex;
@@ -201,6 +203,11 @@
         .project-card[data-project="gpa-reform"] .project-category {
             background: rgba(220, 38, 38, 0.1);
             color: var(--accent-red);
+        }
+
+        .project-card[data-project="flashattention"] .project-category {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
         }
 
         .project-title {
@@ -568,6 +575,20 @@
                 <div class="project-content">
                     <p class="project-subtitle">A two-year campaign that succeeded in changing Fudan's grading policy—then revealed why changing rules doesn't change minds.</p>
                     <p class="project-insight">"80% of students used the new Pass/No Pass option to avoid challenge, not embrace exploration. Goodhart's Law in action."</p>
+                </div>
+            </a>
+
+            <a href="flashattention.html" class="project-card" data-project="flashattention">
+                <div class="project-meta">
+                    <div>
+                        <span class="project-category">Systems Optimization</span>
+                        <h3 class="project-title">FlashAttention on Ascend NPU</h3>
+                    </div>
+                    <span class="project-arrow">→</span>
+                </div>
+                <div class="project-content">
+                    <p class="project-subtitle">Adapting attention mechanisms for Huawei's Ascend architecture—enabling ubiquitous AI inference on edge devices through memory-efficient computation.</p>
+                    <p class="project-insight">"Numerical stability isn't sacred. Preset maximum approaches can outperform traditional methods by 20-40% in error reduction."</p>
                 </div>
             </a>
         </div>
