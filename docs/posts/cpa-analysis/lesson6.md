@@ -3,7 +3,7 @@
 
 **Course:** Econometric Analyses of Cross Section and Panel Data  
 **Instructor Support Document**  
-**Author:** Teaching Assistant Documentation
+**Author:** Yunlong Zhou
 
 ---
 
