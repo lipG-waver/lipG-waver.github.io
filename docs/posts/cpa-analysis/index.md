@@ -13,4 +13,4 @@ title: 截面与面板数据分析
 - [第六课](./lesson6.md)
 
 - [期末复习](./finalreview.md)
-- [期末复习答案](./finalreview_asnwer.md)
+- [期末复习答案](./finalreview_answer.md)
