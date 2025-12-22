@@ -10,5 +10,6 @@ title: 截面与面板数据分析
 - [第三课](./lesson3.md)
 - [第四课](./lesson4.md)
 - [第五课](./lesson5.md)
+- [第六课](./lesson6.md)
 
 - [期末复习](./finalreview.md)
