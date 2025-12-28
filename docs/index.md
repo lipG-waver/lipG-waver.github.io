@@ -30,10 +30,10 @@ features:
     title: 强化学习
     details: 用人类不理解的方式找出答案！
     link: /posts/reinforcement-learning/
-  # - icon: 📚
-  #   title: 学习笔记
-  #   details: 技术文档、读书笔记和知识总结
-  #   link: /posts/
+  - icon: 📚
+    title: 学习笔记
+    details: 技术文档、读书笔记和知识总结
+    link: /posts/math/
   - icon: 🎯
     title: 研究生申请相关资料
     details: 来源于伯克利的课程
