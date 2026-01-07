@@ -18,7 +18,8 @@ title: 并行计算专题
 - [第三课：多核编程](./lesson/ParallelC-lesson3.md)
 - [第一次作业](./lesson/homework1.md)
 - [第二次作业](./lesson/homework2.md)
-
+- [第一次作业答案](./lesson/homework1_answer.md)
+- [第二次作业答案](./lesson/homework2_answer.md)
 
 ## 线性注意力/Linear Attention
 - [从传统注意力到线性注意力](./linear-attention/softmaxToLinear.md)
