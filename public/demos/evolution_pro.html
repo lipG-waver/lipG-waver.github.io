@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>泰坦计划 - 全景演化树沙盘 (代号: TITAN)</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        :root { --primary: #3b82f6; --bg: #f1f5f9; --panel: #ffffff; --border: #cbd5e1; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; height: 100vh; margin: 0; background: var(--bg); color: #334155; overflow: hidden; }
+        
+        /* 布局容器 */
+        #left-col { width: 280px; display: flex; flex-direction: column; border-right: 1px solid var(--border); background: var(--panel); z-index: 2; box-shadow: 2px 0 10px rgba(0,0,0,0.05); }
+        #main-col { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        #right-col { width: 400px; border-left: 1px solid var(--border); background: #f8fafc; overflow-y: auto; z-index: 2; box-shadow: -2px 0 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+
+        /* 左侧日志 */
+        #log-header { padding: 15px; border-bottom: 1px solid var(--border); background: #fce7f3; }
+        #log-header h3 { margin: 0; font-size: 16px; color: #be185d; }
+        #log-list-container { flex-grow: 1; overflow-y: auto; padding: 10px; scroll-behavior: smooth; }
+        .log-item { padding: 10px; margin-bottom: 6px; border-radius: 4px; background: #fff; font-size: 12px; cursor: pointer; border-left: 3px solid #94a3b8; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s; }
+        .log-item:hover { background: #f1f5f9; }
+        .log-item.active { border-left-color: var(--primary); background: #eff6ff; font-weight: 600; transform: translateX(2px); }
+        .log-meta { display: flex; justify-content: space-between; color: #64748b; font-size: 11px; margin-bottom: 4px; }
+
+        /* 中间画布 */
+        #toolbar { padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: center; }
+        button { padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background 0.2s; font-size: 13px; }
+        button:hover { background: #2563eb; }
+        button.secondary { background: #64748b; }
+        button:disabled { background: #cbd5e1; cursor: not-allowed; }
+        #progress-bar { flex-grow: 1; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+        #progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+        #viz-container { flex-grow: 1; overflow: auto; padding: 20px; background: #f8fafc; display: flex; justify-content: center; align-items: flex-start; }
+        #tree-graph { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+
+        /* 右侧详情 */
+        #inspector-header { padding: 20px; border-bottom: 1px solid var(--border); background: #fff; }
+        #inspect-title { margin: 0; font-size: 20px; color: #1e293b; }
+        #inspect-id-tag { display: inline-block; background: #e2e8f0; padding: 4px 8px; border-radius: 4px; font-size: 12px; color: #475569; margin-top: 8px; font-family: monospace; }
+        #inspector-body { padding: 20px; flex-grow: 1; overflow-y: auto; }
+        .ert-section { margin-bottom: 25px; }
+        .ert-label { font-weight: 700; font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: flex; align-items: center; }
+        .ert-content { font-size: 14px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid var(--border); line-height: 1.6; color: #334155; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .empty-state { text-align: center; padding: 50px 20px; color: #94a3b8; }
+        
+        /* Mermaid 样式覆盖 */
+        .node rect, .node circle, .node polygon { stroke-width: 2px; }
+        .node.paused rect { fill: #fef2f2 !important; stroke: #ef4444 !important; stroke-dasharray: 5 5; }
+        .node.completed rect { fill: #f0fdf4 !important; stroke: #22c55e !important; }
+        .node.blocked rect { fill: #fff7ed !important; stroke: #f97316 !important; }
+    </style>
+</head>
+<body>
+
+<div id="left-col">
+    <div id="log-header">
+        <h3>📅 项目演化日志流 (Q1-Q2)</h3>
+    </div>
+    <div id="log-list-container">
+        <div id="log-list"></div>
+    </div>
+</div>
+
+<div id="main-col">
+    <div id="toolbar">
+        <button id="next-btn">▶ 步进推演 (Step)</button>
+        <button id="fast-fwd-btn" class="secondary">⏩ 瞬间加载全量 (Shock)</button>
+        <div id="progress-bar"><div id="progress-fill"></div></div>
+        <span id="status-text" style="font-size: 12px; color: #64748b;">准备就绪</span>
+    </div>
+    <div id="viz-container">
+        <div class="mermaid" id="tree-graph">
+            graph TD;
+            START((等待数据注入...)):::startClass
+            classDef startClass fill:#f1f5f9,stroke:#cbd5e1,color:#94a3b8;
+        </div>
+    </div>
+</div>
+
+<div id="right-col">
+    <div id="inspector-header">
+        <h2 id="inspect-title">决策透视镜</h2>
+        <span id="inspect-id-tag">点击左侧日志或图上节点查看详情</span>
+    </div>
+    <div id="inspector-body">
+        <div id="inspector-content" style="display:none;">
+            <div class="ert-section">
+                <span class="ert-label">🎯 预期目标 (Expectation)</span>
+                <div class="ert-content" id="inspect-exp"></div>
+            </div>
+            <div class="ert-section">
+                <span class="ert-label">📊 执行结果 (Result)</span>
+                <div class="ert-content" id="inspect-res"></div>
+            </div>
+            <div class="ert-section">
+                <span class="ert-label">💡 核心思考 (Thought / Context)</span>
+                <div class="ert-content" id="inspect-tht" style="background: #f8fafc; border-left: 4px solid var(--primary);"></div>
+            </div>
+        </div>
+        <div class="empty-state" id="inspector-empty">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 48px; height: 48px; margin-bottom: 10px; opacity: 0.5;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+            <p>请在演化树上选择一个节点<br>以查看其背后的决策逻辑。</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    mermaid.initialize({ 
+        startOnLoad: false, 
+        theme: 'base',
+        themeVariables: { fontFamily: 'sans-serif', fontSize: '14px' },
+        flowchart: { curve: 'basis', rankSpacing: 80, nodeSpacing: 40 },
+        securityLevel: 'loose'
+    });
+
+    // ==========================================
+    // 核心数据集：泰坦计划半年演化史 (50+节点)
+    // ==========================================
+    const titanData = [
+        // M1: 战略启动期
+        { id: "ROOT", title: "🚀 泰坦计划 (Project Titan)", parent: null, exp: "打造下一代智能终端生态", res: "项目启动", tht: "公司年度最高优先级战略" },
+        { id: "OS-01", title: "自研微内核 OS", parent: "ROOT", exp: "掌握底层核心技术，提升实时性", res: "内核团队组建完成", tht: "必须摆脱对外部商业 RTOS 的依赖" },
+        { id: "AD-01", title: "高阶自动驾驶系统", parent: "ROOT", exp: "实现城区 NOP 功能", res: "感知/规控/硬件团队到位", tht: "核心卖点，不容有失" },
+        { id: "AI-01", title: "多模态座舱大脑", parent: "ROOT", exp: "语音+视觉深度融合交互", res: "基础框架搭建中", tht: "对标行业头部竞品" },
+        
+        // M2: 早期拆解与并行推进
+        { id: "OS-02", title: "内存管理模块", parent: "OS-01", exp: "实现确定性内存分配", res: "设计评审通过", tht: "高安全性的基石" },
+        { id: "OS-03", title: "调度器开发", parent: "OS-01", exp: "支持混合关键性调度", res: "原型开发中", tht: "要同时跑通信息娱乐和车控任务" },
+        { id: "AD-02", title: "感知融合算法", parent: "AD-01", exp: "激光雷达+视觉前融合", res: "数据采集车上路", tht: "目前最主流的技术路线" },
+        { id: "AD-03", title: "大算力计算平台", parent: "AD-01", exp: "选型 Orin-X 芯片", res: "开发板已回片", tht: "算力是算法的天花板" },
+        { id: "AI-02", title: "离线语音识别", parent: "AI-01", exp: "无网状态下可用", res: "模型剪枝至 200MB", tht: "地库等场景是刚需", status: "COMPLETED" },
+
+        // M3: 第一次危机与分歧 (Reality Check)
+        { id: "OS-CR-01", title: "调度器死锁危机", parent: "OS-03", exp: "解决高负载下的死锁问题", res: "复现困难，进度受阻", tht: "严重阻塞了上层应用开发", status: "BLOCKED" },
+        { id: "AD-BK-01", title: "供应商A雷达断供", parent: "AD-02", exp: "等待供应商A交货", res: "供应商破产清算", tht: "突发黑天鹅事件，必须马上寻找替代方案", status: "PAUSED" },
+        { id: "AI-DP-01", title: "座舱视觉依赖项", parent: "AI-01", exp: "等待 OS 提供摄像头驱动", res: "OS团队因死锁问题延期交付", tht: "跨部门依赖导致我们停工待料", status: "BLOCKED" },
+
+        // M4: 艰难的转向与妥协 (The Pivot)
+        { id: "AD-PV-01", title: "转向纯视觉路线", parent: "AD-BK-01", exp: "放弃雷达，死磕视觉", res: "算法团队立下军令状", tht: "被迫的豪赌，特斯拉路线验证可行，但难度极大" },
+        { id: "OS-FIX-01", title: "引入形式化验证", parent: "OS-CR-01", exp: "用数学方法证明调度无死锁", res: "验证通过，找到隐藏 Bug", tht: "虽然慢，但是唯一可靠的方法，代价是进度延后一个月" },
+        { id: "MKT-01", title: "Q2 发布会筹备", parent: "ROOT", exp: "对外展示阶段性成果", res: "方案策划中", tht: "需要提振市场信心" },
+        { id: "MKT-PV-01", title: "调整宣传口径", parent: "MKT-01", exp: "弱化激光雷达，强调视觉 AI", res: "通稿重写", tht: "因 AD-PV-01 的技术路线变更导致的各种物料调整" },
+
+        // M5: 深水区与有机生长 (The Slog & Growth)
+        { id: "AI-OG-01", title: "方言情感引擎", parent: "AI-02", exp: "基于已完成的离线语音，增加情感", res: "预研通过", tht: "从已完成任务中长出的新需求，增加用户粘性" },
+        { id: "AD-OPT-01", title: "BEVTransformer 优化", parent: "AD-PV-01", exp: "优化纯视觉模型的时延", res: "目前时延 150ms，目标 <80ms", tht: "纯视觉路线的关键卡点" },
+        { id: "AD-HW-01", title: "NPU专用算子开发", parent: "AD-OPT-01", exp: "手写汇编压榨芯片性能", res: "性能提升 40%", tht: "为了活下去，什么脏活累活都要干" },
+        { id: "OS-MW-01", title: "通信中间件", parent: "OS-01", exp: "实现跨核高效通信", res: "基于 DDS 改良", tht: "连接 OS 内核与上层应用的关键桥梁" },
+        
+        // M6: 冲刺与新的不确定性 (The Final Push)
+        { id: "INT-01", title: "第一次全系统集成", parent: "ROOT", exp: "OS+AD+AI 跑通闭环", res: "大量兼容性问题爆发", tht: "黎明前的黑暗" },
+        { id: "INT-BUG-01", title: "音视频不同步专项", parent: "INT-01", exp: "解决嘴型和声音对不上的问题", res: "定位到中间件时间戳问题", tht: "跨部门联合 Debug 攻坚队" },
+        { id: "AD-NEW-01", title: "探索端到端大模型", parent: "AD-PV-01", exp: "下一代技术预研", res: "立项分析", tht: "虽然当前很忙，但必须看未来，防止被颠覆" },
+        { id: "FIN-01", title: "B轮融资对接", parent: "ROOT", exp: "展示Demo，锁定资金", res: "投资人对纯视觉方案存疑", tht: "技术决策直接影响公司生死存亡" }
+        // ... 可以继续添加更多节点以增加复杂性
+    ];
+
+    let currentStep = 0;
+    let activeData = [];
+    const treeGraph = document.getElementById('tree-graph');
+    const logList = document.getElementById('log-list');
+    const progressBar = document.getElementById('progress-fill');
+    const statusText = document.getElementById('status-text');
+    const nextBtn = document.getElementById('next-btn');
+    const fastFwdBtn = document.getElementById('fast-fwd-btn');
+
+    // 初始化日志列表
+    titanData.forEach((log, index) => {
+        const div = document.createElement('div');
+        div.className = 'log-item';
+        div.id = `log-${log.id}`;
+        div.innerHTML = `
+            <div class="log-meta"><span>Step ${index + 1}</span><span>ID: ${log.id}</span></div>
+            <div style="font-weight:500">${log.title}</div>
+        `;
+        div.onclick = () => window.callNodeClick(log.id);
+        logList.appendChild(div);
+    });
+
+    // 核心渲染函数
+    async function renderGraph(data) {
+        let code = "graph TD\n";
+        // 增加一些样式定义
+        code += "classDef default fill:#fff,stroke:#334155,stroke-width:1px;\n";
+        code += "classDef root fill:#dbeafe,stroke:#2563eb,stroke-width:2px,font-weight:bold;\n";
+        code += "classDef paused fill:#fef2f2,stroke:#ef4444,stroke-width:2px,stroke-dasharray: 5 5;\n";
+        code += "classDef completed fill:#dcfce7,stroke:#22c55e,stroke-width:2px;\n";
+        code += "classDef blocked fill:#fff7ed,stroke:#f97316,stroke-width:2px;\n";
+
+        data.forEach(node => {
+            // 构建节点样式
+            let styleClass = "";
+            if (node.id === "ROOT") styleClass = ":::root";
+            else if (node.status === "PAUSED") styleClass = ":::paused";
+            else if (node.status === "COMPLETED") styleClass = ":::completed";
+            else if (node.status === "BLOCKED") styleClass = ":::blocked";
+
+            const nodeLabel = `["${node.title}"]${styleClass}`;
+            
+            if (node.parent) {
+                code += `${node.parent} --> ${node.id}${nodeLabel}\n`;
+            } else {
+                code += `${node.id}${nodeLabel}\n`;
+            }
+            // 添加交互事件
+            code += `click ${node.id} callNodeClick\n`;
+        });
+
+        try {
+            treeGraph.innerHTML = code;
+            treeGraph.removeAttribute('data-processed');
+            await mermaid.run({ nodes: [treeGraph] });
+        } catch (e) {
+            console.error("Mermaid rendering error:", e);
+            statusText.innerText = "渲染错误 (可能是节点过多)";
+        }
+    }
+
+    // 更新进度条和状态
+    function updateProgress() {
+        const percent = Math.round((currentStep / titanData.length) * 100);
+        progressBar.style.width = `${percent}%`;
+        statusText.innerText = `演化进度: ${currentStep}/${titanData.length} 节点`;
+        
+        document.querySelectorAll('.log-item').forEach(el => el.classList.remove('active'));
+        for(let i=0; i<currentStep; i++) {
+             document.getElementById(`log-${titanData[i].id}`).classList.add('active');
+        }
+        // 滚动日志到最新
+        if(currentStep > 0) {
+            document.getElementById(`log-${titanData[currentStep-1].id}`).scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+
+        if (currentStep >= titanData.length) {
+            nextBtn.disabled = true;
+            fastFwdBtn.disabled = true;
+            statusText.innerText = "演化完成。请点击节点查看复杂的决策链路。";
+            statusText.style.color = "var(--primary)";
+            statusText.style.fontWeight = "bold";
+        }
+    }
+
+    // 步进动作
+    async function step() {
+        if (currentStep >= titanData.length) return;
+        activeData.push(titanData[currentStep]);
+        currentStep++;
+        updateProgress();
+        await renderGraph(activeData);
+    }
+
+    // 瞬间加载动作
+    async function fastForward() {
+        activeData = [...titanData];
+        currentStep = titanData.length;
+        updateProgress();
+        await renderGraph(activeData);
+    }
+
+    // 节点点击回调 (暴露给全局)
+    window.callNodeClick = function(id) {
+        const node = titanData.find(d => d.id === id);
+        if (!node) return;
+
+        document.getElementById('inspector-empty').style.display = 'none';
+        document.getElementById('inspector-content').style.display = 'block';
+        
+        document.getElementById('inspect-title').innerText = node.title;
+        let statusTag = "";
+        if(node.status) statusTag = ` | 状态: ${node.status}`;
+        document.getElementById('inspect-id-tag').innerText = `ID: ${node.id}${statusTag}`;
+        
+        document.getElementById('inspect-exp').innerText = node.exp || "-";
+        document.getElementById('inspect-res').innerText = node.res || "进行中...";
+        document.getElementById('inspect-tht').innerText = node.tht || "-";
+
+        // 高亮对应的日志
+        document.querySelectorAll('.log-item').forEach(el => el.classList.remove('active'));
+        document.getElementById(`log-${id}`).classList.add('active');
+        document.getElementById(`log-${id}`).scrollIntoView({ behavior: "smooth", block: "nearest" });
+    };
+
+    // 事件绑定
+    nextBtn.addEventListener('click', step);
+    fastFwdBtn.addEventListener('click', fastForward);
+
+    // 初始渲染
+    renderGraph([]);
+</script>
+</body>
+</html>

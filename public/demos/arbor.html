@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>任务演化树实时生成演示</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body { font-family: sans-serif; display: flex; height: 100vh; margin: 0; background: #f4f7f6; }
+        #log-panel { width: 35%; border-right: 1px solid #ccc; padding: 20px; overflow-y: auto; background: #fff; }
+        #viz-panel { width: 65%; padding: 20px; display: flex; flex-direction: column; }
+        .log-item { margin-bottom: 12px; padding: 10px; border-radius: 4px; background: #e9ecef; border-left: 4px solid #6c757d; font-size: 14px; opacity: 0.3; transition: all 0.5s; }
+        .log-item.active { opacity: 1; transform: translateX(10px); border-left-color: #007bff; background: #e7f1ff; }
+        .controls { margin-bottom: 20px; }
+        button { padding: 10px 20px; cursor: pointer; background: #28a745; color: white; border: none; border-radius: 4px; }
+        button:disabled { background: #ccc; }
+        #mermaid-container { background: white; border-radius: 8px; padding: 20px; flex-grow: 1; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: auto; }
+        h3 { margin-top: 0; color: #333; }
+    </style>
+</head>
+<body>
+
+<div id="log-panel">
+    <h3>原始日志流 (碎片数据)</h3>
+    <div id="log-list"></div>
+</div>
+
+<div id="viz-panel">
+    <div class="controls">
+        <button id="next-btn">点击模拟下一条日志输入</button>
+        <span id="status-text" style="margin-left: 15px; color: #666;"></span>
+    </div>
+    <div id="mermaid-container">
+        <div class="mermaid" id="tree-graph">
+            graph TD
+            ROOT((战略目标))
+        </div>
+    </div>
+</div>
+
+<script>
+    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+
+    // 模拟你提供的碎片化记录
+    const logs = [
+        { id: "AD-01", title: "自动驾驶感知", parent: "ROOT", desc: "老板启动了自动驾驶方向" },
+        { id: "INFRA-01", title: "云原生迁移", parent: "ROOT", desc: "老板启动了架构迁移方向" },
+        { id: "AI-01", title: "AI助手2.0", parent: "ROOT", desc: "老板启动了AI产品方向" },
+        { id: "AD-02", title: "路径规划", parent: "AD-01", desc: "感知组拆解出路径规划" },
+        { id: "AD-03", title: "动态行人预测", parent: "AD-02", desc: "路径规划依赖行人预测" },
+        { id: "AI-02", title: "语音识别模块", parent: "AI-01", desc: "AI组完成了语音基础模块", status: "COMPLETED" },
+        { id: "AI-03", title: "方言识别插件", parent: "AI-02", desc: "从已完成的语音模块长出新需求" },
+        { id: "INFRA-02", title: "数据库高可用", parent: "INFRA-01", desc: "架构组调研DB方案" },
+        { id: "INFRA-03", title: "RDS托管", parent: "INFRA-02", desc: "调研分支A", status: "PAUSED" },
+        { id: "INFRA-04", title: "K8s自建", parent: "INFRA-02", desc: "调研分支B" },
+        { id: "AD-04", title: "Transformer模型", parent: "AD-03", desc: "尝试新技术栈替代旧算法" },
+        { id: "AD-05", title: "端侧量化加速", parent: "AD-04", desc: "模型太重，开启量化子任务" },
+        { id: "AD-06", title: "云端协同推理", parent: "AD-04", desc: "尝试云端分担算力", status: "PAUSED" }
+    ];
+
+    let currentIndex = 0;
+    const treeNodes = [];
+
+    const logList = document.getElementById('log-list');
+    const nextBtn = document.getElementById('next-btn');
+    const treeGraph = document.getElementById('tree-graph');
+
+    // 初始化日志列表
+    logs.forEach((log, index) => {
+        const div = document.createElement('div');
+        div.className = 'log-item';
+        div.id = `log-${index}`;
+        div.innerHTML = `<strong>${log.id}</strong>: ${log.desc}`;
+        logList.appendChild(div);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        if (currentIndex >= logs.length) return;
+
+        const log = logs[currentIndex];
+        
+        // 更新日志列表UI
+        document.querySelectorAll('.log-item').forEach(el => el.classList.remove('active'));
+        document.getElementById(`log-${currentIndex}`).classList.add('active');
+
+        // 更新树结构数据
+        treeNodes.push(log);
+        renderTree();
+
+        currentIndex++;
+        if (currentIndex === logs.length) {
+            nextBtn.disabled = true;
+            nextBtn.innerText = "演化模拟完成";
+        }
+    });
+
+    function renderTree() {
+        let code = "graph TD\n";
+        code += "ROOT((战略目标))\n";
+        
+        treeNodes.forEach(node => {
+            let style = "";
+            if(node.status === "PAUSED") style = ":::paused";
+            if(node.status === "COMPLETED") style = ":::completed";
+            
+            code += `  ${node.parent} --> ${node.id}[${node.title}]${style}\n`;
+        });
+
+        code += "classDef paused fill:#f96,stroke:#333,stroke-dasharray: 5 5\n";
+        code += "classDef completed fill:#9f9,stroke:#333\n";
+
+        treeGraph.removeAttribute('data-processed');
+        treeGraph.innerHTML = code;
+        mermaid.render('temp-id', code).then(({svg}) => {
+            treeGraph.innerHTML = svg;
+        });
+    }
+</script>
+
+</body>
+</html>
