@@ -9,7 +9,7 @@ title: 并行计算专题
 ## 📚 文章列表
 
 ## 昇腾NPU编程
-- [介绍：从英伟达和昇腾不同的地方讲起，CPU一侧](./ascend/intro.md)
+- [介绍：从英伟达和昇腾不同的地方讲起，CPU一侧](./ascend/intro_cpu.md)
 - [介绍：继续上一篇，讲解NPU Kernel函数](./ascend/intro_npu.md)
 - [AclrtSynchronizeStream实战示例](./ascend/aclrtSynchStream_example.md)
 ## 并行计算课程
@@ -22,26 +22,26 @@ title: 并行计算专题
 - [第二次作业答案](./lesson/homework2_answer.md)
 
 ## 线性注意力/Linear Attention
-- [从传统注意力到线性注意力](./linear-attention/softmaxToLinear.md)
-- [From Standard Attention to Linear Attention](./linear-attention/softmaxToLinear-en.md)
+- [从传统注意力到线性注意力](./linear-attention/softmax_to_linear.md)
+- [From Standard Attention to Linear Attention](./linear-attention/softmax_to_linear_en.md)
 - [线性注意力的演化过程](./linear-attention/evolution.md)
-- [Evolution of Linear Attention](./linear-attention/evolution-english.md)
+- [Evolution of Linear Attention](./linear-attention/evolution_en.md)
 - [Performer为什么在期望上能做到和Softmax相等](./linear-attention/performer.md)
-- [Why Performer is equal to Softmax attention in the aspect of expectation](./linear-attention//performer-en.md)
+- [Why Performer is equal to Softmax attention in the aspect of expectation](./linear-attention/performer_en.md)
 - [11/22汇报](./linear-attention/pre1122.md)
 
-- [Kimi Delta Attention: 原理及并行算法](./linear-attention/kda.md)
-- [Kimi Delta Attention: Ascend实现v1](./linear-attention/kda_impl.md)
-- [Kimi Delta Attention: Ascend实现v2](./linear-attention/kda_impl_v2.md)
-- [Kimi Delta Attention: Ascend实现v3](./linear-attention/kda_impl_v3.md)
+- [Kimi Delta Attention: 原理及并行算法](./linear-attention/KDA.md)
+- [Kimi Delta Attention: Ascend实现v1](./linear-attention/KDAimplV1.md)
+- [Kimi Delta Attention: Ascend实现v2](./linear-attention/KDAimplV2.md)
+- [Kimi Delta Attention: Ascend实现v3](./linear-attention/KDAimplV3.md)
 
 
 ## 问答 (Ask&Answer)
-- [为什么商业公司选择GPT,而不是BERT?](./ask&answer/bert-vs-gpt-commerical-performance.md)
-- [是否有必要在进行softmax减去最大值，不减的话是否影响精度?](./ask&answer/is_minus_max_necessary.md)
+- [为什么商业公司选择GPT,而不是BERT?](./ask&answer/BERTvsGPT.md)
+- [是否有必要在进行softmax减去最大值，不减的话是否影响精度?](./ask&answer/rethinking_softmax.md)
 - [Rethinking Softmax: Is it necessary to subtract max](./ask&answer/rethinking_softmax_en.md)
 - [利用局部性和簇状最大来抽样Softmax](./ask&answer/sampling_softmax_by_locality.md)
 - [Clustered Maxima: Why it is important to reduce calculation](./ask&answer/clustered_maxima_en.md)
-- [是否能算出一行以后直接进行softmax?](./ask&answer/new.md)
-- [对比算完一整行的方案与目前的Online softmax方案](./ask&answer/new1.md)
-- [Rethinking online softmax](./ask&answer/rethink_online_softmax.md)
+- [是否能算出一行以后直接进行softmax?](./ask&answer/softmax_one_line.md)
+- [对比算完一整行的方案与目前的Online softmax方案](./ask&answer/softmax_one_line_contrast.md)
+- [Rethinking online softmax](./ask&answer/rethinking_online_softmax_en.md)
