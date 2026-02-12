@@ -11,12 +11,12 @@ title: 所有文章
 ### 🚀 [并行计算专题](/posts/parallel-computing/)
 探索并行编程的世界：OpenMP、MPI、CUDA
 
-- [OpenMP 基础入门](/posts/parallel-computing/openmp-basics)
+- [并行计算专题首页](/posts/parallel-computing/)
 - 更多内容持续更新中...
 
 ## 📅 最新文章
 
-- **2025-10-08** - [OpenMP 基础入门](/posts/parallel-computing/openmp-basics)
+- **2025-10-08** - [并行计算专题首页](/posts/parallel-computing/)
 
 ## 🏷️ 分类
 
