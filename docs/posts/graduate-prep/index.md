@@ -18,7 +18,7 @@ title: 研究生准备
 - [第二课：如何进行一个良好的英语表述](./lesson2-good_expression.md)
 - [第三课：系统地介绍了从准备申请、撰写材料到面试和录取管理的全过程](./lesson3-whole_procedure.md)
 ### 可操作性强，值得阅读
-- [第四课：如何撰写强大的SOP](./lesson4_SOPwriting.md)
+- [第四课：如何撰写强大的SOP](./lesson4-SOPwriting.md)
 - [第五课：如何撰写一份CV](./lesson5-CVwriting.md)
 - [第六课：重新回顾SOP](./lesson6-SOPreview.md)
 - [第七课：研究生推荐信如何获取](./lesson7-recommendation_letter.md)

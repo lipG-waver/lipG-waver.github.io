@@ -27,10 +27,10 @@ title: 并行计算专题
 - [线性注意力的演化过程](./linear-attention/evolution.md)
 - [Evolution of Linear Attention](./linear-attention/evolution_en.md)
 - [Performer为什么在期望上能做到和Softmax相等](./linear-attention/performer.md)
-- [Why Performer is equal to Softmax attention in the aspect of expectation](./linear-attention/performer_en.md)
+- [Why Performer is equal to Softmax attention in the aspect of expectation](./linear-attention/performer-en.md)
 - [11/22汇报](./linear-attention/pre1122.md)
 
-- [Kimi Delta Attention: 原理及并行算法](./linear-attention/KDA.md)
+- [Kimi Delta Attention: 原理及并行算法](./linear-attention/kda.md)
 - [Kimi Delta Attention: Ascend实现v1](./linear-attention/KDAimplV1.md)
 - [Kimi Delta Attention: Ascend实现v2](./linear-attention/KDAimplV2.md)
 - [Kimi Delta Attention: Ascend实现v3](./linear-attention/KDAimplV3.md)
