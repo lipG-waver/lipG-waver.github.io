@@ -51,6 +51,14 @@ export default {
           items: [
             { text: '专题介绍', link: '/posts/parallel-computing/' },
           ]
+        },
+        {
+          text: '🛠️ 部署与调试',
+          collapsed: false,
+          items: [
+            { text: '专题介绍', link: '/posts/deployment-debug/' },
+            { text: '部署网站服务 App（模板）', link: '/posts/deployment-debug/2026-02-15-deploy-web-service-app' },
+          ]
         }
       ]
     },
